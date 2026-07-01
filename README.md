@@ -1,5 +1,5 @@
-# Certivo Practice Web App
+# Certivo Bilingual Proof
 
-Version 2.1 safe scoring.
+Temporary proof-of-concept showing complete Spanish and English question text, answer choices, explanations, and UI labels.
 
-This version fixes shuffled-answer scoring by tying correctness to the original answer ID, then calculating the displayed A/B/C/D dynamically after shuffling.
+Upload/replace `index.html`, `README.md`, and `vercel.json` in the GitHub repository.
