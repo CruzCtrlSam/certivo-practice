@@ -1,5 +1,11 @@
-# Certivo Bilingual Proof
+# Certivo Practice MVP v1
 
-Temporary proof-of-concept showing complete Spanish and English question text, answer choices, explanations, and UI labels.
+Static bilingual Texas Life Insurance practice app.
 
-Upload/replace `index.html`, `README.md`, and `vercel.json` in the GitHub repository.
+## Includes
+- 300 Spanish questions
+- 300 English questions
+- Practice mode and exam mode
+- Safe scoring logic tied to answer objects, not shuffled letters
+- Progress saved locally in the browser
+- Colors: #2d3f7f and #d0c660 on white background
