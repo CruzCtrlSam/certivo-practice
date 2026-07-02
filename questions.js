@@ -1,6 +1,6 @@
 // Add more questions to this array using the same shape.
 // Each answer needs a stable id because scoring must not depend on visible order.
-// The first production bank contains 300 paired English/Spanish questions.
+// The production bank contains 300 questions, each with English and Spanish content.
 const CERTIVO_QUESTIONS = [
   {
     "id": "s1q1",
@@ -298,7 +298,7 @@ const CERTIVO_QUESTIONS = [
           "text": "$500,000"
         }
       ],
-      "explanation": "TLHIGA: $300,000 de beneficio por muerte. (A es el límite de cash value.)"
+      "explanation": "TLHIGA: $300,000 de beneficio por muerte. (A es el límite de valor en efectivo.)"
     },
     "correctAnswerId": "s1q6-a3"
   },
@@ -537,7 +537,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s1q11-a2",
-          "text": "Resulte asegurable según el underwriting normal"
+          "text": "Resulte asegurable según la evaluación normal de riesgo"
         },
         {
           "id": "s1q11-a3",
@@ -648,7 +648,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Gravable si excede $100,000"
         }
       ],
-      "explanation": "El death benefit en lump sum es libre de income tax."
+      "explanation": "El beneficio por muerte en lump sum es libre de income tax."
     },
     "correctAnswerId": "s1q13-a2"
   },
@@ -683,19 +683,19 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s1q14-a1",
-          "text": "Life with 10-year period certain"
+          "text": "Vida con periodo cierto de 10 años"
         },
         {
           "id": "s1q14-a2",
-          "text": "Joint and survivor"
+          "text": "Conjunto y sobreviviente"
         },
         {
           "id": "s1q14-a3",
-          "text": "Life only (straight life)"
+          "text": "Solo vida (vida directa)"
         },
         {
           "id": "s1q14-a4",
-          "text": "Cash refund"
+          "text": "Reembolso en efectivo"
         }
       ],
       "explanation": "Life only paga más, pero nada a herederos."
@@ -733,15 +733,15 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s1q15-a1",
-          "text": "Domestic"
+          "text": "Doméstica"
         },
         {
           "id": "s1q15-a2",
-          "text": "Foreign"
+          "text": "Foránea"
         },
         {
           "id": "s1q15-a3",
-          "text": "Alien"
+          "text": "Extranjera"
         },
         {
           "id": "s1q15-a4",
@@ -779,7 +779,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Waiver is triggered by total disability (after the waiting period)."
     },
     "es": {
-      "question": "El rider de exención de prima (waiver of premium) se activa cuando el asegurado:",
+      "question": "El rider de exención de prima (waiver of prima) se activa cuando el asegurado:",
       "answers": [
         {
           "id": "s1q16-a1",
@@ -833,22 +833,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s1q17-a1",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         },
         {
           "id": "s1q17-a2",
-          "text": "Commingling"
+          "text": "Mezcla indebida de fondos"
         },
         {
           "id": "s1q17-a3",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s1q17-a4",
-          "text": "Sliding"
+          "text": "Venta agregada no autorizada"
         }
       ],
-      "explanation": "Mezclar primas con fondos personales es commingling."
+      "explanation": "Mezclar primas con fondos personales es mezcla indebida de fondos."
     },
     "correctAnswerId": "s1q17-a2"
   },
@@ -1091,7 +1091,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s1q22-a3",
-          "text": "Term convertible"
+          "text": "Término convertible"
         },
         {
           "id": "s1q22-a4",
@@ -1198,7 +1198,7 @@ const CERTIVO_QUESTIONS = [
           "text": "El doble en caso de accidente"
         }
       ],
-      "explanation": "Opción B = suma asegurada + cash value (crece)."
+      "explanation": "Opción B = suma asegurada + valor en efectivo (crece)."
     },
     "correctAnswerId": "s1q24-a2"
   },
@@ -1237,18 +1237,18 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s1q25-a2",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         },
         {
           "id": "s1q25-a3",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s1q25-a4",
           "text": "Coercion"
         }
       ],
-      "explanation": "Incentivo no contractual para inducir compra = rebating (ilegal, ambos)."
+      "explanation": "Incentivo no contractual para inducir compra = rebaja indebida (ilegal, ambos)."
     },
     "correctAnswerId": "s1q25-a2"
   },
@@ -1479,7 +1479,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Texas life free look = 10 days."
     },
     "es": {
-      "question": "El free look para una póliza de vida ordinaria en Texas es de:",
+      "question": "El periodo de revisión gratuita para una póliza de vida ordinaria en Texas es de:",
       "answers": [
         {
           "id": "s1q30-a1",
@@ -1498,7 +1498,7 @@ const CERTIVO_QUESTIONS = [
           "text": "60 días"
         }
       ],
-      "explanation": "Free look de vida en Texas = 10 días."
+      "explanation": "periodo de revisión gratuita de vida en Texas = 10 días."
     },
     "correctAnswerId": "s1q30-a2"
   },
@@ -1529,7 +1529,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Accelerated DB = collect while alive for terminal illness, reduces the benefit."
     },
     "es": {
-      "question": "El Accelerated Death Benefit permite al asegurado:",
+      "question": "El beneficio acelerado por muerte permite al asegurado:",
       "answers": [
         {
           "id": "s1q31-a1",
@@ -1883,11 +1883,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s1q38-a1",
-          "text": "Churning"
+          "text": "Reemplazo abusivo"
         },
         {
           "id": "s1q38-a2",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s1q38-a3",
@@ -1895,10 +1895,10 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s1q38-a4",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         }
       ],
-      "explanation": "Reemplazo por declaraciones falsas = twisting."
+      "explanation": "Reemplazo por declaraciones falsas = inducción engañosa al reemplazo."
     },
     "correctAnswerId": "s1q38-a2"
   },
@@ -2091,11 +2091,11 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s1q42-a3",
-          "text": "El buyer’s guide"
+          "text": "El guía del comprador"
         },
         {
           "id": "s1q42-a4",
-          "text": "El policy summary"
+          "text": "El resumen de la póliza"
         }
       ],
       "explanation": "El agent’s report no se muestra al solicitante."
@@ -2137,11 +2137,11 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s1q43-a2",
-          "text": "La Texas Life and Health Insurance Guaranty Association"
+          "text": "La Asociación de Garantía de Seguros de Vida y Salud de Texas"
         },
         {
           "id": "s1q43-a3",
-          "text": "El free look"
+          "text": "El periodo de revisión gratuita"
         },
         {
           "id": "s1q43-a4",
@@ -2198,7 +2198,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Se paga de más"
         }
       ],
-      "explanation": "La UL caduca si el cash value no cubre el cost of insurance."
+      "explanation": "La UL caduca si el valor en efectivo no cubre el cost of insurance."
     },
     "correctAnswerId": "s1q44-a2"
   },
@@ -2241,7 +2241,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s1q45-a3",
-          "text": "Base primero (FIFO), libre"
+          "text": "Base primero (FIFO), libre de impuesto"
         },
         {
           "id": "s1q45-a4",
@@ -2333,22 +2333,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s1q47-a1",
-          "text": "Term life"
+          "text": "Vida temporal"
         },
         {
           "id": "s1q47-a2",
-          "text": "Limited-pay whole life"
+          "text": "Vida entera de pago limitado"
         },
         {
           "id": "s1q47-a3",
-          "text": "Annual renewable term"
+          "text": "Término renovable anual"
         },
         {
           "id": "s1q47-a4",
-          "text": "Decreasing term"
+          "text": "Término decreciente"
         }
       ],
-      "explanation": "Limited-pay whole life: pagas menos tiempo, cobertura vitalicia."
+      "explanation": "Limited-pay vida entera: pagas menos tiempo, cobertura vitalicia."
     },
     "correctAnswerId": "s1q47-a2"
   },
@@ -2498,7 +2498,7 @@ const CERTIVO_QUESTIONS = [
           "text": "60 días"
         }
       ],
-      "explanation": "Grace period de vida ordinaria en Texas = 31 días."
+      "explanation": "periodo de gracia de vida ordinaria en Texas = 31 días."
     },
     "correctAnswerId": "s1q50-a3"
   },
@@ -2687,18 +2687,18 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s2q4-a2",
-          "text": "Commingling, una violación del deber fiduciario"
+          "text": "Mezcla indebida de fondos, una violación del deber fiduciario"
         },
         {
           "id": "s2q4-a3",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         },
         {
           "id": "s2q4-a4",
-          "text": "Field underwriting"
+          "text": "Evaluación inicial de campo"
         }
       ],
-      "explanation": "Mezclar primas con fondos personales = commingling."
+      "explanation": "Mezclar primas con fondos personales = mezcla indebida de fondos."
     },
     "correctAnswerId": "s2q4-a2"
   },
@@ -2745,7 +2745,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s2q5-a4",
-          "text": "Whole life de prima única"
+          "text": "vida entera de prima única"
         }
       ],
       "explanation": "Prima única + pagos casi inmediatos = SPIA."
@@ -2948,7 +2948,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Devuelve las primas"
         }
       ],
-      "explanation": "Durante el grace period se paga el beneficio menos la prima vencida."
+      "explanation": "Durante el periodo de gracia se paga el beneficio menos la prima vencida."
     },
     "correctAnswerId": "s2q9-a3"
   },
@@ -3033,22 +3033,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s2q11-a1",
-          "text": "Churning"
+          "text": "Reemplazo abusivo"
         },
         {
           "id": "s2q11-a2",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s2q11-a3",
-          "text": "Sliding"
+          "text": "Venta agregada no autorizada"
         },
         {
           "id": "s2q11-a4",
           "text": "Backdating"
         }
       ],
-      "explanation": "Reemplazo inducido por engaño = twisting."
+      "explanation": "Reemplazo inducido por engaño = inducción engañosa al reemplazo."
     },
     "correctAnswerId": "s2q11-a2"
   },
@@ -3083,11 +3083,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s2q12-a1",
-          "text": "Whole life de pago limitado"
+          "text": "Vida entera de pago limitado"
         },
         {
           "id": "s2q12-a2",
-          "text": "Term nivelado convertible"
+          "text": "Término nivelado convertible"
         },
         {
           "id": "s2q12-a3",
@@ -3095,7 +3095,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s2q12-a4",
-          "text": "Single-premium whole life"
+          "text": "Vida entera de prima única"
         }
       ],
       "explanation": "Term nivelado convertible: máxima cobertura barata + conversión sin examen."
@@ -3129,7 +3129,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Gain = 42,000 − 30,000 = $12,000 (only the gain is taxable)."
     },
     "es": {
-      "question": "El valor en efectivo de una whole life se rescata. El cliente pagó $30,000 en primas (sin dividendos) y el cash value es $42,000. La parte gravable es:",
+      "question": "El valor en efectivo de una vida entera se rescata. El cliente pagó $30,000 en primas (sin dividendos) y el valor en efectivo es $42,000. La parte gravable es:",
       "answers": [
         {
           "id": "s2q13-a1",
@@ -3183,7 +3183,7 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s2q14-a1",
-          "text": "Joint life (first-to-die)"
+          "text": "Vida conjunta (primer fallecimiento)"
         },
         {
           "id": "s2q14-a2",
@@ -3191,11 +3191,11 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s2q14-a3",
-          "text": "Decreasing term"
+          "text": "Término decreciente"
         },
         {
           "id": "s2q14-a4",
-          "text": "Annual renewable term"
+          "text": "Término renovable anual"
         }
       ],
       "explanation": "Survivorship (second-to-die) para impuestos sucesorios al segundo deceso."
@@ -3237,7 +3237,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s2q15-a2",
-          "text": "4 horas Best Interest (suitability)"
+          "text": "4 horas de mejor interés (idoneidad)"
         },
         {
           "id": "s2q15-a3",
@@ -3248,7 +3248,7 @@ const CERTIVO_QUESTIONS = [
           "text": "3 horas de flood"
         }
       ],
-      "explanation": "Texas exige el curso Best Interest de 4 horas antes de vender anualidades."
+      "explanation": "Texas exige el curso mejor interés de 4 horas antes de vender anualidades."
     },
     "correctAnswerId": "s2q15-a2"
   },
@@ -3283,7 +3283,7 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s2q16-a1",
-          "text": "Se convierte en whole life"
+          "text": "Se convierte en vida entera"
         },
         {
           "id": "s2q16-a2",
@@ -3298,7 +3298,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Paga dividendos"
         }
       ],
-      "explanation": "Si el cash value no cubre el cost of insurance, la UL caduca."
+      "explanation": "Si el valor en efectivo no cubre el cost of insurance, la UL caduca."
     },
     "correctAnswerId": "s2q16-a2"
   },
@@ -3379,7 +3379,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Conditional receipt: they were insurable → the insurer pays."
     },
     "es": {
-      "question": "Un solicitante paga la prima y recibe un recibo condicional. Muere antes de la emisión, pero el underwriting concluye que era asegurable como se solicitó. La aseguradora:",
+      "question": "Un solicitante paga la prima y recibe un recibo condicional. Muere antes de la emisión, pero el evaluación de riesgo concluye que era asegurable como se solicitó. La aseguradora:",
       "answers": [
         {
           "id": "s2q18-a1",
@@ -3483,7 +3483,7 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s2q20-a1",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         },
         {
           "id": "s2q20-a2",
@@ -3491,11 +3491,11 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s2q20-a3",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s2q20-a4",
-          "text": "Sliding"
+          "text": "Venta agregada no autorizada"
         }
       ],
       "explanation": "Difamar la solvencia de otra aseguradora = defamation."
@@ -3783,11 +3783,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s2q26-a1",
-          "text": "Fixed period"
+          "text": "Periodo fijo"
         },
         {
           "id": "s2q26-a2",
-          "text": "Fixed amount"
+          "text": "Monto fijo"
         },
         {
           "id": "s2q26-a3",
@@ -3795,7 +3795,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s2q26-a4",
-          "text": "Life only"
+          "text": "Solo vida"
         }
       ],
       "explanation": "Monto fijo hasta agotarse = fixed amount."
@@ -3998,7 +3998,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Se anula"
         }
       ],
-      "explanation": "El préstamo pendiente reduce el death benefit (saldo + intereses)."
+      "explanation": "El préstamo pendiente reduce el beneficio por muerte (saldo + intereses)."
     },
     "correctAnswerId": "s2q30-a2"
   },
@@ -4133,22 +4133,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s2q33-a1",
-          "text": "Stock"
+          "text": "Por acciones"
         },
         {
           "id": "s2q33-a2",
-          "text": "Mutual"
+          "text": "Mutua"
         },
         {
           "id": "s2q33-a3",
-          "text": "Reciprocal"
+          "text": "Recíproca"
         },
         {
           "id": "s2q33-a4",
           "text": "Fraternal"
         }
       ],
-      "explanation": "Propiedad de asegurados + pólizas participantes = mutual."
+      "explanation": "Propiedad de los asegurados + pólizas participantes = mutua."
     },
     "correctAnswerId": "s2q33-a2"
   },
@@ -4395,7 +4395,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s2q38-a4",
-          "text": "Whole life"
+          "text": "Vida entera"
         }
       ],
       "explanation": "Índice con piso y tope, sin arriesgar capital = anualidad indexada."
@@ -4433,22 +4433,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s2q39-a1",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         },
         {
           "id": "s2q39-a2",
-          "text": "Sliding"
+          "text": "Venta agregada no autorizada"
         },
         {
           "id": "s2q39-a3",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s2q39-a4",
-          "text": "Churning"
+          "text": "Reemplazo abusivo"
         }
       ],
-      "explanation": "Agregar cargos sin consentimiento = sliding."
+      "explanation": "Agregar cargos sin consentimiento = venta agregada no autorizada."
     },
     "correctAnswerId": "s2q39-a2"
   },
@@ -4633,19 +4633,19 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s2q43-a1",
-          "text": "Life only"
+          "text": "Solo vida"
         },
         {
           "id": "s2q43-a2",
-          "text": "Period certain"
+          "text": "Periodo cierto"
         },
         {
           "id": "s2q43-a3",
-          "text": "Joint and survivor"
+          "text": "Conjunto y sobreviviente"
         },
         {
           "id": "s2q43-a4",
-          "text": "Fixed amount"
+          "text": "Monto fijo"
         }
       ],
       "explanation": "Dos vidas con continuación al sobreviviente = joint and survivor."
@@ -4845,7 +4845,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s2q47-a4",
-          "text": "Fiduciary"
+          "text": "Fiduciario"
         }
       ],
       "explanation": "Autoridad aparente (apparent), por la apariencia creada (estoppel)."
@@ -4929,7 +4929,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Life only: no dependents, highest income, nothing to heirs."
     },
     "es": {
-      "question": "Una anualidad “life only” se elige normalmente cuando el annuitant:",
+      "question": "Una anualidad “life only” se elige normalmente cuando el anualizante:",
       "answers": [
         {
           "id": "s2q49-a1",
@@ -5083,19 +5083,19 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s3q2-a1",
-          "text": "Term nivelado"
+          "text": "Término nivelado"
         },
         {
           "id": "s3q2-a2",
-          "text": "Whole life de pago limitado"
+          "text": "Vida entera de pago limitado"
         },
         {
           "id": "s3q2-a3",
-          "text": "Universal Life"
+          "text": "Vida universal"
         },
         {
           "id": "s3q2-a4",
-          "text": "Decreasing term"
+          "text": "Término decreciente"
         }
       ],
       "explanation": "Prima flexible + suma ajustable = Universal Life."
@@ -5229,7 +5229,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "TLHIGA life cash value = $100,000."
     },
     "es": {
-      "question": "El límite de la Texas Guaranty Association para el valor de rescate en efectivo (cash value) de vida es:",
+      "question": "El límite de la Texas Guaranty Association para el valor de rescate en efectivo (valor en efectivo) de vida es:",
       "answers": [
         {
           "id": "s3q5-a1",
@@ -5248,7 +5248,7 @@ const CERTIVO_QUESTIONS = [
           "text": "$300,000"
         }
       ],
-      "explanation": "TLHIGA cash value de vida = $100,000."
+      "explanation": "TLHIGA valor en efectivo de vida = $100,000."
     },
     "correctAnswerId": "s3q5-a2"
   },
@@ -5387,18 +5387,18 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s3q8-a2",
-          "text": "Extended term"
+          "text": "Término extendido"
         },
         {
           "id": "s3q8-a3",
-          "text": "Automatic Premium Loan"
+          "text": "Préstamo automático de prima"
         },
         {
           "id": "s3q8-a4",
-          "text": "Waiver of premium"
+          "text": "Exención de prima"
         }
       ],
-      "explanation": "Pagar la prima impaga con el cash value = APL."
+      "explanation": "Pagar la prima impaga con el valor en efectivo = APL."
     },
     "correctAnswerId": "s3q8-a3"
   },
@@ -5483,11 +5483,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s3q10-a1",
-          "text": "Life only"
+          "text": "Solo vida"
         },
         {
           "id": "s3q10-a2",
-          "text": "Life with 20-year period certain"
+          "text": "Vida con periodo cierto de 20 años"
         },
         {
           "id": "s3q10-a3",
@@ -5495,7 +5495,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s3q10-a4",
-          "text": "Cash surrender"
+          "text": "Rescate en efectivo"
         }
       ],
       "explanation": "Ingreso vitalicio con mínimo garantizado de años = life with period certain."
@@ -5533,19 +5533,19 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s3q11-a1",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         },
         {
           "id": "s3q11-a2",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s3q11-a3",
-          "text": "Replacement (reemplazo)"
+          "text": "Reemplazo"
         },
         {
           "id": "s3q11-a4",
-          "text": "Churning"
+          "text": "Reemplazo abusivo"
         }
       ],
       "explanation": "El reemplazo es legal con la debida divulgación."
@@ -5579,7 +5579,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Whole life matures at 100 (or 121 under recent tables)."
     },
     "es": {
-      "question": "Una whole life tradicional “madura” (endows) normalmente a la edad de:",
+      "question": "Una vida entera tradicional “madura” (endows) normalmente a la edad de:",
       "answers": [
         {
           "id": "s3q12-a1",
@@ -5598,7 +5598,7 @@ const CERTIVO_QUESTIONS = [
           "text": "59½"
         }
       ],
-      "explanation": "Whole life madura a los 100 (o 121 con tablas recientes)."
+      "explanation": "vida entera madura a los 100 (o 121 con tablas recientes)."
     },
     "correctAnswerId": "s3q12-a3"
   },
@@ -5733,7 +5733,7 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s3q15-a1",
-          "text": "Creciente (suma + cash value)"
+          "text": "Creciente (suma asegurada + valor en efectivo)"
         },
         {
           "id": "s3q15-a2",
@@ -5987,7 +5987,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s3q20-a2",
-          "text": "No es idóneo (viola la suitability/best interest)"
+          "text": "No es idóneo (viola la idoneidad/mejor interés)"
         },
         {
           "id": "s3q20-a3",
@@ -6133,15 +6133,15 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s3q23-a1",
-          "text": "Domestic"
+          "text": "Doméstica"
         },
         {
           "id": "s3q23-a2",
-          "text": "Foreign"
+          "text": "Foránea"
         },
         {
           "id": "s3q23-a3",
-          "text": "Alien"
+          "text": "Extranjera"
         },
         {
           "id": "s3q23-a4",
@@ -6183,19 +6183,19 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s3q24-a1",
-          "text": "Cash surrender value"
+          "text": "Valor de rescate en efectivo"
         },
         {
           "id": "s3q24-a2",
-          "text": "Reduced paid-up insurance"
+          "text": "Seguro saldado reducido"
         },
         {
           "id": "s3q24-a3",
-          "text": "Extended term insurance"
+          "text": "Seguro de término extendido"
         },
         {
           "id": "s3q24-a4",
-          "text": "Automatic premium loan"
+          "text": "Préstamo automático de prima"
         }
       ],
       "explanation": "El APL es una cláusula, no una nonforfeiture option."
@@ -6283,22 +6283,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s3q26-a1",
-          "text": "Suitability"
+          "text": "Idoneidad"
         },
         {
           "id": "s3q26-a2",
-          "text": "Rebating (ilegal, ambos sancionables)"
+          "text": "Rebaja indebida (ilegal, ambos sancionables)"
         },
         {
           "id": "s3q26-a3",
-          "text": "Field underwriting"
+          "text": "Evaluación inicial de campo"
         },
         {
           "id": "s3q26-a4",
-          "text": "Best interest"
+          "text": "Mejor interés"
         }
       ],
-      "explanation": "Devolver parte de la comisión = rebating (ilegal, ambos)."
+      "explanation": "Devolver parte de la comisión = rebaja indebida (ilegal, ambos)."
     },
     "correctAnswerId": "s3q26-a2"
   },
@@ -6337,15 +6337,15 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s3q27-a2",
-          "text": "Incontestability clause"
+          "text": "Cláusula de incontestabilidad"
         },
         {
           "id": "s3q27-a3",
-          "text": "Grace period"
+          "text": "Periodo de gracia"
         },
         {
           "id": "s3q27-a4",
-          "text": "Free look"
+          "text": "Periodo de revisión gratuita"
         }
       ],
       "explanation": "Tras 2 años: incontestability clause."
@@ -6483,11 +6483,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s3q30-a1",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s3q30-a2",
-          "text": "Churning"
+          "text": "Reemplazo abusivo"
         },
         {
           "id": "s3q30-a3",
@@ -6495,10 +6495,10 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s3q30-a4",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         }
       ],
-      "explanation": "Reemplazar con los valores existentes por comisión = churning."
+      "explanation": "Reemplazar con los valores existentes por comisión = reemplazo abusivo."
     },
     "correctAnswerId": "s3q30-a2"
   },
@@ -6537,18 +6537,18 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s3q31-a2",
-          "text": "Field underwriting"
+          "text": "Evaluación inicial de campo"
         },
         {
           "id": "s3q31-a3",
-          "text": "Commingling"
+          "text": "Mezcla indebida de fondos"
         },
         {
           "id": "s3q31-a4",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         }
       ],
-      "explanation": "El agente como primer evaluador = field underwriting."
+      "explanation": "El agente como primer evaluador = evaluación inicial de campo."
     },
     "correctAnswerId": "s3q31-a2"
   },
@@ -6587,11 +6587,11 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s3q32-a2",
-          "text": "Joint life (first-to-die)"
+          "text": "Vida conjunta (primer fallecimiento)"
         },
         {
           "id": "s3q32-a3",
-          "text": "Decreasing term individual"
+          "text": "Término decreciente individual"
         },
         {
           "id": "s3q32-a4",
@@ -6645,7 +6645,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s3q33-a4",
-          "text": "Un return of premium"
+          "text": "Una devolución de prima"
         }
       ],
       "explanation": "El interés sobre dividendos acumulados es gravable."
@@ -6829,7 +6829,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Included in the estate if they had incidents of ownership."
     },
     "es": {
-      "question": "El death benefit pagado en suma global por muerte es libre de income tax, pero entra al patrimonio (estate) si el asegurado:",
+      "question": "El beneficio por muerte pagado en suma global por muerte es libre de income tax, pero entra al patrimonio (estate) si el asegurado:",
       "answers": [
         {
           "id": "s3q37-a1",
@@ -6879,7 +6879,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Life only: at the annuitant’s death, nothing to beneficiaries."
     },
     "es": {
-      "question": "Una anualidad “life only” deja a los beneficiarios, al morir el annuitant:",
+      "question": "Una anualidad “life only” deja a los beneficiarios, al morir el anualizante:",
       "answers": [
         {
           "id": "s3q38-a1",
@@ -6898,7 +6898,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Un reembolso de primas"
         }
       ],
-      "explanation": "Life only: al morir el annuitant, nada a beneficiarios."
+      "explanation": "Life only: al morir el anualizante, nada a beneficiarios."
     },
     "correctAnswerId": "s3q38-a2"
   },
@@ -6937,7 +6937,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s3q39-a2",
-          "text": "Era asegurable según el underwriting normal"
+          "text": "Era asegurable según la evaluación normal de riesgo"
         },
         {
           "id": "s3q39-a3",
@@ -6983,11 +6983,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s3q40-a1",
-          "text": "After-tax (no deducibles)"
+          "text": "Después de impuestos (no deducibles)"
         },
         {
           "id": "s3q40-a2",
-          "text": "Pre-tax (deducibles)"
+          "text": "Antes de impuestos (deducibles)"
         },
         {
           "id": "s3q40-a3",
@@ -7037,7 +7037,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s3q41-a2",
-          "text": "El buyer’s guide y el policy summary"
+          "text": "La guía del comprador y el resumen de la póliza"
         },
         {
           "id": "s3q41-a3",
@@ -7048,7 +7048,7 @@ const CERTIVO_QUESTIONS = [
           "text": "El APS"
         }
       ],
-      "explanation": "Para comparar: buyer’s guide + policy summary."
+      "explanation": "Para comparar: guía del comprador + resumen de la póliza."
     },
     "correctAnswerId": "s3q41-a2"
   },
@@ -7148,7 +7148,7 @@ const CERTIVO_QUESTIONS = [
           "text": "90 días"
         }
       ],
-      "explanation": "Grace period de vida en Texas = 31 días."
+      "explanation": "periodo de gracia de vida en Texas = 31 días."
     },
     "correctAnswerId": "s3q43-a3"
   },
@@ -7183,7 +7183,7 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s3q44-a1",
-          "text": "Waiver of premium"
+          "text": "Exención de prima"
         },
         {
           "id": "s3q44-a2",
@@ -7191,11 +7191,11 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s3q44-a3",
-          "text": "Accidental Death Benefit"
+          "text": "Beneficio por muerte accidental"
         },
         {
           "id": "s3q44-a4",
-          "text": "Return of Premium"
+          "text": "Devolución de prima"
         }
       ],
       "explanation": "Comprar más cobertura sin examen = Guaranteed Insurability."
@@ -7587,7 +7587,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s4q2-a2",
-          "text": "Reduce premium"
+          "text": "Reducir la prima"
         },
         {
           "id": "s4q2-a3",
@@ -7629,7 +7629,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "After the initial course: 8 hours of annuities per period."
     },
     "es": {
-      "question": "Un agente de Texas que vende anualidades, tras el curso inicial Best Interest, debe completar por cada periodo de licencia:",
+      "question": "Un agente de Texas que vende anualidades, tras el curso inicial mejor interés, debe completar por cada periodo de licencia:",
       "answers": [
         {
           "id": "s4q3-a1",
@@ -7695,7 +7695,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s4q4-a4",
-          "text": "Free look"
+          "text": "Periodo de revisión gratuita"
         }
       ],
       "explanation": "Convertir el valor en pagos (irreversible) = anualización."
@@ -7779,7 +7779,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "TLHIGA death benefit = $300,000."
     },
     "es": {
-      "question": "¿Qué cantidad de cobertura de death benefit protege la TLHIGA por persona y aseguradora insolvente?",
+      "question": "¿Qué cantidad de cobertura de beneficio por muerte protege la TLHIGA por persona y aseguradora insolvente?",
       "answers": [
         {
           "id": "s4q6-a1",
@@ -7798,7 +7798,7 @@ const CERTIVO_QUESTIONS = [
           "text": "$500,000"
         }
       ],
-      "explanation": "TLHIGA death benefit = $300,000."
+      "explanation": "TLHIGA beneficio por muerte = $300,000."
     },
     "correctAnswerId": "s4q6-a3"
   },
@@ -7829,7 +7829,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Same face, limited period = extended term."
     },
     "es": {
-      "question": "Un dueño deja de pagar y no elige opción. La aseguradora mantiene la misma suma asegurada durante el mayor tiempo que el cash value permita. Aplicó:",
+      "question": "Un dueño deja de pagar y no elige opción. La aseguradora mantiene la misma suma asegurada durante el mayor tiempo que el valor en efectivo permita. Aplicó:",
       "answers": [
         {
           "id": "s4q7-a1",
@@ -7837,11 +7837,11 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s4q7-a2",
-          "text": "Extended term"
+          "text": "Término extendido"
         },
         {
           "id": "s4q7-a3",
-          "text": "Cash surrender"
+          "text": "Rescate en efectivo"
         },
         {
           "id": "s4q7-a4",
@@ -7933,7 +7933,7 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s4q9-a1",
-          "text": "Fixed"
+          "text": "Fija"
         },
         {
           "id": "s4q9-a2",
@@ -8033,7 +8033,7 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s4q11-a1",
-          "text": "El buyer’s guide"
+          "text": "El guía del comprador"
         },
         {
           "id": "s4q11-a2",
@@ -8041,7 +8041,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s4q11-a3",
-          "text": "El policy summary"
+          "text": "El resumen de la póliza"
         },
         {
           "id": "s4q11-a4",
@@ -8083,15 +8083,15 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s4q12-a1",
-          "text": "Increasing term"
+          "text": "Término creciente"
         },
         {
           "id": "s4q12-a2",
-          "text": "Decreasing term"
+          "text": "Término decreciente"
         },
         {
           "id": "s4q12-a3",
-          "text": "Whole life"
+          "text": "Vida entera"
         },
         {
           "id": "s4q12-a4",
@@ -8141,7 +8141,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s4q13-a3",
-          "text": "El MEC pierde su death benefit"
+          "text": "El MEC pierde su beneficio por muerte"
         },
         {
           "id": "s4q13-a4",
@@ -8333,22 +8333,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s4q17-a1",
-          "text": "Field underwriting"
+          "text": "Evaluación inicial de campo"
         },
         {
           "id": "s4q17-a2",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         },
         {
           "id": "s4q17-a3",
-          "text": "Replacement con divulgación"
+          "text": "Reemplazo con divulgación"
         },
         {
           "id": "s4q17-a4",
-          "text": "Suitability"
+          "text": "Idoneidad"
         }
       ],
-      "explanation": "Rebating sanciona a ambos."
+      "explanation": "rebaja indebida sanciona a ambos."
     },
     "correctAnswerId": "s4q17-a2"
   },
@@ -8445,7 +8445,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s4q19-a4",
-          "text": "El death benefit"
+          "text": "El beneficio por muerte"
         }
       ],
       "explanation": "La ganancia (LIFO) es gravable, +10% si <59½."
@@ -8479,7 +8479,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Death by illness → only the base benefit (ADB does not apply)."
     },
     "es": {
-      "question": "Un asegurado fallece por enfermedad natural. Tenía un rider de Accidental Death Benefit. La aseguradora paga:",
+      "question": "Un asegurado fallece por enfermedad natural. Tenía un rider de beneficio por muerte accidental. La aseguradora paga:",
       "answers": [
         {
           "id": "s4q20-a1",
@@ -8579,15 +8579,15 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Shareholders + non-par = stock."
     },
     "es": {
-      "question": "Una compañía propiedad de accionistas que emite pólizas non-participating es:",
+      "question": "Una compañía propiedad de accionistas que emite pólizas no participantes es:",
       "answers": [
         {
           "id": "s4q22-a1",
-          "text": "Mutual"
+          "text": "Mutua"
         },
         {
           "id": "s4q22-a2",
-          "text": "Stock"
+          "text": "Por acciones"
         },
         {
           "id": "s4q22-a3",
@@ -8595,10 +8595,10 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s4q22-a4",
-          "text": "Reciprocal"
+          "text": "Recíproca"
         }
       ],
-      "explanation": "Accionistas + non-par = stock."
+      "explanation": "Accionistas + pólizas no participantes = compañía por acciones."
     },
     "correctAnswerId": "s4q22-a2"
   },
@@ -8679,7 +8679,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Free look in a replacement extends up to 20 days."
     },
     "es": {
-      "question": "El free look de una póliza de vida en Texas, en un caso de reemplazo, puede extenderse hasta:",
+      "question": "El periodo de revisión gratuita de una póliza de vida en Texas, en un caso de reemplazo, puede extenderse hasta:",
       "answers": [
         {
           "id": "s4q24-a1",
@@ -8698,7 +8698,7 @@ const CERTIVO_QUESTIONS = [
           "text": "60 días"
         }
       ],
-      "explanation": "Free look en reemplazo se extiende hasta 20 días."
+      "explanation": "periodo de revisión gratuita en reemplazo se extiende hasta 20 días."
     },
     "correctAnswerId": "s4q24-a3"
   },
@@ -8733,22 +8733,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s4q25-a1",
-          "text": "Annual renewable term"
+          "text": "Término renovable anual"
         },
         {
           "id": "s4q25-a2",
-          "text": "20-pay whole life (limited-pay)"
+          "text": "Vida entera de 20 pagos (pago limitado)"
         },
         {
           "id": "s4q25-a3",
-          "text": "Decreasing term"
+          "text": "Término decreciente"
         },
         {
           "id": "s4q25-a4",
-          "text": "Universal Life Opción B"
+          "text": "Vida universal opción B"
         }
       ],
-      "explanation": "Pagas 20 años, cubre de por vida = 20-pay whole life."
+      "explanation": "Pagas 20 años, cubre de por vida = 20-pay vida entera."
     },
     "correctAnswerId": "s4q25-a2"
   },
@@ -8833,22 +8833,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s4q27-a1",
-          "text": "Sliding"
+          "text": "Venta agregada no autorizada"
         },
         {
           "id": "s4q27-a2",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s4q27-a3",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         },
         {
           "id": "s4q27-a4",
           "text": "Backdating"
         }
       ],
-      "explanation": "Agregar rider/cargo sin consentimiento = sliding."
+      "explanation": "Agregar rider/cargo sin consentimiento = venta agregada no autorizada."
     },
     "correctAnswerId": "s4q27-a1"
   },
@@ -8879,7 +8879,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "The cash value is a living benefit."
     },
     "es": {
-      "question": "El valor en efectivo de una whole life es un beneficio:",
+      "question": "El valor en efectivo de una vida entera es un beneficio:",
       "answers": [
         {
           "id": "s4q28-a1",
@@ -8898,7 +8898,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Que no existe en pólizas permanentes"
         }
       ],
-      "explanation": "El cash value es un living benefit."
+      "explanation": "El valor en efectivo es un living benefit."
     },
     "correctAnswerId": "s4q28-a2"
   },
@@ -9033,22 +9033,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s4q31-a1",
-          "text": "Whole life"
+          "text": "Vida entera"
         },
         {
           "id": "s4q31-a2",
-          "text": "Term life"
+          "text": "Vida temporal"
         },
         {
           "id": "s4q31-a3",
-          "text": "Universal Life"
+          "text": "Vida universal"
         },
         {
           "id": "s4q31-a4",
-          "text": "Variable life"
+          "text": "Vida variable"
         }
       ],
-      "explanation": "Cobertura temporal barata = term life."
+      "explanation": "Cobertura temporal barata = vida temporal."
     },
     "correctAnswerId": "s4q31-a2"
   },
@@ -9433,11 +9433,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s4q39-a1",
-          "text": "Accidental Death Benefit"
+          "text": "Beneficio por muerte accidental"
         },
         {
           "id": "s4q39-a2",
-          "text": "Waiver of Premium"
+          "text": "Exención de prima"
         },
         {
           "id": "s4q39-a3",
@@ -9445,10 +9445,10 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s4q39-a4",
-          "text": "Return of Premium"
+          "text": "Devolución de prima"
         }
       ],
-      "explanation": "Exención por discapacidad = Waiver of Premium."
+      "explanation": "Exención por discapacidad = Waiver of prima."
     },
     "correctAnswerId": "s4q39-a2"
   },
@@ -9495,7 +9495,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s4q40-a4",
-          "text": "No necesita underwriting"
+          "text": "No necesita evaluación de riesgo"
         }
       ],
       "explanation": "Substandard = aceptado con recargo."
@@ -9529,7 +9529,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Fair Credit Reporting Act."
     },
     "es": {
-      "question": "¿Qué ley federal protege la privacidad y exactitud de los consumer reports usados en underwriting?",
+      "question": "¿Qué ley federal protege la privacidad y exactitud de los consumer reports usados en evaluación de riesgo?",
       "answers": [
         {
           "id": "s4q41-a1",
@@ -9587,7 +9587,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s4q42-a2",
-          "text": "Nunca son deducibles (after-tax)"
+          "text": "Nunca son deducibles (después de impuestos)"
         },
         {
           "id": "s4q42-a3",
@@ -9629,7 +9629,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Lump-sum death benefit = income-tax-free."
     },
     "es": {
-      "question": "El death benefit en suma global pagado por muerte es, para income tax:",
+      "question": "El beneficio por muerte en suma global pagado por muerte es, para income tax:",
       "answers": [
         {
           "id": "s4q43-a1",
@@ -9648,7 +9648,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Gravable si excede $250,000"
         }
       ],
-      "explanation": "Death benefit lump sum = libre de income tax."
+      "explanation": "beneficio por muerte lump sum = libre de income tax."
     },
     "correctAnswerId": "s4q43-a2"
   },
@@ -9683,22 +9683,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s4q44-a1",
-          "text": "Churning"
+          "text": "Reemplazo abusivo"
         },
         {
           "id": "s4q44-a2",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s4q44-a3",
-          "text": "Sliding"
+          "text": "Venta agregada no autorizada"
         },
         {
           "id": "s4q44-a4",
-          "text": "Field underwriting"
+          "text": "Evaluación inicial de campo"
         }
       ],
-      "explanation": "Reemplazo por engaño = twisting."
+      "explanation": "Reemplazo por engaño = inducción engañosa al reemplazo."
     },
     "correctAnswerId": "s4q44-a2"
   },
@@ -10141,7 +10141,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q3-a3",
-          "text": "La porción no garantizada de una variable annuity (cuenta separada)"
+          "text": "La porción no garantizada de una anualidad variable (cuenta separada)"
         },
         {
           "id": "s5q3-a4",
@@ -10183,11 +10183,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s5q4-a1",
-          "text": "Waiver of premium"
+          "text": "Exención de prima"
         },
         {
           "id": "s5q4-a2",
-          "text": "Return of premium"
+          "text": "Devolución de prima"
         },
         {
           "id": "s5q4-a3",
@@ -10198,7 +10198,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Guaranteed insurability"
         }
       ],
-      "explanation": "DB + primas pagadas = Return of Premium."
+      "explanation": "DB + primas pagadas = Return of prima."
     },
     "correctAnswerId": "s5q4-a2"
   },
@@ -10279,11 +10279,11 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Single-premium WL is usually a MEC."
     },
     "es": {
-      "question": "Una whole life de prima única (single-premium) probablemente se clasifique como:",
+      "question": "Una vida entera de prima única (single-prima) probablemente se clasifique como:",
       "answers": [
         {
           "id": "s5q6-a1",
-          "text": "Term convertible"
+          "text": "Término convertible"
         },
         {
           "id": "s5q6-a2",
@@ -10298,7 +10298,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Anualidad inmediata"
         }
       ],
-      "explanation": "Single-premium WL suele ser MEC."
+      "explanation": "Single-prima WL suele ser MEC."
     },
     "correctAnswerId": "s5q6-a2"
   },
@@ -10337,7 +10337,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q7-a2",
-          "text": "Buyer’s guide y policy summary"
+          "text": "Guía del comprador y resumen de la póliza"
         },
         {
           "id": "s5q7-a3",
@@ -10348,7 +10348,7 @@ const CERTIVO_QUESTIONS = [
           "text": "APS"
         }
       ],
-      "explanation": "Para comparar: buyer’s guide + policy summary."
+      "explanation": "Para comparar: guía del comprador + resumen de la póliza."
     },
     "correctAnswerId": "s5q7-a2"
   },
@@ -10391,7 +10391,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q8-a3",
-          "text": "No, la Roth no exige RMD en vida"
+          "text": "No, la Roth no exige RMD durante la vida del titular"
         },
         {
           "id": "s5q8-a4",
@@ -10433,11 +10433,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s5q9-a1",
-          "text": "Fixed period"
+          "text": "Periodo fijo"
         },
         {
           "id": "s5q9-a2",
-          "text": "Fixed amount"
+          "text": "Monto fijo"
         },
         {
           "id": "s5q9-a3",
@@ -10445,7 +10445,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q9-a4",
-          "text": "Life income"
+          "text": "Ingreso de por vida"
         }
       ],
       "explanation": "Retener capital y pagar interés = interest only."
@@ -10483,22 +10483,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s5q10-a1",
-          "text": "De suitability"
+          "text": "De idoneidad"
         },
         {
           "id": "s5q10-a2",
-          "text": "Fiduciario (commingling)"
+          "text": "Fiduciario (mezcla indebida de fondos)"
         },
         {
           "id": "s5q10-a3",
-          "text": "De field underwriting"
+          "text": "De evaluación inicial de campo"
         },
         {
           "id": "s5q10-a4",
           "text": "De disclosure"
         }
       ],
-      "explanation": "Mezclar primas = violación fiduciaria (commingling)."
+      "explanation": "Mezclar primas = violación fiduciaria (mezcla indebida de fondos)."
     },
     "correctAnswerId": "s5q10-a2"
   },
@@ -10598,7 +10598,7 @@ const CERTIVO_QUESTIONS = [
           "text": "De prima única"
         }
       ],
-      "explanation": "DB = suma + cash value = Opción B."
+      "explanation": "DB = suma + valor en efectivo = Opción B."
     },
     "correctAnswerId": "s5q12-a2"
   },
@@ -10787,18 +10787,18 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q16-a2",
-          "text": "Field underwriting"
+          "text": "Evaluación inicial de campo"
         },
         {
           "id": "s5q16-a3",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         },
         {
           "id": "s5q16-a4",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         }
       ],
-      "explanation": "Reunir/verificar info = field underwriting."
+      "explanation": "Reunir/verificar info = evaluación inicial de campo."
     },
     "correctAnswerId": "s5q16-a2"
   },
@@ -10833,19 +10833,19 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s5q17-a1",
-          "text": "Joint and survivor"
+          "text": "Conjunto y sobreviviente"
         },
         {
           "id": "s5q17-a2",
-          "text": "Life with period certain"
+          "text": "Vida con periodo cierto"
         },
         {
           "id": "s5q17-a3",
-          "text": "Life only (straight life)"
+          "text": "Solo vida (vida directa)"
         },
         {
           "id": "s5q17-a4",
-          "text": "Cash refund"
+          "text": "Reembolso en efectivo"
         }
       ],
       "explanation": "Life only paga el ingreso más alto."
@@ -10883,11 +10883,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s5q18-a1",
-          "text": "Grace period"
+          "text": "Periodo de gracia"
         },
         {
           "id": "s5q18-a2",
-          "text": "Free look"
+          "text": "Periodo de revisión gratuita"
         },
         {
           "id": "s5q18-a3",
@@ -10898,7 +10898,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Elimination period"
         }
       ],
-      "explanation": "Devolución con reembolso total = free look."
+      "explanation": "Devolución con reembolso total = periodo de revisión gratuita."
     },
     "correctAnswerId": "s5q18-a2"
   },
@@ -11141,11 +11141,11 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q23-a3",
-          "text": "De suitability"
+          "text": "De idoneidad"
         },
         {
           "id": "s5q23-a4",
-          "text": "De field underwriting"
+          "text": "De evaluación inicial de campo"
         }
       ],
       "explanation": "Estados financieros falsos = práctica injusta prohibida."
@@ -11191,7 +11191,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q24-a3",
-          "text": "Inmediata variable"
+          "text": "Variable inmediata"
         },
         {
           "id": "s5q24-a4",
@@ -11279,7 +11279,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Included in the estate if they had incidents of ownership."
     },
     "es": {
-      "question": "El death benefit entra al patrimonio del asegurado para estate tax si este:",
+      "question": "El beneficio por muerte entra al patrimonio del asegurado para estate tax si este:",
       "answers": [
         {
           "id": "s5q26-a1",
@@ -11383,7 +11383,7 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s5q28-a1",
-          "text": "Free look"
+          "text": "Periodo de revisión gratuita"
         },
         {
           "id": "s5q28-a2",
@@ -11395,7 +11395,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q28-a4",
-          "text": "Reinstatement"
+          "text": "Rehabilitación de la póliza"
         }
       ],
       "explanation": "Pagar el DB menos la prima vencida = periodo de gracia."
@@ -11733,11 +11733,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s5q35-a1",
-          "text": "Accidental Death Benefit"
+          "text": "Beneficio por muerte accidental"
         },
         {
           "id": "s5q35-a2",
-          "text": "Accelerated Death Benefit"
+          "text": "Beneficio acelerado por muerte"
         },
         {
           "id": "s5q35-a3",
@@ -11745,10 +11745,10 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q35-a4",
-          "text": "Waiver of Premium"
+          "text": "Exención de prima"
         }
       ],
-      "explanation": "Cobrar en vida por terminal = Accelerated Death Benefit."
+      "explanation": "Cobrar en vida por terminal = beneficio acelerado por muerte."
     },
     "correctAnswerId": "s5q35-a2"
   },
@@ -11883,22 +11883,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s5q38-a1",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s5q38-a2",
-          "text": "Churning"
+          "text": "Reemplazo abusivo"
         },
         {
           "id": "s5q38-a3",
-          "text": "Sliding"
+          "text": "Venta agregada no autorizada"
         },
         {
           "id": "s5q38-a4",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         }
       ],
-      "explanation": "Reemplazar con valores existentes por comisión = churning."
+      "explanation": "Reemplazar con valores existentes por comisión = reemplazo abusivo."
     },
     "correctAnswerId": "s5q38-a2"
   },
@@ -11941,7 +11941,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q39-a3",
-          "text": "La póliza más el buyer’s guide"
+          "text": "La póliza más el guía del comprador"
         },
         {
           "id": "s5q39-a4",
@@ -11987,7 +11987,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q40-a2",
-          "text": "4 horas (Best Interest)"
+          "text": "4 horas de mejor interés"
         },
         {
           "id": "s5q40-a3",
@@ -11998,7 +11998,7 @@ const CERTIVO_QUESTIONS = [
           "text": "3 horas de flood"
         }
       ],
-      "explanation": "Curso Best Interest de 4 horas."
+      "explanation": "Curso mejor interés de 4 horas."
     },
     "correctAnswerId": "s5q40-a2"
   },
@@ -12033,22 +12033,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s5q41-a1",
-          "text": "Whole life"
+          "text": "Vida entera"
         },
         {
           "id": "s5q41-a2",
-          "text": "Universal life"
+          "text": "Vida universal"
         },
         {
           "id": "s5q41-a3",
-          "text": "Term life"
+          "text": "Vida temporal"
         },
         {
           "id": "s5q41-a4",
-          "text": "Variable life"
+          "text": "Vida variable"
         }
       ],
-      "explanation": "El term life no acumula cash value."
+      "explanation": "El vida temporal no acumula valor en efectivo."
     },
     "correctAnswerId": "s5q41-a3"
   },
@@ -12141,7 +12141,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q43-a3",
-          "text": "El underwriting médico"
+          "text": "La evaluación médica de riesgo"
         },
         {
           "id": "s5q43-a4",
@@ -12437,7 +12437,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s5q49-a2",
-          "text": "Era asegurable según el underwriting normal"
+          "text": "Era asegurable según la evaluación normal de riesgo"
         },
         {
           "id": "s5q49-a3",
@@ -12548,7 +12548,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Obligatoria bajo el estándar de mejor interés"
         }
       ],
-      "explanation": "El producto atrapa la liquidez que la clienta necesita pronto: no es idóneo. A/C: un beneficio fiscal o un cargo de rescate no vuelven idóneo un producto que choca con su necesidad. D: el best interest exige lo contrario."
+      "explanation": "El producto atrapa la liquidez que la clienta necesita pronto: no es idóneo. A/C: un beneficio fiscal o un cargo de rescate no vuelven idóneo un producto que choca con su necesidad. D: el mejor interés exige lo contrario."
     },
     "correctAnswerId": "s6q1-a2"
   },
@@ -12629,7 +12629,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Best interest requires care, disclosure, and conflict management; no product guarantees 8%. A/B/C are real obligations of the standard."
     },
     "es": {
-      "question": "El estándar de mejor interés (best interest) para anualidades en Texas exige todas las siguientes obligaciones EXCEPTO:",
+      "question": "El estándar de mejor interés (mejor interés) para anualidades en Texas exige todas las siguientes obligaciones EXCEPTO:",
       "answers": [
         {
           "id": "s6q3-a1",
@@ -12648,7 +12648,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Garantizar un rendimiento mínimo del 8%"
         }
       ],
-      "explanation": "El best interest exige care, disclosure y manejo de conflictos; ningún producto garantiza 8%. A/B/C sí son obligaciones reales del estándar."
+      "explanation": "El mejor interés exige care, disclosure y manejo de conflictos; ningún producto garantiza 8%. A/B/C sí son obligaciones reales del estándar."
     },
     "correctAnswerId": "s6q3-a4"
   },
@@ -12795,10 +12795,10 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q6-a4",
-          "text": "Requerida por el best interest"
+          "text": "Requerida por el mejor interés"
         }
       ],
-      "explanation": "El riesgo de mercado de la variable contradice el objetivo de proteger capital: no idónea. A: las variables pueden perder. C: la comisión no determina idoneidad. D: el best interest lo prohíbe."
+      "explanation": "El riesgo de mercado de la variable contradice el objetivo de proteger capital: no idónea. A: las variables pueden perder. C: la comisión no determina idoneidad. D: el mejor interés lo prohíbe."
     },
     "correctAnswerId": "s6q6-a2"
   },
@@ -12829,7 +12829,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "The free look lets the client review and return for a full refund. A: it’s not for the insurer. C: it doesn’t extend contestability. D: it doesn’t affect the premium."
     },
     "es": {
-      "question": "El propósito PRINCIPAL del periodo de “free look” es:",
+      "question": "El propósito PRINCIPAL del periodo de “periodo de revisión gratuita” es:",
       "answers": [
         {
           "id": "s6q7-a1",
@@ -12848,7 +12848,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Aumentar la prima"
         }
       ],
-      "explanation": "El free look permite revisar y devolver para reembolso total. A: no es para la aseguradora. C: no extiende la contestabilidad. D: no afecta la prima."
+      "explanation": "El periodo de revisión gratuita permite revisar y devolver para reembolso total. A: no es para la aseguradora. C: no extiende la contestabilidad. D: no afecta la prima."
     },
     "correctAnswerId": "s6q7-a2"
   },
@@ -12937,7 +12937,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q9-a2",
-          "text": "Un curso inicial de “Best Interest” de 4 horas"
+          "text": "Un curso inicial de mejor interés de 4 horas"
         },
         {
           "id": "s6q9-a3",
@@ -12948,7 +12948,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Nada adicional"
         }
       ],
-      "explanation": "Texas exige el curso Best Interest de 4 horas antes de vender anualidades. A/C/D no son requisitos para anualidades."
+      "explanation": "Texas exige el curso mejor interés de 4 horas antes de vender anualidades. A/C/D no son requisitos para anualidades."
     },
     "correctAnswerId": "s6q9-a2"
   },
@@ -12983,22 +12983,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s6q10-a1",
-          "text": "Suitability"
+          "text": "Idoneidad"
         },
         {
           "id": "s6q10-a2",
-          "text": "Churning"
+          "text": "Reemplazo abusivo"
         },
         {
           "id": "s6q10-a3",
-          "text": "Field underwriting"
+          "text": "Evaluación inicial de campo"
         },
         {
           "id": "s6q10-a4",
-          "text": "Free look"
+          "text": "Periodo de revisión gratuita"
         }
       ],
-      "explanation": "Reemplazar usando los valores existentes por comisión = churning. A: suitability es lo correcto, no esto. C: field underwriting es reunir info. D: free look es otra cosa."
+      "explanation": "Reemplazar usando los valores existentes por comisión = reemplazo abusivo. A: idoneidad es lo correcto, no esto. C: evaluación inicial de campo es reunir info. D: periodo de revisión gratuita es otra cosa."
     },
     "correctAnswerId": "s6q10-a2"
   },
@@ -13095,10 +13095,10 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q12-a4",
-          "text": "Parte del field underwriting"
+          "text": "Parte de la evaluación inicial de campo"
         }
       ],
-      "explanation": "Una designación engañosa de “senior” es práctica prohibida de protección al consumidor. A: no es buen marketing, es engaño. C: el TDI no lo exige. D: no es field underwriting."
+      "explanation": "Una designación engañosa de “senior” es práctica prohibida de protección al consumidor. A: no es buen marketing, es engaño. C: el TDI no lo exige. D: no es evaluación inicial de campo."
     },
     "correctAnswerId": "s6q12-a2"
   },
@@ -13133,22 +13133,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s6q13-a1",
-          "text": "Churning"
+          "text": "Reemplazo abusivo"
         },
         {
           "id": "s6q13-a2",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s6q13-a3",
-          "text": "Suitability"
+          "text": "Idoneidad"
         },
         {
           "id": "s6q13-a4",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         }
       ],
-      "explanation": "Inducir el reemplazo con información falsa = twisting. A: churning usa valores, no engaño. C: suitability es lo correcto. D: rebating es un incentivo."
+      "explanation": "Inducir el reemplazo con información falsa = inducción engañosa al reemplazo. A: reemplazo abusivo usa valores, no engaño. C: idoneidad es lo correcto. D: rebaja indebida es un incentivo."
     },
     "correctAnswerId": "s6q13-a2"
   },
@@ -13198,7 +13198,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Pagar la comisión al cliente"
         }
       ],
-      "explanation": "El best interest exige divulgar el conflicto de interés. A: ocultarlo lo viola. C: no obliga a cancelar. D: no se “paga” la comisión al cliente."
+      "explanation": "El mejor interés exige divulgar el conflicto de interés. A: ocultarlo lo viola. C: no obliga a cancelar. D: no se “paga” la comisión al cliente."
     },
     "correctAnswerId": "s6q14-a2"
   },
@@ -13245,7 +13245,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q15-a4",
-          "text": "Acelerar el underwriting"
+          "text": "Acelerar la evaluación de riesgo"
         }
       ],
       "explanation": "El reemplazo se regula para proteger al cliente de pérdidas y cargos. A: lo contrario. C/D: no es su propósito."
@@ -13329,7 +13329,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Eight days is within the 10 of the free look: the insurer refunds. A: the deadline hasn’t passed. C: no penalty. D: it doesn’t convert."
     },
     "es": {
-      "question": "Un cliente recibe su póliza de vida el lunes y la devuelve ocho días después, sin reclamo. Bajo el free look de Texas, la aseguradora DEBE:",
+      "question": "Un cliente recibe su póliza de vida el lunes y la devuelve ocho días después, sin reclamo. Bajo el periodo de revisión gratuita de Texas, la aseguradora DEBE:",
       "answers": [
         {
           "id": "s6q17-a1",
@@ -13348,7 +13348,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Convertir la póliza en anualidad"
         }
       ],
-      "explanation": "Ocho días está dentro de los 10 del free look: la aseguradora reembolsa. A: no ha pasado el plazo. C: no hay penalidad. D: no se convierte en nada."
+      "explanation": "Ocho días está dentro de los 10 del periodo de revisión gratuita: la aseguradora reembolsa. A: no ha pasado el plazo. C: no hay penalidad. D: no se convierte en nada."
     },
     "correctAnswerId": "s6q17-a2"
   },
@@ -13548,7 +13548,7 @@ const CERTIVO_QUESTIONS = [
           "text": "$500,000"
         }
       ],
-      "explanation": "TLHIGA beneficio por muerte = $300,000. A: $100k es cash value. B: $250k es anualidad. D: $500k es salud."
+      "explanation": "TLHIGA beneficio por muerte = $300,000. A: $100k es valor en efectivo. B: $250k es anualidad. D: $500k es salud."
     },
     "correctAnswerId": "s6q21-a3"
   },
@@ -13579,7 +13579,7 @@ const CERTIVO_QUESTIONS = [
       "explanation": "Rebating penalizes agent and client. A/D: not just one. C: it’s not legal."
     },
     "es": {
-      "question": "Un agente ofrece a un cliente una tarjeta de regalo de $200 por firmar hoy. Respecto del rebating:",
+      "question": "Un agente ofrece a un cliente una tarjeta de regalo de $200 por firmar hoy. Respecto del rebaja indebida:",
       "answers": [
         {
           "id": "s6q22-a1",
@@ -13598,7 +13598,7 @@ const CERTIVO_QUESTIONS = [
           "text": "Solo el cliente es sancionado"
         }
       ],
-      "explanation": "El rebating sanciona a agente y cliente. A/D: no es solo uno. C: no es legal."
+      "explanation": "El rebaja indebida sanciona a agente y cliente. A/D: no es solo uno. C: no es legal."
     },
     "correctAnswerId": "s6q22-a2"
   },
@@ -13683,7 +13683,7 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s6q24-a1",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         },
         {
           "id": "s6q24-a2",
@@ -13691,14 +13691,14 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q24-a3",
-          "text": "Twisting"
+          "text": "Inducción engañosa al reemplazo"
         },
         {
           "id": "s6q24-a4",
-          "text": "Sliding"
+          "text": "Venta agregada no autorizada"
         }
       ],
-      "explanation": "Difamar la solvencia de otra aseguradora = defamation. A: rebating es un incentivo. C: twisting es reemplazo por engaño. D: sliding es cargo sin permiso."
+      "explanation": "Difamar la solvencia de otra aseguradora = defamation. A: rebaja indebida es un incentivo. C: inducción engañosa al reemplazo es reemplazo por engaño. D: venta agregada no autorizada es cargo sin permiso."
     },
     "correctAnswerId": "s6q24-a2"
   },
@@ -13737,18 +13737,18 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q25-a2",
-          "text": "Commingling, una violación del deber fiduciario"
+          "text": "Mezcla indebida de fondos, una violación del deber fiduciario"
         },
         {
           "id": "s6q25-a3",
-          "text": "Rebating"
+          "text": "Rebaja indebida"
         },
         {
           "id": "s6q25-a4",
-          "text": "Field underwriting"
+          "text": "Evaluación inicial de campo"
         }
       ],
-      "explanation": "Mezclar primas con fondos personales = commingling. A: no es aceptable. C/D: no aplican."
+      "explanation": "Mezclar primas con fondos personales = mezcla indebida de fondos. A: no es aceptable. C/D: no aplican."
     },
     "correctAnswerId": "s6q25-a2"
   },
@@ -14033,11 +14033,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s6q31-a1",
-          "text": "Fixed period; se determina el monto"
+          "text": "Periodo fijo; se determina el monto"
         },
         {
           "id": "s6q31-a2",
-          "text": "Fixed amount; se determina el tiempo (cuánto durará)"
+          "text": "Monto fijo; se determina el tiempo (cuánto durará)"
         },
         {
           "id": "s6q31-a3",
@@ -14045,7 +14045,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q31-a4",
-          "text": "Life only; de por vida"
+          "text": "Solo vida; de por vida"
         }
       ],
       "explanation": "Monto fijo hasta agotarse = fixed amount; se determina el tiempo. A: el fixed period fija el tiempo y calcula el monto. C: retiene capital. D: es de por vida."
@@ -14341,14 +14341,14 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q37-a3",
-          "text": "Decreasing term"
+          "text": "Término decreciente"
         },
         {
           "id": "s6q37-a4",
           "text": "Prima única"
         }
       ],
-      "explanation": "DB creciente con el cash value = Opción B. A: la A es nivelada. C/D: no aplican."
+      "explanation": "DB creciente con el valor en efectivo = Opción B. A: la A es nivelada. C/D: no aplican."
     },
     "correctAnswerId": "s6q37-a2"
   },
@@ -14437,7 +14437,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q39-a2",
-          "text": "El agente (field underwriting)"
+          "text": "El agente (evaluación inicial de campo)"
         },
         {
           "id": "s6q39-a3",
@@ -14448,7 +14448,7 @@ const CERTIVO_QUESTIONS = [
           "text": "El reasegurador"
         }
       ],
-      "explanation": "El agente es el primer underwriter (field underwriting). A/C/D actúan después o no evalúan al inicio."
+      "explanation": "El agente es el primer underwriter (evaluación inicial de campo). A/C/D actúan después o no evalúan al inicio."
     },
     "correctAnswerId": "s6q39-a2"
   },
@@ -14487,7 +14487,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q40-a2",
-          "text": "Se clasifica como MEC y sus distribuciones en vida se gravan LIFO (+10% si <59½)"
+          "text": "Se clasifica como MEC y sus distribuciones en vida se gravan LIFO (+10% si es menor de 59 1/2)"
         },
         {
           "id": "s6q40-a3",
@@ -14533,22 +14533,22 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s6q41-a1",
-          "text": "Accidental Death Benefit"
+          "text": "Beneficio por muerte accidental"
         },
         {
           "id": "s6q41-a2",
-          "text": "Accelerated Death Benefit"
+          "text": "Beneficio acelerado por muerte"
         },
         {
           "id": "s6q41-a3",
-          "text": "Waiver of Premium"
+          "text": "Exención de prima"
         },
         {
           "id": "s6q41-a4",
-          "text": "Return of Premium"
+          "text": "Devolución de prima"
         }
       ],
-      "explanation": "Cobrar en vida por enfermedad terminal, reduciendo el DB = Accelerated Death Benefit. A: es por accidente. C: exime primas. D: devuelve primas."
+      "explanation": "Cobrar en vida por enfermedad terminal, reduciendo el DB = beneficio acelerado por muerte. A: es por accidente. C: exime primas. D: devuelve primas."
     },
     "correctAnswerId": "s6q41-a2"
   },
@@ -14733,11 +14733,11 @@ const CERTIVO_QUESTIONS = [
       "answers": [
         {
           "id": "s6q45-a1",
-          "text": "Accidental Death Benefit"
+          "text": "Beneficio por muerte accidental"
         },
         {
           "id": "s6q45-a2",
-          "text": "Waiver of Premium"
+          "text": "Exención de prima"
         },
         {
           "id": "s6q45-a3",
@@ -14745,10 +14745,10 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q45-a4",
-          "text": "Return of Premium"
+          "text": "Devolución de prima"
         }
       ],
-      "explanation": "Discapacidad total → Waiver of Premium. A: por muerte accidental. C: compra futura. D: devuelve primas."
+      "explanation": "Discapacidad total → Waiver of prima. A: por muerte accidental. C: compra futura. D: devuelve primas."
     },
     "correctAnswerId": "s6q45-a2"
   },
@@ -14945,7 +14945,7 @@ const CERTIVO_QUESTIONS = [
         },
         {
           "id": "s6q49-a4",
-          "text": "El free look"
+          "text": "El periodo de revisión gratuita"
         }
       ],
       "explanation": "Reemplazo sin beneficio para el cliente, solo por comisión, viola la idoneidad/mejor interés. B: sí viola una regla. C/D: no son lo relevante."
