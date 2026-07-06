@@ -67,8 +67,11 @@
       of: "of",
       correct: "Correct",
       incorrect: "Incorrect",
+      yourAnswer: "Your answer",
       correctAnswer: "Correct answer",
       explanation: "Explanation",
+      whyItMatters: "Why it matters",
+      reviewCue: "Review this topic",
       chooseAnswer: "Choose an answer to continue.",
       emptyMissed: "No missed questions yet.",
       noHistory: "No sessions yet.",
@@ -143,8 +146,11 @@
       of: "de",
       correct: "Correcto",
       incorrect: "Incorrecto",
+      yourAnswer: "Tu respuesta",
       correctAnswer: "Respuesta correcta",
       explanation: "Explicación",
+      whyItMatters: "Por qué importa",
+      reviewCue: "Repasa este tema",
       chooseAnswer: "Elige una respuesta para continuar.",
       emptyMissed: "Todavía no hay preguntas falladas.",
       noHistory: "Aún no hay sesiones.",
@@ -255,6 +261,29 @@
     return String(value).replace(/\b\w/g, (letter) => letter.toUpperCase());
   }
 
+  function topicLabel(topic) {
+    const labels = {
+      es: {
+        annuities: "Anualidades",
+        beneficiaries: "Beneficiarios",
+        "best interest": "Mejor interés",
+        calculation: "Cálculos",
+        contracts: "Contratos",
+        ethics: "Ética",
+        general: "General",
+        "life insurance": "Seguro de vida",
+        "policy provisions": "Cláusulas de póliza",
+        retirement: "Retiro",
+        riders: "Cláusulas adicionales",
+        taxes: "Impuestos",
+        texas: "Texas",
+        underwriting: "Evaluación de riesgo"
+      },
+      en: {}
+    };
+    return labels[prefs.language]?.[topic] || titleCase(topic);
+  }
+
   function localize() {
     document.documentElement.lang = prefs.language;
     document.querySelectorAll("[data-i18n]").forEach((node) => {
@@ -294,7 +323,7 @@
     const previousSimulator = els.simulator.value || "all";
     const topics = [...new Set(CERTIVO_QUESTIONS.map((question) => question.topic))].sort();
     const simulators = [...new Set(CERTIVO_QUESTIONS.map((question) => question.simulator))].sort((a, b) => a - b);
-    fillSelect(els.topic, [{ value: "all", label: t("allTopics") }, { value: "missed", label: t("reviewMissed") }, ...topics.map((topic) => ({ value: topic, label: titleCase(topic) }))], previousTopic);
+    fillSelect(els.topic, [{ value: "all", label: t("allTopics") }, { value: "missed", label: t("reviewMissed") }, ...topics.map((topic) => ({ value: topic, label: topicLabel(topic) }))], previousTopic);
     fillSelect(els.simulator, [{ value: "all", label: t("allSimulators") }, ...simulators.map((sim) => ({ value: String(sim), label: `${t("simulator")} ${sim}` }))], previousSimulator);
     populateCounts();
   }
@@ -407,7 +436,7 @@
 
     els.questionCounter.textContent = `${t("question")} ${session.index + 1} ${t("of")} ${session.deck.length}`;
     els.timer.textContent = `${minutes}:${seconds}`;
-    els.questionTopic.textContent = titleCase(question.topic);
+    els.questionTopic.textContent = topicLabel(question.topic);
     els.questionProgress.style.width = `${((session.index + 1) / session.deck.length) * 100}%`;
     els.questionSource.textContent = `${t("simulator")} ${question.simulator} · ${question.id.toUpperCase()}${session.reviewingMissed ? ` · ${t("reviewingMissed")}` : ""}`;
     els.questionText.textContent = copy.question;
@@ -444,13 +473,48 @@
     if (!checked || session.mode === "exam") return;
 
     const isCorrect = selectedId === question.correctAnswerId;
-    const correctText = question[prefs.language].answers.find((answer) => answer.id === question.correctAnswerId).text;
+    const answers = question[prefs.language].answers;
+    const selectedText = answers.find((answer) => answer.id === selectedId)?.text || "";
+    const correctText = answers.find((answer) => answer.id === question.correctAnswerId).text;
     els.feedback.className = `feedback ${isCorrect ? "good" : "bad"}`;
+
     const title = document.createElement("strong");
-    title.textContent = isCorrect ? t("correct") : `${t("incorrect")} · ${t("correctAnswer")}: ${correctText}`;
-    const detail = document.createElement("span");
-    detail.textContent = `${t("explanation")}: ${question[prefs.language].explanation}`;
-    els.feedback.append(title, detail);
+    title.textContent = isCorrect ? t("correct") : t("incorrect");
+    els.feedback.appendChild(title);
+
+    if (!isCorrect) {
+      const comparison = document.createElement("div");
+      comparison.className = "feedback-grid";
+      comparison.append(
+        feedbackLine(t("yourAnswer"), selectedText),
+        feedbackLine(t("correctAnswer"), correctText)
+      );
+      els.feedback.appendChild(comparison);
+    }
+
+    const explanation = document.createElement("p");
+    explanation.className = "feedback-detail";
+    const explanationLabel = document.createElement("b");
+    explanationLabel.textContent = `${isCorrect ? t("explanation") : t("whyItMatters")}:`;
+    explanation.append(explanationLabel, ` ${question[prefs.language].explanation}`);
+    els.feedback.appendChild(explanation);
+
+    if (!isCorrect) {
+      const cue = document.createElement("p");
+      cue.className = "feedback-cue";
+      cue.textContent = `${t("reviewCue")}: ${topicLabel(question.topic)} · ${t("simulator")} ${question.simulator}`;
+      els.feedback.appendChild(cue);
+    }
+  }
+
+  function feedbackLine(label, value) {
+    const row = document.createElement("p");
+    const labelNode = document.createElement("span");
+    const valueNode = document.createElement("b");
+    labelNode.textContent = `${label}:`;
+    valueNode.textContent = value;
+    row.append(labelNode, valueNode);
+    return row;
   }
 
   function selectAnswer(questionId, answerId) {
@@ -587,7 +651,7 @@
       const percent = Math.round((value.correct / value.total) * 100);
       const row = document.createElement("div");
       row.className = "topic-row";
-      row.innerHTML = `<div class="topic-top"><span>${titleCase(topic)}</span><span>${value.correct}/${value.total} · ${percent}%</span></div><div class="progress-track"><div class="progress-fill" style="width:${percent}%"></div></div>`;
+      row.innerHTML = `<div class="topic-top"><span>${topicLabel(topic)}</span><span>${value.correct}/${value.total} · ${percent}%</span></div><div class="progress-track"><div class="progress-fill" style="width:${percent}%"></div></div>`;
       els.topicBreakdown.appendChild(row);
     });
   }

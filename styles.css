@@ -509,6 +509,42 @@ select {
   margin-bottom: 6px;
 }
 
+.feedback-grid {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.feedback-grid p,
+.feedback-detail,
+.feedback-cue {
+  margin: 0;
+}
+
+.feedback-grid p {
+  display: grid;
+  gap: 3px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel), transparent 18%);
+  padding: 10px;
+}
+
+.feedback-grid span,
+.feedback-cue {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.feedback-detail {
+  margin-top: 10px;
+}
+
+.feedback-cue {
+  margin-top: 10px;
+}
+
 .question-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
