@@ -71,6 +71,11 @@
       correctAnswer: "Correct answer",
       explanation: "Explanation",
       whyItMatters: "Why it matters",
+      whatToNotice: "What to notice",
+      plainMeaning: "Plain meaning",
+      whyCorrect: "Why the correct answer is right",
+      whyWrong: "Why your answer is not right",
+      memoryRule: "Simple memory rule",
       reviewCue: "Review this topic",
       chooseAnswer: "Choose an answer to continue.",
       emptyMissed: "No missed questions yet.",
@@ -150,6 +155,11 @@
       correctAnswer: "Respuesta correcta",
       explanation: "Explicación",
       whyItMatters: "Por qué importa",
+      whatToNotice: "Qué debes notar",
+      plainMeaning: "En palabras simples",
+      whyCorrect: "Por qué la respuesta correcta sí encaja",
+      whyWrong: "Por qué tu respuesta no encaja",
+      memoryRule: "Regla fácil para recordar",
       reviewCue: "Repasa este tema",
       chooseAnswer: "Elige una respuesta para continuar.",
       emptyMissed: "Todavía no hay preguntas falladas.",
@@ -492,12 +502,27 @@
       els.feedback.appendChild(comparison);
     }
 
-    const explanation = document.createElement("p");
-    explanation.className = "feedback-detail";
-    const explanationLabel = document.createElement("b");
-    explanationLabel.textContent = `${isCorrect ? t("explanation") : t("whyItMatters")}:`;
-    explanation.append(explanationLabel, ` ${question[prefs.language].explanation}`);
-    els.feedback.appendChild(explanation);
+    if (isCorrect) {
+      const explanation = document.createElement("p");
+      explanation.className = "feedback-detail";
+      const explanationLabel = document.createElement("b");
+      explanationLabel.textContent = `${t("explanation")}:`;
+      explanation.append(explanationLabel, ` ${question[prefs.language].explanation}`);
+      els.feedback.appendChild(explanation);
+    } else {
+      const lesson = document.createElement("div");
+      lesson.className = "feedback-lesson";
+      buildTeachingSteps(question, selectedText, correctText).forEach((step) => {
+        const item = document.createElement("section");
+        const heading = document.createElement("h4");
+        const body = document.createElement("p");
+        heading.textContent = step.title;
+        body.textContent = step.body;
+        item.append(heading, body);
+        lesson.appendChild(item);
+      });
+      els.feedback.appendChild(lesson);
+    }
 
     if (!isCorrect) {
       const cue = document.createElement("p");
@@ -515,6 +540,215 @@
     valueNode.textContent = value;
     row.append(labelNode, valueNode);
     return row;
+  }
+
+  function buildTeachingSteps(question, selectedText, correctText) {
+    const concept = conceptLesson(question, correctText);
+    return [
+      {
+        title: t("whatToNotice"),
+        body: concept.notice || defaultNotice(question, correctText)
+      },
+      {
+        title: t("plainMeaning"),
+        body: concept.plain || defaultPlainMeaning(question)
+      },
+      {
+        title: t("whyCorrect"),
+        body: concept.correct || defaultCorrectReason(question, correctText)
+      },
+      {
+        title: t("whyWrong"),
+        body: concept.wrong || defaultWrongReason(selectedText, correctText)
+      },
+      {
+        title: t("memoryRule"),
+        body: concept.rule || defaultMemoryRule(question, correctText)
+      }
+    ];
+  }
+
+  function conceptLesson(question, correctText) {
+    const source = `${question.en.question} ${question.en.explanation} ${correctText}`.toLowerCase();
+    const spanish = prefs.language === "es";
+    const lessons = [
+      {
+        match: /single-premium immediate annuity|spia/,
+        en: {
+          notice: "The key words are single-premium and immediate.",
+          plain: "Single-premium means the owner pays one lump sum. Immediate means income payments start soon, usually within about one year.",
+          correct: "The correct answer says payments begin within about one year and there is no accumulation phase. That matches an immediate annuity exactly.",
+          wrong: "Flexible contributions describe a flexible-premium product. A SPIA is not funded little by little. It is funded once, then it starts paying.",
+          rule: "SPIA = one payment in, income starts soon."
+        },
+        es: {
+          notice: "Las palabras clave son prima única e inmediata.",
+          plain: "Prima única significa que el dueño paga una sola suma grande. Inmediata significa que los pagos de ingreso empiezan pronto, normalmente dentro de aproximadamente un año.",
+          correct: "La respuesta correcta dice que empieza a pagar dentro de aproximadamente un año y que no hay fase de acumulación. Eso describe exactamente una anualidad inmediata.",
+          wrong: "Aportaciones flexibles describe otro tipo de producto. Una SPIA no se paga poco a poco. Se paga una vez y luego empieza a pagar ingresos.",
+          rule: "SPIA = un pago entra, el ingreso empieza pronto."
+        }
+      },
+      {
+        match: /best interest|suitability|liquidity|surrender charge/,
+        en: {
+          notice: "Look for the client's need first: age, liquidity, risk tolerance, and time horizon.",
+          plain: "Best interest means the recommendation must fit the client, not just the product features or the commission.",
+          correct: "The correct answer protects the client's stated need. If the client needs money soon, a product with long surrender charges is usually a bad fit.",
+          wrong: "Your answer focuses on one feature, but suitability is about the whole client situation. A good feature does not fix a product that blocks money the client needs.",
+          rule: "Client need first, product second."
+        },
+        es: {
+          notice: "Primero mira la necesidad del cliente: edad, liquidez, tolerancia al riesgo y plazo.",
+          plain: "Mejor interés significa que la recomendación debe encajar con el cliente, no solo con las características del producto o la comisión.",
+          correct: "La respuesta correcta protege la necesidad declarada del cliente. Si el cliente necesita dinero pronto, un producto con cargos de rescate largos normalmente no encaja.",
+          wrong: "Tu respuesta se enfoca en una característica, pero la idoneidad mira la situación completa del cliente. Una característica buena no arregla un producto que bloquea el dinero que el cliente necesita.",
+          rule: "Primero la necesidad del cliente, después el producto."
+        }
+      },
+      {
+        match: /lifo|fifo|nonqualified annuity|withdrawal|annuity withdrawals/,
+        en: {
+          notice: "Watch whether the annuity is nonqualified and whether the question says withdrawal instead of annuitized payment.",
+          plain: "For a nonqualified annuity withdrawal, the IRS treats earnings as coming out first.",
+          correct: "The correct answer matches LIFO: last in, first out. The gain comes out first, so it is taxable first.",
+          wrong: "Your answer treats the owner's basis as coming out first or treats the money as tax-free. That is not how nonqualified annuity withdrawals are tested.",
+          rule: "Nonqualified annuity withdrawal = gain first = taxable first."
+        },
+        es: {
+          notice: "Fíjate si la anualidad es no calificada y si la pregunta dice retiro en vez de pago anualizado.",
+          plain: "En un retiro de anualidad no calificada, el IRS trata la ganancia como si saliera primero.",
+          correct: "La respuesta correcta coincide con LIFO: lo último que entró sale primero. La ganancia sale primero, así que se grava primero.",
+          wrong: "Tu respuesta trata la base del dueño como si saliera primero o como si el dinero fuera libre de impuesto. Así no se prueban los retiros de anualidades no calificadas.",
+          rule: "Retiro de anualidad no calificada = ganancia primero = impuesto primero."
+        }
+      },
+      {
+        match: /required minimum distribution|rmd|traditional ira/,
+        en: {
+          notice: "The key is the account type and the required beginning age.",
+          plain: "Traditional IRA money was usually tax-deferred, so the IRS eventually forces minimum withdrawals.",
+          correct: "The correct answer gives the current general RMD start age for a traditional IRA.",
+          wrong: "Your answer is either an old rule, a penalty-free withdrawal age, or a retirement age. Those are different rules.",
+          rule: "Traditional IRA RMDs currently start at 73 for this exam rule."
+        },
+        es: {
+          notice: "La clave es el tipo de cuenta y la edad en que deben empezar las distribuciones.",
+          plain: "El dinero de una IRA tradicional normalmente fue diferido de impuestos, por eso el IRS eventualmente exige retiros mínimos.",
+          correct: "La respuesta correcta da la edad general vigente para empezar RMD en una IRA tradicional.",
+          wrong: "Tu respuesta puede ser una regla vieja, una edad para retirar sin penalidad o una edad de retiro. Son reglas distintas.",
+          rule: "RMD de IRA tradicional empieza generalmente a los 73 bajo esta regla de examen."
+        }
+      },
+      {
+        match: /insurable interest/,
+        en: {
+          notice: "Ask when insurable interest must exist.",
+          plain: "For life insurance, insurable interest is checked when the policy starts. It does not have to be proven again at death.",
+          correct: "The correct answer says application or policy issue. That is the required timing for life insurance.",
+          wrong: "Your answer adds another timing requirement that belongs more to property insurance thinking, not life insurance.",
+          rule: "Life insurance insurable interest = required at the beginning."
+        },
+        es: {
+          notice: "Pregunta cuándo debe existir el interés asegurable.",
+          plain: "En seguro de vida, el interés asegurable se revisa cuando empieza la póliza. No tiene que probarse otra vez al morir.",
+          correct: "La respuesta correcta dice solicitud o emisión de la póliza. Ese es el momento requerido en vida.",
+          wrong: "Tu respuesta agrega otro momento que se parece más a la lógica de seguros de propiedad, no de vida.",
+          rule: "Interés asegurable en vida = se exige al inicio."
+        }
+      },
+      {
+        match: /guaranty association|tlhiga/,
+        en: {
+          notice: "This is asking for a Texas guaranty association dollar limit.",
+          plain: "The guaranty association is a safety net if an insurer fails, but it only protects up to set limits.",
+          correct: "The correct answer is the death benefit limit for life insurance.",
+          wrong: "Your answer is likely a different benefit limit. The exam expects you to match the limit to the type of benefit.",
+          rule: "TLHIGA life death benefit limit = $300,000."
+        },
+        es: {
+          notice: "La pregunta pide un límite en dólares de la asociación de garantía de Texas.",
+          plain: "La asociación de garantía funciona como protección si una aseguradora falla, pero solo protege hasta ciertos límites.",
+          correct: "La respuesta correcta es el límite para beneficio por muerte en seguro de vida.",
+          wrong: "Tu respuesta probablemente corresponde a otro tipo de límite. El examen espera que conectes el límite con el tipo de beneficio.",
+          rule: "Límite TLHIGA para beneficio por muerte de vida = $300,000."
+        }
+      },
+      {
+        match: /churning|twisting|rebating|sliding|commingling/,
+        en: {
+          notice: "This is an ethics vocabulary question. Small wording differences matter.",
+          plain: "The question describes a prohibited sales behavior. Match the behavior to the exact term.",
+          correct: "The correct answer names the specific unfair practice described in the question.",
+          wrong: "Your answer is a different unfair practice. These terms are close, but each one describes a different bad action.",
+          rule: "Define the behavior first, then pick the term."
+        },
+        es: {
+          notice: "Esta es una pregunta de vocabulario ético. Las diferencias pequeñas importan.",
+          plain: "La pregunta describe una práctica de venta prohibida. Debes conectar la conducta con el término exacto.",
+          correct: "La respuesta correcta nombra la práctica injusta específica descrita en la pregunta.",
+          wrong: "Tu respuesta es otra práctica injusta distinta. Estos términos se parecen, pero cada uno describe una mala conducta diferente.",
+          rule: "Primero define la conducta, luego escoge el término."
+        }
+      },
+      {
+        match: /waiver of premium|disability/,
+        en: {
+          notice: "Look for total disability and premium payments.",
+          plain: "Waiver of premium means the policy can stay in force without the insured paying premiums after a qualifying disability.",
+          correct: "The correct answer connects the rider to disability, not death, loans, or beneficiary changes.",
+          wrong: "Your answer points to a different policy feature. The disability clue should lead you to waiver of premium.",
+          rule: "Disability clue = waiver of premium."
+        },
+        es: {
+          notice: "Busca discapacidad total y pagos de prima.",
+          plain: "Exención de prima significa que la póliza puede seguir activa sin que el asegurado pague primas después de una discapacidad que califica.",
+          correct: "La respuesta correcta conecta el rider con discapacidad, no con muerte, préstamos o cambios de beneficiario.",
+          wrong: "Tu respuesta apunta a otra característica de la póliza. La pista de discapacidad debe llevarte a exención de prima.",
+          rule: "Pista de discapacidad = exención de prima."
+        }
+      }
+    ];
+
+    const match = lessons.find((lesson) => lesson.match.test(source));
+    return match ? match[spanish ? "es" : "en"] : {};
+  }
+
+  function defaultNotice(question, correctText) {
+    if (prefs.language === "es") {
+      return `Identifica exactamente qué pide la pregunta. En este caso, la pista principal debe apuntarte hacia: ${correctText}.`;
+    }
+    return `Identify exactly what the question is asking. In this case, the main clue should point you toward: ${correctText}.`;
+  }
+
+  function defaultPlainMeaning(question) {
+    const topic = topicLabel(question.topic);
+    if (prefs.language === "es") {
+      return `La pregunta está probando una regla o definición de ${topic}. No busques la opción que “suena familiar”; busca la que coincide con la regla.`;
+    }
+    return `The question is testing a ${topic} rule or definition. Do not pick the answer that only sounds familiar; pick the one that matches the rule.`;
+  }
+
+  function defaultCorrectReason(question, correctText) {
+    const explanation = question[prefs.language].explanation;
+    if (prefs.language === "es") {
+      return `La respuesta correcta es “${correctText}” porque coincide con la explicación de la regla: ${explanation}`;
+    }
+    return `The correct answer is “${correctText}” because it matches the rule explanation: ${explanation}`;
+  }
+
+  function defaultWrongReason(selectedText, correctText) {
+    if (prefs.language === "es") {
+      return `Tu respuesta fue “${selectedText}.” Esa opción puede sonar relacionada, pero no responde la regla exacta de esta pregunta. La opción que sí responde la regla es “${correctText}.”`;
+    }
+    return `You chose “${selectedText}.” That option may sound related, but it does not answer the exact rule being tested. The option that does answer the rule is “${correctText}.”`;
+  }
+
+  function defaultMemoryRule(question, correctText) {
+    if (prefs.language === "es") {
+      return `Para memorizarlo: conecta la pista de la pregunta con esta frase corta: ${correctText}.`;
+    }
+    return `Memory shortcut: connect the question clue to this short phrase: ${correctText}.`;
   }
 
   function selectAnswer(questionId, answerId) {
