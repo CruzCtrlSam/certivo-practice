@@ -14,6 +14,7 @@ Certivo Practice is a static, mobile-first bilingual Texas Life Insurance practi
 - Saved local progress, history, missed questions, and flags
 - Dark mode
 - Mobile bottom navigation
+- Certivo logo, favicon, and installable app icons
 
 ## Files
 
@@ -21,6 +22,8 @@ Certivo Practice is a static, mobile-first bilingual Texas Life Insurance practi
 - `styles.css` - responsive light/dark styling
 - `app.js` - quiz behavior, progress, scoring, flags, history, and filters
 - `questions.js` - structured bilingual question database
+- `manifest.webmanifest` - installable app metadata
+- `assets/` - Certivo logo and app icon files
 - `README.md` - this file
 
 ## Question Format
@@ -60,10 +63,16 @@ Keep answer ids identical between English and Spanish. The app shuffles answers 
    - `styles.css`
    - `app.js`
    - `questions.js`
+   - `manifest.webmanifest`
+   - `assets/certivo-mark.svg`
+   - `assets/certivo-icon.svg`
+   - `assets/certivo-icon-512.png`
+   - `assets/certivo-apple-touch-icon.png`
    - `README.md`
-3. Go to **Settings > Pages**.
-4. Set the source to the main branch and root folder.
-5. Save. The app will be available at:
+3. Make sure the four image files stay inside an `assets` folder in the repository root.
+4. Go to **Settings > Pages**.
+5. Set the source to the main branch and root folder.
+6. Save. The app will be available at:
 
 `https://cruzctrlsam.github.io/certivo-practice/`
 
