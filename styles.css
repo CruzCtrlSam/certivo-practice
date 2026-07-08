@@ -509,63 +509,30 @@ select {
   margin-bottom: 6px;
 }
 
-.feedback-grid {
-  display: grid;
-  gap: 8px;
-  margin: 10px 0;
-}
-
-.feedback-grid p,
-.feedback-detail,
-.feedback-cue {
+.feedback-detail {
   margin: 0;
-}
-
-.feedback-grid p {
-  display: grid;
-  gap: 3px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--panel), transparent 18%);
-  padding: 10px;
-}
-
-.feedback-grid span,
-.feedback-cue {
-  color: var(--muted);
-  font-size: 0.9rem;
-  font-weight: 800;
 }
 
 .feedback-detail {
   margin-top: 10px;
 }
 
-.feedback-cue {
+.feedback-section {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel), transparent 18%);
+  padding: 12px;
   margin-top: 10px;
 }
 
-.feedback-lesson {
-  display: grid;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.feedback-lesson section {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--panel), transparent 10%);
-  padding: 12px;
-}
-
-.feedback-lesson h4 {
+.feedback-section h4 {
   margin: 0 0 5px;
   color: var(--blue-strong);
   font-size: 0.92rem;
   line-height: 1.25;
 }
 
-.feedback-lesson p {
+.feedback-section p {
   margin: 0;
   line-height: 1.48;
 }

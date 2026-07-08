@@ -67,16 +67,10 @@
       of: "of",
       correct: "Correct",
       incorrect: "Incorrect",
-      yourAnswer: "Your answer",
       correctAnswer: "Correct answer",
       explanation: "Explanation",
-      whyItMatters: "Why it matters",
-      whatToNotice: "What to notice",
-      plainMeaning: "Plain meaning",
-      whyCorrect: "Why the correct answer is right",
-      whyWrong: "Why your answer is not right",
-      memoryRule: "Simple memory rule",
-      reviewCue: "Review this topic",
+      basicExplanation: "Explanation",
+      memoryPhrase: "Memory phrase",
       chooseAnswer: "Choose an answer to continue.",
       emptyMissed: "No missed questions yet.",
       noHistory: "No sessions yet.",
@@ -151,16 +145,10 @@
       of: "de",
       correct: "Correcto",
       incorrect: "Incorrecto",
-      yourAnswer: "Tu respuesta",
       correctAnswer: "Respuesta correcta",
       explanation: "Explicación",
-      whyItMatters: "Por qué importa",
-      whatToNotice: "Qué debes notar",
-      plainMeaning: "En palabras simples",
-      whyCorrect: "Por qué la respuesta correcta sí encaja",
-      whyWrong: "Por qué tu respuesta no encaja",
-      memoryRule: "Regla fácil para recordar",
-      reviewCue: "Repasa este tema",
+      basicExplanation: "Explicación",
+      memoryPhrase: "Frase para memorizar",
       chooseAnswer: "Elige una respuesta para continuar.",
       emptyMissed: "Todavía no hay preguntas falladas.",
       noHistory: "Aún no hay sesiones.",
@@ -492,16 +480,6 @@
     title.textContent = isCorrect ? t("correct") : t("incorrect");
     els.feedback.appendChild(title);
 
-    if (!isCorrect) {
-      const comparison = document.createElement("div");
-      comparison.className = "feedback-grid";
-      comparison.append(
-        feedbackLine(t("yourAnswer"), selectedText),
-        feedbackLine(t("correctAnswer"), correctText)
-      );
-      els.feedback.appendChild(comparison);
-    }
-
     if (isCorrect) {
       const explanation = document.createElement("p");
       explanation.className = "feedback-detail";
@@ -510,62 +488,40 @@
       explanation.append(explanationLabel, ` ${question[prefs.language].explanation}`);
       els.feedback.appendChild(explanation);
     } else {
-      const lesson = document.createElement("div");
-      lesson.className = "feedback-lesson";
-      buildTeachingSteps(question, selectedText, correctText).forEach((step) => {
-        const item = document.createElement("section");
-        const heading = document.createElement("h4");
-        const body = document.createElement("p");
-        heading.textContent = step.title;
-        body.textContent = step.body;
-        item.append(heading, body);
-        lesson.appendChild(item);
-      });
-      els.feedback.appendChild(lesson);
-    }
-
-    if (!isCorrect) {
-      const cue = document.createElement("p");
-      cue.className = "feedback-cue";
-      cue.textContent = `${t("reviewCue")}: ${topicLabel(question.topic)} · ${t("simulator")} ${question.simulator}`;
-      els.feedback.appendChild(cue);
+      const lesson = buildFeedbackLesson(question, selectedText, correctText);
+      els.feedback.append(
+        feedbackSection(t("basicExplanation"), lesson.explanation),
+        feedbackSection(t("memoryPhrase"), lesson.memory)
+      );
     }
   }
 
-  function feedbackLine(label, value) {
-    const row = document.createElement("p");
-    const labelNode = document.createElement("span");
-    const valueNode = document.createElement("b");
-    labelNode.textContent = `${label}:`;
-    valueNode.textContent = value;
-    row.append(labelNode, valueNode);
-    return row;
+  function feedbackSection(label, value) {
+    const section = document.createElement("section");
+    section.className = "feedback-section";
+    const heading = document.createElement("h4");
+    const body = document.createElement("p");
+    heading.textContent = label;
+    body.textContent = value;
+    section.append(heading, body);
+    return section;
   }
 
-  function buildTeachingSteps(question, selectedText, correctText) {
+  function buildFeedbackLesson(question, selectedText, correctText) {
     const concept = conceptLesson(question, correctText);
-    return [
-      {
-        title: t("whatToNotice"),
-        body: concept.notice || defaultNotice(question, correctText)
-      },
-      {
-        title: t("plainMeaning"),
-        body: concept.plain || defaultPlainMeaning(question)
-      },
-      {
-        title: t("whyCorrect"),
-        body: concept.correct || defaultCorrectReason(question, correctText)
-      },
-      {
-        title: t("whyWrong"),
-        body: concept.wrong || defaultWrongReason(selectedText, correctText)
-      },
-      {
-        title: t("memoryRule"),
-        body: concept.rule || defaultMemoryRule(question, correctText)
-      }
-    ];
+    return {
+      explanation: concept.explanation || conceptExplanation(concept) || defaultWrongExplanation(question, selectedText, correctText),
+      memory: concept.rule || defaultMemoryRule(question, correctText)
+    };
+  }
+
+  function conceptExplanation(concept) {
+    const parts = [concept.plain, concept.correct, concept.wrong].filter(Boolean);
+    if (!parts.length) return "";
+    const prefix = prefs.language === "es"
+      ? "Según la regla que se prueba para la licencia de seguros de Texas, "
+      : "Under the rule tested for the Texas insurance license, ";
+    return `${prefix}${parts.join(" ")}`;
   }
 
   function conceptLesson(question, correctText) {
@@ -578,14 +534,14 @@
           notice: "The key words are single-premium and immediate.",
           plain: "Single-premium means the owner pays one lump sum. Immediate means income payments start soon, usually within about one year.",
           correct: "The correct answer says payments begin within about one year and there is no accumulation phase. That matches an immediate annuity exactly.",
-          wrong: "Flexible contributions describe a flexible-premium product. A SPIA is not funded little by little. It is funded once, then it starts paying.",
+          wrong: "The wrong choices describe other ideas: flexible payments, variable-only products, or long accumulation. A SPIA is not built that way. It is funded once, then it starts paying.",
           rule: "SPIA = one payment in, income starts soon."
         },
         es: {
           notice: "Las palabras clave son prima única e inmediata.",
           plain: "Prima única significa que el dueño paga una sola suma grande. Inmediata significa que los pagos de ingreso empiezan pronto, normalmente dentro de aproximadamente un año.",
           correct: "La respuesta correcta dice que empieza a pagar dentro de aproximadamente un año y que no hay fase de acumulación. Eso describe exactamente una anualidad inmediata.",
-          wrong: "Aportaciones flexibles describe otro tipo de producto. Una SPIA no se paga poco a poco. Se paga una vez y luego empieza a pagar ingresos.",
+          wrong: "Las respuestas incorrectas describen otras ideas: pagos flexibles, productos solo variables o una acumulación larga. Una SPIA no funciona así. Se paga una vez y luego empieza a pagar ingresos.",
           rule: "SPIA = un pago entra, el ingreso empieza pronto."
         }
       },
@@ -714,34 +670,12 @@
     return match ? match[spanish ? "es" : "en"] : {};
   }
 
-  function defaultNotice(question, correctText) {
-    if (prefs.language === "es") {
-      return `Identifica exactamente qué pide la pregunta. En este caso, la pista principal debe apuntarte hacia: ${correctText}.`;
-    }
-    return `Identify exactly what the question is asking. In this case, the main clue should point you toward: ${correctText}.`;
-  }
-
-  function defaultPlainMeaning(question) {
-    const topic = topicLabel(question.topic);
-    if (prefs.language === "es") {
-      return `La pregunta está probando una regla o definición de ${topic}. No busques la opción que “suena familiar”; busca la que coincide con la regla.`;
-    }
-    return `The question is testing a ${topic} rule or definition. Do not pick the answer that only sounds familiar; pick the one that matches the rule.`;
-  }
-
-  function defaultCorrectReason(question, correctText) {
+  function defaultWrongExplanation(question, selectedText, correctText) {
     const explanation = question[prefs.language].explanation;
     if (prefs.language === "es") {
-      return `La respuesta correcta es “${correctText}” porque coincide con la explicación de la regla: ${explanation}`;
+      return `Según la regla que se prueba para la licencia de seguros de Texas, “${selectedText}” no es la mejor respuesta porque no coincide con el punto legal exacto de la pregunta. La respuesta correcta es “${correctText}” porque esta es la regla: ${explanation}`;
     }
-    return `The correct answer is “${correctText}” because it matches the rule explanation: ${explanation}`;
-  }
-
-  function defaultWrongReason(selectedText, correctText) {
-    if (prefs.language === "es") {
-      return `Tu respuesta fue “${selectedText}.” Esa opción puede sonar relacionada, pero no responde la regla exacta de esta pregunta. La opción que sí responde la regla es “${correctText}.”`;
-    }
-    return `You chose “${selectedText}.” That option may sound related, but it does not answer the exact rule being tested. The option that does answer the rule is “${correctText}.”`;
+    return `Under the rule tested for the Texas insurance license, “${selectedText}” is not the best answer because it does not match the exact legal point in the question. The correct answer is “${correctText}” because this is the rule: ${explanation}`;
   }
 
   function defaultMemoryRule(question, correctText) {
