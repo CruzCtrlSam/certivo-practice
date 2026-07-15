@@ -2,6 +2,7 @@
   const SESSION_KEY = "certivoPracticeSession";
   const PROGRESS_KEY = "certivoPracticeProgress";
   const PREF_KEY = "certivoPracticePrefs";
+  const INTRO_KEY = "certivoIntroPlayed";
 
   const text = {
     en: {
@@ -214,6 +215,8 @@
     historyList: document.getElementById("historyList"),
     navButtons: document.querySelectorAll(".nav-button")
   };
+  els.intro = document.getElementById("introScreen");
+  els.introSkip = document.getElementById("introSkip");
 
   let prefs = loadJson(PREF_KEY, { language: "en", theme: "light" });
   let progress = loadJson(PROGRESS_KEY, defaultProgress());
@@ -924,6 +927,7 @@
     document.getElementById("navPractice").addEventListener("click", () => openSetup("practice"));
     document.getElementById("navExam").addEventListener("click", () => openSetup("exam"));
     document.getElementById("navStats").addEventListener("click", () => showScreen("progress"));
+    els.introSkip?.addEventListener("click", hideIntro);
     els.topic.addEventListener("change", populateCounts);
     els.simulator.addEventListener("change", populateCounts);
     els.start.addEventListener("click", startSession);
@@ -949,8 +953,37 @@
     localize();
   }
 
+  function setupIntro() {
+    if (!els.intro) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const alreadyPlayed = sessionStorage.getItem(INTRO_KEY) === "true";
+
+    if (reduceMotion || alreadyPlayed) {
+      hideIntro(true);
+      return;
+    }
+
+    document.body.classList.add("intro-active");
+    window.setTimeout(hideIntro, 2850);
+  }
+
+  function hideIntro(immediate = false) {
+    if (!els.intro) return;
+    sessionStorage.setItem(INTRO_KEY, "true");
+    document.body.classList.remove("intro-active");
+    els.intro.classList.add("is-hidden");
+    if (immediate) {
+      els.intro.classList.add("hidden");
+      return;
+    }
+    window.setTimeout(() => {
+      els.intro.classList.add("hidden");
+    }, 460);
+  }
+
   bindEvents();
   applyTheme();
   localize();
   showScreen("home");
+  setupIntro();
 })();

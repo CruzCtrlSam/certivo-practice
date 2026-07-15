@@ -8,14 +8,24 @@
     <link rel="icon" href="./assets/certivo-icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="./assets/certivo-apple-touch-icon.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=1.2-feedback">
+    <link rel="stylesheet" href="./styles.css?v=1.3-intro">
   </head>
   <body>
+    <section class="intro" id="introScreen" aria-label="Certivo intro">
+      <button class="intro-skip" id="introSkip" type="button">Skip</button>
+      <div class="intro-mark" aria-hidden="true">
+        <img class="intro-layer intro-shield" src="./assets/certivo-shield.svg" alt="">
+        <img class="intro-layer intro-c" src="./assets/certivo-c.svg" alt="">
+        <img class="intro-layer intro-spear" src="./assets/certivo-spear.svg" alt="">
+      </div>
+      <img class="intro-tagline" src="./assets/certivo-tagline.svg" alt="Forge Your Future.">
+    </section>
+
     <div class="app">
       <header class="hero">
         <div class="brand">
           <div class="logo" aria-hidden="true">
-            <img src="./assets/certivo-mark.svg" alt="">
+            <img src="./assets/certivo-main-mark.svg" alt="">
           </div>
           <div>
             <h1>Certivo</h1>
@@ -29,7 +39,7 @@
             <button id="langEs" type="button">Español</button>
           </div>
           <button class="pill-button" id="themeToggle" type="button" data-i18n="darkMode">Dark mode</button>
-          <span class="pill">v1.2</span>
+          <span class="pill">v1.3</span>
           <span class="pill" id="bankPill">300 questions</span>
         </div>
       </header>
@@ -225,7 +235,7 @@
       <button class="nav-button" id="navStats" type="button" data-i18n="stats">Stats</button>
     </nav>
 
-    <script src="./questions.js?v=1.2-feedback"></script>
-    <script src="./app.js?v=1.2-feedback"></script>
+    <script src="./questions.js?v=1.3-intro"></script>
+    <script src="./app.js?v=1.3-intro"></script>
   </body>
 </html>
