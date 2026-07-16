@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/certivo-apple-touch-icon-v3.png?v=2.3-flat-icon">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png?v=2.3-flat-icon">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=2.5-stripe-checkout">
+    <link rel="stylesheet" href="./styles.css?v=2.6-account-nav">
   </head>
   <body>
     <section class="intro" id="introScreen" aria-label="Certivo intro">
@@ -127,10 +127,17 @@
           <button class="pill-button" id="themeToggle" type="button" data-i18n="darkMode">Dark mode</button>
           <button class="pill-button" id="accountButton" type="button" data-i18n="account">Account</button>
           <button class="pill-button" id="plansButton" type="button" data-i18n="plans">Plans</button>
-          <span class="pill">v2.5</span>
+          <span class="pill">v2.6</span>
           <span class="pill" id="bankPill">300 questions</span>
         </div>
       </header>
+
+      <nav class="mobile-nav" aria-label="Primary">
+        <button class="nav-button active" id="navHome" type="button" data-i18n="home">Home</button>
+        <button class="nav-button" id="navPractice" type="button" data-i18n="practice">Practice</button>
+        <button class="nav-button" id="navExam" type="button" data-i18n="exam">Exam</button>
+        <button class="nav-button" id="navStats" type="button" data-i18n="stats">Stats</button>
+      </nav>
 
       <main class="screen" id="homeScreen">
         <div class="dashboard-grid">
@@ -329,7 +336,26 @@
             <span class="badge accent" id="accountBadge" data-i18n="freeTrialStatus">Free Trial</span>
           </div>
 
-          <div class="account-grid">
+          <form class="auth-card account-auth-card" id="authForm">
+            <div class="auth-switch" aria-label="Account action">
+              <button class="active" id="authLoginTab" type="button" data-auth-mode="login" data-i18n="logIn">Log in</button>
+              <button id="authSignupTab" type="button" data-auth-mode="signup" data-i18n="createAccount">Create account</button>
+            </div>
+
+            <h3 id="authTitle" data-i18n="logIn">Log in</h3>
+            <label>
+              <span data-i18n="email">Email</span>
+              <input id="authEmail" type="email" autocomplete="email" placeholder="student@example.com">
+            </label>
+            <label>
+              <span data-i18n="password">Password</span>
+              <input id="authPassword" type="password" autocomplete="current-password" placeholder="••••••••">
+            </label>
+            <button class="button primary" id="authSubmitButton" type="submit" data-i18n="logIn">Log in</button>
+            <p class="muted" id="authHelper" data-i18n="loginComing">Log in with your Certivo account.</p>
+          </form>
+
+          <div class="account-grid hidden" aria-hidden="true">
             <form class="auth-card" id="signupForm">
               <h3 data-i18n="createAccount">Create account</h3>
               <label>
@@ -419,15 +445,8 @@
       <p class="footer-note">Certivo Practice · Independent study aid</p>
     </div>
 
-    <nav class="mobile-nav" aria-label="Primary">
-      <button class="nav-button active" id="navHome" type="button" data-i18n="home">Home</button>
-      <button class="nav-button" id="navPractice" type="button" data-i18n="practice">Practice</button>
-      <button class="nav-button" id="navExam" type="button" data-i18n="exam">Exam</button>
-      <button class="nav-button" id="navStats" type="button" data-i18n="stats">Stats</button>
-    </nav>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./questions.js?v=2.5-stripe-checkout"></script>
-    <script src="./app.js?v=2.5-stripe-checkout"></script>
+    <script src="./questions.js?v=2.6-account-nav"></script>
+    <script src="./app.js?v=2.6-account-nav"></script>
   </body>
 </html>

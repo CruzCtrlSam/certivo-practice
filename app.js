@@ -340,6 +340,13 @@
     currentAccountCard: document.getElementById("currentAccountCard"),
     accountEmail: document.getElementById("accountEmail"),
     paidStatus: document.getElementById("paidStatus"),
+    authForm: document.getElementById("authForm"),
+    authTitle: document.getElementById("authTitle"),
+    authEmail: document.getElementById("authEmail"),
+    authPassword: document.getElementById("authPassword"),
+    authSubmitButton: document.getElementById("authSubmitButton"),
+    authHelper: document.getElementById("authHelper"),
+    authModeButtons: document.querySelectorAll("[data-auth-mode]"),
     progressAnswered: document.getElementById("progressAnswered"),
     progressCorrect: document.getElementById("progressCorrect"),
     progressAccuracy: document.getElementById("progressAccuracy"),
@@ -358,6 +365,7 @@
   let supabaseClient = null;
   let authUser = null;
   let accessState = { status: "free", plan: "free", access_until: null };
+  let authMode = "login";
 
   function defaultProgress() {
     return { answers: {}, missed: {}, flagged: {}, history: [] };
@@ -449,6 +457,7 @@
     if (activeScreen === "quiz" && session) renderQuestion();
     if (activeScreen === "results" && session) renderResults();
     if (activeScreen === "progress") renderProgress();
+    updateAuthForm();
     updateAuthUi();
   }
 
@@ -480,6 +489,7 @@
   function updateAuthUi() {
     if (!els.currentAccountCard) return;
     const isLoggedIn = Boolean(authUser);
+    if (els.authForm) els.authForm.classList.toggle("hidden", isLoggedIn);
     els.currentAccountCard.classList.toggle("hidden", !isLoggedIn);
     els.accountBadge.textContent = isLoggedIn ? t("activeStatus") : t("freeTrialStatus");
     els.accountEmail.textContent = authUser?.email || "";
@@ -518,6 +528,23 @@
 
   function authErrorMessage(error) {
     return error?.message ? `${t("authError")} ${error.message}` : t("authError");
+  }
+
+  function setAuthMode(mode) {
+    authMode = mode === "signup" ? "signup" : "login";
+    updateAuthForm();
+  }
+
+  function updateAuthForm() {
+    if (!els.authForm) return;
+    const isSignup = authMode === "signup";
+    els.authTitle.textContent = isSignup ? t("createAccount") : t("logIn");
+    els.authSubmitButton.textContent = isSignup ? t("createAccount") : t("logIn");
+    els.authHelper.textContent = isSignup ? t("supabaseComing") : t("loginComing");
+    els.authPassword.autocomplete = isSignup ? "new-password" : "current-password";
+    els.authModeButtons.forEach((button) => {
+      button.classList.toggle("active", button.dataset.authMode === authMode);
+    });
   }
 
   function applyTheme() {
@@ -1151,6 +1178,38 @@
     updateAuthUi();
   }
 
+  async function handleAuth(event) {
+    event.preventDefault();
+    if (!supabaseClient) {
+      showPlaceholderStatus("authUnavailable");
+      return;
+    }
+    const email = els.authEmail.value.trim();
+    const password = els.authPassword.value;
+    if (authMode === "signup") {
+      setAccountStatus(t("supabaseComing"));
+      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+      if (error) {
+        setAccountStatus(authErrorMessage(error));
+        return;
+      }
+      authUser = data.user || authUser;
+      setAccountStatus(t("signupSuccess"));
+      updateAuthUi();
+      return;
+    }
+
+    setAccountStatus(t("loginComing"));
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if (error) {
+      setAccountStatus(authErrorMessage(error));
+      return;
+    }
+    authUser = data.user || null;
+    setAccountStatus(t("loginSuccess"));
+    updateAuthUi();
+  }
+
   async function handleLogout() {
     if (!supabaseClient) {
       showPlaceholderStatus("authUnavailable");
@@ -1333,8 +1392,10 @@
     els.check.addEventListener("click", checkOrNext);
     els.finish.addEventListener("click", finishSession);
     els.reviewLastMissed.addEventListener("click", reviewLastMissed);
-    document.getElementById("signupForm").addEventListener("submit", handleSignup);
-    document.getElementById("loginForm").addEventListener("submit", handleLogin);
+    els.authForm?.addEventListener("submit", handleAuth);
+    els.authModeButtons.forEach((button) => button.addEventListener("click", () => setAuthMode(button.dataset.authMode)));
+    document.getElementById("signupForm")?.addEventListener("submit", handleSignup);
+    document.getElementById("loginForm")?.addEventListener("submit", handleLogin);
     document.getElementById("logoutButton").addEventListener("click", handleLogout);
     document.querySelectorAll("[data-plan]").forEach((button) => button.addEventListener("click", () => startCheckout(button.dataset.plan)));
   }
