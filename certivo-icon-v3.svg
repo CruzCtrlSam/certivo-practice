@@ -3,9 +3,9 @@
   <desc id="desc">A dark blue rounded square app icon with the Certivo gold shield mark.</desc>
   <defs>
     <linearGradient id="bg" x1="76" y1="52" x2="438" y2="462" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#172752"/>
-      <stop offset="0.62" stop-color="#284aa5"/>
-      <stop offset="1" stop-color="#0f766e"/>
+      <stop offset="0" stop-color="#102135"/>
+      <stop offset="0.66" stop-color="#17345a"/>
+      <stop offset="1" stop-color="#21567a"/>
     </linearGradient>
     <filter id="shadow" x="-30%" y="-20%" width="160%" height="150%">
       <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#07142d" flood-opacity="0.34"/>

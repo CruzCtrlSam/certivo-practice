@@ -47,10 +47,6 @@ body {
   background: var(--bg);
 }
 
-body.intro-active {
-  overflow: hidden;
-}
-
 button,
 select {
   font: inherit;
@@ -67,119 +63,6 @@ button:disabled {
 
 .hidden {
   display: none !important;
-}
-
-.intro {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 30px;
-  padding: 32px 22px;
-  background: #0d1d31;
-  color: #d6b34a;
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 420ms ease, visibility 420ms ease;
-}
-
-.intro.is-hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.intro-skip {
-  position: absolute;
-  top: calc(16px + env(safe-area-inset-top));
-  right: 16px;
-  min-height: 40px;
-  border: 1px solid rgba(214, 179, 74, 0.45);
-  border-radius: 999px;
-  background: rgba(13, 29, 49, 0.68);
-  color: #d6b34a;
-  padding: 0 14px;
-  font-weight: 850;
-}
-
-.intro-mark {
-  position: relative;
-  width: min(46vw, 245px);
-  aspect-ratio: 700.56 / 1249.03;
-}
-
-.intro-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.intro-shield,
-.intro-c {
-  opacity: 0;
-  animation: introFade 760ms ease forwards;
-}
-
-.intro-c {
-  animation-delay: 120ms;
-}
-
-.intro-spear {
-  opacity: 0;
-  transform: translateY(62vh);
-  animation: spearRise 980ms cubic-bezier(0.18, 0.82, 0.2, 1) 620ms forwards;
-}
-
-.intro-tagline {
-  width: min(66vw, 430px);
-  opacity: 0;
-  animation: introFade 620ms ease 1500ms forwards;
-}
-
-.intro::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 43%, rgba(214, 179, 74, 0.13), transparent 34%);
-  opacity: 0;
-  animation: introGlow 900ms ease 980ms forwards;
-  pointer-events: none;
-}
-
-@keyframes introFade {
-  from {
-    opacity: 0;
-    transform: scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes spearRise {
-  0% {
-    opacity: 0;
-    transform: translateY(62vh);
-  }
-  68% {
-    opacity: 1;
-    transform: translateY(-8px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes introGlow {
-  to {
-    opacity: 1;
-  }
 }
 
 .app {
@@ -201,31 +84,29 @@ button:disabled {
 .brand {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 
 .logo {
-  width: 50px;
-  height: 72px;
-  flex: 0 0 auto;
+  width: 54px;
+  height: 54px;
+  border-radius: 8px;
   display: grid;
   place-items: center;
-  background: transparent;
-  box-shadow: none;
-  overflow: visible;
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(10, 24, 54, 0.18);
+  overflow: hidden;
 }
 
-.logo img,
-.logo svg {
+.logo img {
   width: 100%;
   height: 100%;
   display: block;
-  filter: drop-shadow(0 8px 14px rgba(9, 22, 48, 0.28));
 }
 
 .hero h1 {
   margin: 0;
-  font-size: 2.18rem;
+  font-size: 2.1rem;
   line-height: 1;
   letter-spacing: 0;
 }
@@ -810,23 +691,5 @@ select {
 
   .question-actions .button {
     width: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .intro,
-  .intro *,
-  .screen,
-  .progress-fill {
-    animation: none !important;
-    transition: none !important;
-  }
-
-  .intro-shield,
-  .intro-c,
-  .intro-spear,
-  .intro-tagline {
-    opacity: 1;
-    transform: none;
   }
 }
