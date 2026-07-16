@@ -779,6 +779,14 @@ input::placeholder {
   margin-bottom: 0;
 }
 
+.account-email {
+  margin: 0 0 10px;
+  color: var(--blue-strong);
+  font-size: 1.05rem;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
 .plan-card {
   display: grid;
   gap: 10px;
