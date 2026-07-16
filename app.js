@@ -2,11 +2,10 @@
   const SESSION_KEY = "certivoPracticeSession";
   const PROGRESS_KEY = "certivoPracticeProgress";
   const PREF_KEY = "certivoPracticePrefs";
-  const INTRO_KEY = "certivoIntroPlayed";
 
   const text = {
     en: {
-      subTitle: "Texas Life Insurance Trainer",
+      subTitle: "Certification Exam Trainer",
       darkMode: "Dark mode",
       lightMode: "Light mode",
       homeTitle: "Continue Studying",
@@ -84,7 +83,7 @@
       noQuestions: "No questions match those filters."
     },
     es: {
-      subTitle: "Entrenador para Texas Life Insurance",
+      subTitle: "Entrenador para exámenes de certificación",
       darkMode: "Modo oscuro",
       lightMode: "Modo claro",
       homeTitle: "Continúa estudiando",
@@ -956,9 +955,8 @@
   function setupIntro() {
     if (!els.intro) return;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const alreadyPlayed = sessionStorage.getItem(INTRO_KEY) === "true";
 
-    if (reduceMotion || alreadyPlayed) {
+    if (reduceMotion) {
       hideIntro(true);
       return;
     }
@@ -969,7 +967,6 @@
 
   function hideIntro(immediate = false) {
     if (!els.intro) return;
-    sessionStorage.setItem(INTRO_KEY, "true");
     document.body.classList.remove("intro-active");
     els.intro.classList.add("is-hidden");
     if (immediate) {
