@@ -12,6 +12,8 @@
       homeDesc: "Bilingual Texas Life practice with saved progress.",
       readiness: "Readiness",
       startPractice: "Start Practice",
+      freeTrial: "Try 10 Free Questions",
+      freeTrialDesc: "Right or wrong only",
       examSimulation: "Exam Simulation",
       dashboard: "Dashboard",
       view: "View",
@@ -67,6 +69,17 @@
       of: "of",
       correct: "Correct",
       incorrect: "Incorrect",
+      notQuite: "Not quite",
+      trialCorrect: "Correct. Keep going.",
+      trialIncorrect: "Not quite. Unlock the full trainer to see the correct answer and explanation.",
+      trialLockedTitle: "Free practice complete",
+      trialLockedSummary: "Subscribe to unlock your score, correct answers, explanations, memory phrases, progress tracking, and the full 300-question trainer.",
+      locked: "Locked",
+      unlockResults: "Unlock Results",
+      viewPlans: "View Plans",
+      weeklyPlan: "Weekly access - $14.99/week",
+      bundlePlan: "90-day access - $149.99",
+      accountComingSoon: "Account and payment setup is the next step.",
       correctAnswer: "Correct answer",
       explanation: "Explanation",
       basicExplanation: "Explanation",
@@ -91,6 +104,8 @@
       homeDesc: "Práctica bilingüe de Texas Life con progreso guardado.",
       readiness: "Preparación",
       startPractice: "Iniciar práctica",
+      freeTrial: "Probar 10 preguntas gratis",
+      freeTrialDesc: "Solo correcto o incorrecto",
       examSimulation: "Simulación de examen",
       dashboard: "Panel",
       view: "Ver",
@@ -146,6 +161,17 @@
       of: "de",
       correct: "Correcto",
       incorrect: "Incorrecto",
+      notQuite: "Casi",
+      trialCorrect: "Correcto. Sigue adelante.",
+      trialIncorrect: "Casi. Desbloquea el entrenador completo para ver la respuesta correcta y la explicación.",
+      trialLockedTitle: "Práctica gratis completada",
+      trialLockedSummary: "Suscríbete para desbloquear tu calificación, respuestas correctas, explicaciones, frases para memorizar, progreso guardado y el entrenador completo de 300 preguntas.",
+      locked: "Bloqueado",
+      unlockResults: "Desbloquear resultados",
+      viewPlans: "Ver planes",
+      weeklyPlan: "Acceso semanal - $14.99/semana",
+      bundlePlan: "Acceso de 90 días - $149.99",
+      accountComingSoon: "La cuenta y el pago son el siguiente paso.",
       correctAnswer: "Respuesta correcta",
       explanation: "Explicación",
       basicExplanation: "Explicación",
@@ -208,6 +234,7 @@
     resultTitle: document.getElementById("resultTitle"),
     resultSummary: document.getElementById("resultSummary"),
     reviewLastMissed: document.getElementById("reviewLastMissedButton"),
+    topicBreakdownTitle: document.getElementById("topicBreakdownTitle"),
     topicBreakdown: document.getElementById("topicBreakdown"),
     progressAnswered: document.getElementById("progressAnswered"),
     progressCorrect: document.getElementById("progressCorrect"),
@@ -261,6 +288,14 @@
 
   function titleCase(value) {
     return String(value).replace(/\b\w/g, (letter) => letter.toUpperCase());
+  }
+
+  function isTrialSession() {
+    return session?.mode === "trial";
+  }
+
+  function givesInstantFeedback() {
+    return session?.mode === "practice" || isTrialSession();
   }
 
   function topicLabel(topic) {
@@ -396,6 +431,25 @@
     renderQuestion();
   }
 
+  function startTrialSession() {
+    const deck = shuffle(CERTIVO_QUESTIONS).slice(0, 10).map((question) => ({
+      id: question.id,
+      answerOrder: shuffle(question.en.answers.map((answer) => answer.id))
+    }));
+    session = {
+      mode: "trial",
+      deck,
+      index: 0,
+      answers: {},
+      startedAt: Date.now(),
+      lastMissed: [],
+      reviewingMissed: false
+    };
+    saveJson(SESSION_KEY, session);
+    showScreen("quiz");
+    renderQuestion();
+  }
+
   function resumeSession() {
     session = loadJson(SESSION_KEY, null);
     if (!session?.deck?.length) return;
@@ -452,7 +506,8 @@
       button.textContent = answer.text;
       button.setAttribute("aria-pressed", String(selectedId === answer.id));
       if (selectedId === answer.id) button.classList.add("selected");
-      if (checked && answer.id === question.correctAnswerId) button.classList.add("correct");
+      if (checked && answer.id === question.correctAnswerId && !isTrialSession()) button.classList.add("correct");
+      if (checked && isTrialSession() && selectedId === answer.id && answer.id === question.correctAnswerId) button.classList.add("correct");
       if (checked && selectedId === answer.id && answer.id !== question.correctAnswerId) button.classList.add("wrong");
       button.addEventListener("click", () => selectAnswer(question.id, answer.id));
       els.answers.appendChild(button);
@@ -475,6 +530,17 @@
     if (!checked || session.mode === "exam") return;
 
     const isCorrect = selectedId === question.correctAnswerId;
+    if (isTrialSession()) {
+      els.feedback.className = `feedback ${isCorrect ? "good" : "bad"}`;
+      const title = document.createElement("strong");
+      const message = document.createElement("p");
+      message.className = "feedback-detail";
+      title.textContent = isCorrect ? t("correct") : t("notQuite");
+      message.textContent = isCorrect ? t("trialCorrect") : t("trialIncorrect");
+      els.feedback.append(title, message);
+      return;
+    }
+
     const answers = question[prefs.language].answers;
     const selectedText = answers.find((answer) => answer.id === selectedId)?.text || "";
     const correctText = answers.find((answer) => answer.id === question.correctAnswerId).text;
@@ -691,7 +757,7 @@
 
   function selectAnswer(questionId, answerId) {
     const current = session.answers[questionId];
-    if (current?.checked && session.mode === "practice") return;
+    if (current?.checked && givesInstantFeedback()) return;
     session.answers[questionId] = { selectedAnswerId: answerId, checked: false };
     renderQuestion();
   }
@@ -699,14 +765,14 @@
   function checkOrNext() {
     const question = qById(session.deck[session.index].id);
     const current = session.answers[question.id];
-    if (session.mode === "practice" && !current?.checked) {
+    if (givesInstantFeedback() && !current?.checked) {
       if (!current?.selectedAnswerId) {
         renderMessage(els.feedback, t("chooseAnswer"));
         els.feedback.className = "feedback";
         return;
       }
       session.answers[question.id] = { ...current, checked: true };
-      recordAnswer(question, current.selectedAnswerId);
+      if (!isTrialSession()) recordAnswer(question, current.selectedAnswerId);
       renderQuestion();
       return;
     }
@@ -770,7 +836,7 @@
       }
       if (selected === question.correctAnswerId) {
         correct += 1;
-      } else {
+      } else if (!isTrialSession()) {
         progress.missed[question.id] = true;
         missed.push(question.id);
       }
@@ -779,9 +845,11 @@
     const total = session.deck.length;
     const percent = total ? Math.round((correct / total) * 100) : 0;
     session.lastMissed = missed;
-    progress.history.unshift({ date: new Date().toISOString(), mode: session.mode, language: prefs.language, correct, total, percent });
-    progress.history = progress.history.slice(0, 20);
-    saveJson(PROGRESS_KEY, progress);
+    if (!isTrialSession()) {
+      progress.history.unshift({ date: new Date().toISOString(), mode: session.mode, language: prefs.language, correct, total, percent });
+      progress.history = progress.history.slice(0, 20);
+      saveJson(PROGRESS_KEY, progress);
+    }
     saveJson(SESSION_KEY, session);
     showScreen("results");
     renderResults();
@@ -801,12 +869,53 @@
 
   function renderResults() {
     const score = sessionScore();
+    if (isTrialSession()) {
+      renderTrialLockedResults();
+      return;
+    }
+    document.getElementById("practiceAgainButton").textContent = t("practiceAgain");
+    els.topicBreakdownTitle.textContent = t("topicBreakdown");
+    els.scoreCircle.classList.remove("locked");
     els.scoreCircle.style.setProperty("--pct", String(score.percent));
     els.scorePercent.textContent = `${score.percent}%`;
     els.resultTitle.textContent = score.percent >= 84 ? t("strong") : score.percent >= 70 ? t("passing") : t("keepPracticing");
     els.resultSummary.textContent = `${t("youScored")}: ${score.correct} / ${score.total}`;
     els.reviewLastMissed.classList.toggle("hidden", score.missed.length === 0);
     renderTopicBreakdown();
+  }
+
+  function renderTrialLockedResults() {
+    els.scoreCircle.style.setProperty("--pct", "100");
+    els.scoreCircle.classList.add("locked");
+    els.scorePercent.textContent = t("locked");
+    els.resultTitle.textContent = t("trialLockedTitle");
+    els.resultSummary.textContent = t("trialLockedSummary");
+    els.reviewLastMissed.classList.add("hidden");
+    els.topicBreakdownTitle.textContent = t("unlockResults");
+    const practiceAgain = document.getElementById("practiceAgainButton");
+    practiceAgain.textContent = t("viewPlans");
+    els.topicBreakdown.innerHTML = "";
+    const panel = document.createElement("div");
+    panel.className = "pricing-grid";
+    panel.innerHTML = `
+      <article class="price-card">
+        <strong>${t("weeklyPlan")}</strong>
+        <p class="muted">${t("unlockResults")}</p>
+      </article>
+      <article class="price-card featured">
+        <strong>${t("bundlePlan")}</strong>
+        <p class="muted">${t("accountComingSoon")}</p>
+      </article>
+    `;
+    els.topicBreakdown.appendChild(panel);
+  }
+
+  function handlePracticeAgain() {
+    if (isTrialSession()) {
+      els.topicBreakdown.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    openSetup("practice");
   }
 
   function renderTopicBreakdown() {
@@ -911,9 +1020,11 @@
     els.langEn.addEventListener("click", () => setLanguage("en"));
     els.langEs.addEventListener("click", () => setLanguage("es"));
     els.theme.addEventListener("click", toggleTheme);
+    document.getElementById("homeTrialButton").addEventListener("click", startTrialSession);
     document.getElementById("homePracticeButton").addEventListener("click", () => openSetup("practice"));
     document.getElementById("homeExamButton").addEventListener("click", () => openSetup("exam"));
     document.getElementById("viewProgressButton").addEventListener("click", () => showScreen("progress"));
+    document.getElementById("freeTrialPath").addEventListener("click", startTrialSession);
     document.getElementById("practicePath").addEventListener("click", () => openSetup("practice"));
     document.getElementById("examPath").addEventListener("click", () => openSetup("exam"));
     document.getElementById("missedPath").addEventListener("click", () => openSetup("missed"));
@@ -921,7 +1032,7 @@
     document.getElementById("setupHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("resultsHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("progressHomeButton").addEventListener("click", () => showScreen("home"));
-    document.getElementById("practiceAgainButton").addEventListener("click", () => openSetup("practice"));
+    document.getElementById("practiceAgainButton").addEventListener("click", handlePracticeAgain);
     document.getElementById("progressMissedButton").addEventListener("click", () => openSetup("missed"));
     document.getElementById("resetProgressButton").addEventListener("click", resetProgress);
     document.getElementById("navHome").addEventListener("click", () => showScreen("home"));

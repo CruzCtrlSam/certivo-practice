@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/certivo-apple-touch-icon-v3.png">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=2.0-disclaimer">
+    <link rel="stylesheet" href="./styles.css?v=2.1-free-trial">
   </head>
   <body>
     <section class="intro" id="introScreen" aria-label="Certivo intro">
@@ -125,7 +125,7 @@
             <button id="langEs" type="button">Español</button>
           </div>
           <button class="pill-button" id="themeToggle" type="button" data-i18n="darkMode">Dark mode</button>
-          <span class="pill">v2.0</span>
+          <span class="pill">v2.1</span>
           <span class="pill" id="bankPill">300 questions</span>
         </div>
       </header>
@@ -142,6 +142,7 @@
               <div class="progress-fill" id="readinessBar"></div>
             </div>
             <div class="actions">
+              <button class="button primary" id="homeTrialButton" type="button" data-i18n="freeTrial">Try 10 Free Questions</button>
               <button class="button primary" id="homePracticeButton" type="button" data-i18n="startPractice">Start Practice</button>
               <button class="button secondary" id="homeExamButton" type="button" data-i18n="examSimulation">Exam Simulation</button>
             </div>
@@ -166,6 +167,11 @@
             <h2 data-i18n="choosePath">Choose a path</h2>
           </div>
           <div class="path-grid">
+            <button class="path-card trial-card" id="freeTrialPath" type="button">
+              <span class="path-icon">10</span>
+              <strong data-i18n="freeTrial">Try 10 Free Questions</strong>
+              <small data-i18n="freeTrialDesc">Right or wrong only</small>
+            </button>
             <button class="path-card" id="practicePath" type="button">
               <span class="path-icon">P</span>
               <strong data-i18n="practiceMode">Practice Mode</strong>
@@ -280,7 +286,7 @@
         </section>
         <section class="panel">
           <div class="section-title">
-            <h2 data-i18n="topicBreakdown">Topic breakdown</h2>
+            <h2 id="topicBreakdownTitle" data-i18n="topicBreakdown">Topic breakdown</h2>
           </div>
           <div class="topic-rows" id="topicBreakdown"></div>
         </section>
@@ -325,7 +331,7 @@
       <button class="nav-button" id="navStats" type="button" data-i18n="stats">Stats</button>
     </nav>
 
-    <script src="./questions.js?v=2.0-disclaimer"></script>
-    <script src="./app.js?v=2.0-disclaimer"></script>
+    <script src="./questions.js?v=2.1-free-trial"></script>
+    <script src="./app.js?v=2.1-free-trial"></script>
   </body>
 </html>
