@@ -5,15 +5,44 @@
 
   const text = {
     en: {
-      subTitle: "Texas Life Insurance Trainer",
+      subTitle: "Certification Exam Trainer",
       darkMode: "Dark mode",
       lightMode: "Light mode",
       homeTitle: "Continue Studying",
       homeDesc: "Bilingual Texas Life practice with saved progress.",
       readiness: "Readiness",
       startPractice: "Start Practice",
+      freeTrial: "Try 10 Free Questions",
+      freeTrialDesc: "Right or wrong only",
       examSimulation: "Exam Simulation",
       dashboard: "Dashboard",
+      account: "Account",
+      plans: "Plans",
+      accountDesc: "Create an account to save progress and unlock paid access.",
+      freeTrialStatus: "Free Trial",
+      createAccount: "Create account",
+      logIn: "Log in",
+      email: "Email",
+      password: "Password",
+      supabaseComing: "Supabase signup will connect here in the next step.",
+      loginComing: "Login will connect after Supabase is created.",
+      accountPlaceholder: "Account system is not connected yet. This screen is ready for Supabase.",
+      unlockFullTrainer: "Unlock the full trainer",
+      plansDesc: "Choose the access length that fits your study timeline.",
+      flexible: "Flexible",
+      weeklyAccess: "Weekly Access",
+      perWeek: "/ week",
+      weeklyDesc: "Best if you only need a short final review window.",
+      chooseWeekly: "Choose weekly",
+      bestValue: "Best value",
+      ninetyDayAccess: "90-Day Access",
+      bundleDesc: "Best if you want room to study, review missed questions, and retake practice exams.",
+      chooseNinety: "Choose 90-day",
+      paidIncludes: "Paid access includes",
+      includeQuestions: "Full 300-question trainer",
+      includeExplanations: "Correct answers, explanations, and memory phrases",
+      includeProgress: "Saved progress, missed review, filters, and exam mode",
+      includeLanguage: "Full English and Spanish practice",
       view: "View",
       answered: "Answered",
       accuracy: "Accuracy",
@@ -67,6 +96,17 @@
       of: "of",
       correct: "Correct",
       incorrect: "Incorrect",
+      notQuite: "Not quite",
+      trialCorrect: "Correct. Keep going.",
+      trialIncorrect: "Not quite. Unlock the full trainer to see the correct answer and explanation.",
+      trialLockedTitle: "Free practice complete",
+      trialLockedSummary: "Subscribe to unlock your score, correct answers, explanations, memory phrases, progress tracking, and the full 300-question trainer.",
+      locked: "Locked",
+      unlockResults: "Unlock Results",
+      viewPlans: "View Plans",
+      weeklyPlan: "Weekly access - $14.99/week",
+      bundlePlan: "90-day access - $149.99",
+      accountComingSoon: "Account and payment setup is the next step.",
       correctAnswer: "Correct answer",
       explanation: "Explanation",
       basicExplanation: "Explanation",
@@ -80,18 +120,48 @@
       keepPracticing: "Keep practicing",
       youScored: "You scored",
       reviewingMissed: "Reviewing missed",
-      noQuestions: "No questions match those filters."
+      noQuestions: "No questions match those filters.",
+      disclaimer: "Certivo is a training tool only. Using this app does not grant a certification, license, or guarantee a passing score. You must still take and pass the official exam required by the certifying authority."
     },
     es: {
-      subTitle: "Entrenador para Texas Life Insurance",
+      subTitle: "Entrenador para exámenes de certificación",
       darkMode: "Modo oscuro",
       lightMode: "Modo claro",
       homeTitle: "Continúa estudiando",
       homeDesc: "Práctica bilingüe de Texas Life con progreso guardado.",
       readiness: "Preparación",
       startPractice: "Iniciar práctica",
+      freeTrial: "Probar 10 preguntas gratis",
+      freeTrialDesc: "Solo correcto o incorrecto",
       examSimulation: "Simulación de examen",
       dashboard: "Panel",
+      account: "Cuenta",
+      plans: "Planes",
+      accountDesc: "Crea una cuenta para guardar progreso y desbloquear acceso pagado.",
+      freeTrialStatus: "Prueba gratis",
+      createAccount: "Crear cuenta",
+      logIn: "Iniciar sesión",
+      email: "Correo electrónico",
+      password: "Contraseña",
+      supabaseComing: "El registro con Supabase se conectará en el siguiente paso.",
+      loginComing: "El inicio de sesión se conectará después de crear Supabase.",
+      accountPlaceholder: "El sistema de cuenta aún no está conectado. Esta pantalla está lista para Supabase.",
+      unlockFullTrainer: "Desbloquear el entrenador completo",
+      plansDesc: "Elige el tiempo de acceso que se ajuste a tu plan de estudio.",
+      flexible: "Flexible",
+      weeklyAccess: "Acceso semanal",
+      perWeek: "/ semana",
+      weeklyDesc: "Ideal si solo necesitas un repaso final corto.",
+      chooseWeekly: "Elegir semanal",
+      bestValue: "Mejor valor",
+      ninetyDayAccess: "Acceso de 90 días",
+      bundleDesc: "Ideal si quieres tiempo para estudiar, repasar falladas y repetir simulaciones de examen.",
+      chooseNinety: "Elegir 90 días",
+      paidIncludes: "El acceso pagado incluye",
+      includeQuestions: "Entrenador completo de 300 preguntas",
+      includeExplanations: "Respuestas correctas, explicaciones y frases para memorizar",
+      includeProgress: "Progreso guardado, repaso de falladas, filtros y modo examen",
+      includeLanguage: "Práctica completa en inglés y español",
       view: "Ver",
       answered: "Respondidas",
       accuracy: "Precisión",
@@ -145,6 +215,17 @@
       of: "de",
       correct: "Correcto",
       incorrect: "Incorrecto",
+      notQuite: "Casi",
+      trialCorrect: "Correcto. Sigue adelante.",
+      trialIncorrect: "Casi. Desbloquea el entrenador completo para ver la respuesta correcta y la explicación.",
+      trialLockedTitle: "Práctica gratis completada",
+      trialLockedSummary: "Suscríbete para desbloquear tu calificación, respuestas correctas, explicaciones, frases para memorizar, progreso guardado y el entrenador completo de 300 preguntas.",
+      locked: "Bloqueado",
+      unlockResults: "Desbloquear resultados",
+      viewPlans: "Ver planes",
+      weeklyPlan: "Acceso semanal - $14.99/semana",
+      bundlePlan: "Acceso de 90 días - $149.99",
+      accountComingSoon: "La cuenta y el pago son el siguiente paso.",
       correctAnswer: "Respuesta correcta",
       explanation: "Explicación",
       basicExplanation: "Explicación",
@@ -158,7 +239,8 @@
       keepPracticing: "Sigue practicando",
       youScored: "Tu resultado",
       reviewingMissed: "Repasando falladas",
-      noQuestions: "Ninguna pregunta coincide con esos filtros."
+      noQuestions: "Ninguna pregunta coincide con esos filtros.",
+      disclaimer: "Certivo es solo una herramienta de entrenamiento. Usar esta aplicación no otorga una certificación, licencia ni garantiza una calificación aprobatoria. Aún debes tomar y aprobar el examen oficial requerido por la autoridad certificadora."
     }
   };
 
@@ -168,7 +250,9 @@
       setup: document.getElementById("setupScreen"),
       quiz: document.getElementById("quizScreen"),
       results: document.getElementById("resultsScreen"),
-      progress: document.getElementById("progressScreen")
+      progress: document.getElementById("progressScreen"),
+      account: document.getElementById("accountScreen"),
+      pricing: document.getElementById("pricingScreen")
     },
     langEn: document.getElementById("langEn"),
     langEs: document.getElementById("langEs"),
@@ -206,6 +290,7 @@
     resultTitle: document.getElementById("resultTitle"),
     resultSummary: document.getElementById("resultSummary"),
     reviewLastMissed: document.getElementById("reviewLastMissedButton"),
+    topicBreakdownTitle: document.getElementById("topicBreakdownTitle"),
     topicBreakdown: document.getElementById("topicBreakdown"),
     progressAnswered: document.getElementById("progressAnswered"),
     progressCorrect: document.getElementById("progressCorrect"),
@@ -214,6 +299,8 @@
     historyList: document.getElementById("historyList"),
     navButtons: document.querySelectorAll(".nav-button")
   };
+  els.intro = document.getElementById("introScreen");
+  els.introSkip = document.getElementById("introSkip");
 
   let prefs = loadJson(PREF_KEY, { language: "en", theme: "light" });
   let progress = loadJson(PROGRESS_KEY, defaultProgress());
@@ -257,6 +344,14 @@
 
   function titleCase(value) {
     return String(value).replace(/\b\w/g, (letter) => letter.toUpperCase());
+  }
+
+  function isTrialSession() {
+    return session?.mode === "trial";
+  }
+
+  function givesInstantFeedback() {
+    return session?.mode === "practice" || isTrialSession();
   }
 
   function topicLabel(topic) {
@@ -307,7 +402,7 @@
     activeScreen = name;
     Object.entries(els.screens).forEach(([screen, node]) => node.classList.toggle("hidden", screen !== name));
     els.navButtons.forEach((button) => button.classList.remove("active"));
-    const navMap = { home: "navHome", setup: session?.mode === "exam" ? "navExam" : "navPractice", quiz: session?.mode === "exam" ? "navExam" : "navPractice", results: "navStats", progress: "navStats" };
+    const navMap = { home: "navHome", setup: session?.mode === "exam" ? "navExam" : "navPractice", quiz: session?.mode === "exam" ? "navExam" : "navPractice", results: "navStats", progress: "navStats", account: "navStats", pricing: "navStats" };
     const active = document.getElementById(navMap[name]);
     if (active) active.classList.add("active");
     if (name === "progress") renderProgress();
@@ -392,6 +487,25 @@
     renderQuestion();
   }
 
+  function startTrialSession() {
+    const deck = shuffle(CERTIVO_QUESTIONS).slice(0, 10).map((question) => ({
+      id: question.id,
+      answerOrder: shuffle(question.en.answers.map((answer) => answer.id))
+    }));
+    session = {
+      mode: "trial",
+      deck,
+      index: 0,
+      answers: {},
+      startedAt: Date.now(),
+      lastMissed: [],
+      reviewingMissed: false
+    };
+    saveJson(SESSION_KEY, session);
+    showScreen("quiz");
+    renderQuestion();
+  }
+
   function resumeSession() {
     session = loadJson(SESSION_KEY, null);
     if (!session?.deck?.length) return;
@@ -448,7 +562,8 @@
       button.textContent = answer.text;
       button.setAttribute("aria-pressed", String(selectedId === answer.id));
       if (selectedId === answer.id) button.classList.add("selected");
-      if (checked && answer.id === question.correctAnswerId) button.classList.add("correct");
+      if (checked && answer.id === question.correctAnswerId && !isTrialSession()) button.classList.add("correct");
+      if (checked && isTrialSession() && selectedId === answer.id && answer.id === question.correctAnswerId) button.classList.add("correct");
       if (checked && selectedId === answer.id && answer.id !== question.correctAnswerId) button.classList.add("wrong");
       button.addEventListener("click", () => selectAnswer(question.id, answer.id));
       els.answers.appendChild(button);
@@ -471,6 +586,17 @@
     if (!checked || session.mode === "exam") return;
 
     const isCorrect = selectedId === question.correctAnswerId;
+    if (isTrialSession()) {
+      els.feedback.className = `feedback ${isCorrect ? "good" : "bad"}`;
+      const title = document.createElement("strong");
+      const message = document.createElement("p");
+      message.className = "feedback-detail";
+      title.textContent = isCorrect ? t("correct") : t("notQuite");
+      message.textContent = isCorrect ? t("trialCorrect") : t("trialIncorrect");
+      els.feedback.append(title, message);
+      return;
+    }
+
     const answers = question[prefs.language].answers;
     const selectedText = answers.find((answer) => answer.id === selectedId)?.text || "";
     const correctText = answers.find((answer) => answer.id === question.correctAnswerId).text;
@@ -687,7 +813,7 @@
 
   function selectAnswer(questionId, answerId) {
     const current = session.answers[questionId];
-    if (current?.checked && session.mode === "practice") return;
+    if (current?.checked && givesInstantFeedback()) return;
     session.answers[questionId] = { selectedAnswerId: answerId, checked: false };
     renderQuestion();
   }
@@ -695,14 +821,14 @@
   function checkOrNext() {
     const question = qById(session.deck[session.index].id);
     const current = session.answers[question.id];
-    if (session.mode === "practice" && !current?.checked) {
+    if (givesInstantFeedback() && !current?.checked) {
       if (!current?.selectedAnswerId) {
         renderMessage(els.feedback, t("chooseAnswer"));
         els.feedback.className = "feedback";
         return;
       }
       session.answers[question.id] = { ...current, checked: true };
-      recordAnswer(question, current.selectedAnswerId);
+      if (!isTrialSession()) recordAnswer(question, current.selectedAnswerId);
       renderQuestion();
       return;
     }
@@ -766,7 +892,7 @@
       }
       if (selected === question.correctAnswerId) {
         correct += 1;
-      } else {
+      } else if (!isTrialSession()) {
         progress.missed[question.id] = true;
         missed.push(question.id);
       }
@@ -775,9 +901,11 @@
     const total = session.deck.length;
     const percent = total ? Math.round((correct / total) * 100) : 0;
     session.lastMissed = missed;
-    progress.history.unshift({ date: new Date().toISOString(), mode: session.mode, language: prefs.language, correct, total, percent });
-    progress.history = progress.history.slice(0, 20);
-    saveJson(PROGRESS_KEY, progress);
+    if (!isTrialSession()) {
+      progress.history.unshift({ date: new Date().toISOString(), mode: session.mode, language: prefs.language, correct, total, percent });
+      progress.history = progress.history.slice(0, 20);
+      saveJson(PROGRESS_KEY, progress);
+    }
     saveJson(SESSION_KEY, session);
     showScreen("results");
     renderResults();
@@ -797,12 +925,63 @@
 
   function renderResults() {
     const score = sessionScore();
+    if (isTrialSession()) {
+      renderTrialLockedResults();
+      return;
+    }
+    document.getElementById("practiceAgainButton").textContent = t("practiceAgain");
+    els.topicBreakdownTitle.textContent = t("topicBreakdown");
+    els.scoreCircle.classList.remove("locked");
     els.scoreCircle.style.setProperty("--pct", String(score.percent));
     els.scorePercent.textContent = `${score.percent}%`;
     els.resultTitle.textContent = score.percent >= 84 ? t("strong") : score.percent >= 70 ? t("passing") : t("keepPracticing");
     els.resultSummary.textContent = `${t("youScored")}: ${score.correct} / ${score.total}`;
     els.reviewLastMissed.classList.toggle("hidden", score.missed.length === 0);
     renderTopicBreakdown();
+  }
+
+  function renderTrialLockedResults() {
+    els.scoreCircle.style.setProperty("--pct", "100");
+    els.scoreCircle.classList.add("locked");
+    els.scorePercent.textContent = t("locked");
+    els.resultTitle.textContent = t("trialLockedTitle");
+    els.resultSummary.textContent = t("trialLockedSummary");
+    els.reviewLastMissed.classList.add("hidden");
+    els.topicBreakdownTitle.textContent = t("unlockResults");
+    const practiceAgain = document.getElementById("practiceAgainButton");
+    practiceAgain.textContent = t("viewPlans");
+    els.topicBreakdown.innerHTML = "";
+    const panel = document.createElement("div");
+    panel.className = "pricing-grid";
+    panel.innerHTML = `
+      <article class="price-card">
+        <strong>${t("weeklyPlan")}</strong>
+        <p class="muted">${t("unlockResults")}</p>
+        <button class="button primary compact plan-jump" type="button">${t("viewPlans")}</button>
+      </article>
+      <article class="price-card featured">
+        <strong>${t("bundlePlan")}</strong>
+        <p class="muted">${t("accountComingSoon")}</p>
+        <button class="button primary compact plan-jump" type="button">${t("viewPlans")}</button>
+      </article>
+    `;
+    els.topicBreakdown.appendChild(panel);
+    panel.querySelectorAll(".plan-jump").forEach((button) => button.addEventListener("click", () => showScreen("pricing")));
+  }
+
+  function handlePracticeAgain() {
+    if (isTrialSession()) {
+      showScreen("pricing");
+      return;
+    }
+    openSetup("practice");
+  }
+
+  function showPlaceholderStatus(messageKey = "accountPlaceholder") {
+    const status = document.getElementById("accountStatus");
+    status.textContent = t(messageKey);
+    status.classList.add("visible");
+    showScreen("account");
   }
 
   function renderTopicBreakdown() {
@@ -907,9 +1086,13 @@
     els.langEn.addEventListener("click", () => setLanguage("en"));
     els.langEs.addEventListener("click", () => setLanguage("es"));
     els.theme.addEventListener("click", toggleTheme);
+    document.getElementById("accountButton").addEventListener("click", () => showScreen("account"));
+    document.getElementById("plansButton").addEventListener("click", () => showScreen("pricing"));
+    document.getElementById("homeTrialButton").addEventListener("click", startTrialSession);
     document.getElementById("homePracticeButton").addEventListener("click", () => openSetup("practice"));
     document.getElementById("homeExamButton").addEventListener("click", () => openSetup("exam"));
     document.getElementById("viewProgressButton").addEventListener("click", () => showScreen("progress"));
+    document.getElementById("freeTrialPath").addEventListener("click", startTrialSession);
     document.getElementById("practicePath").addEventListener("click", () => openSetup("practice"));
     document.getElementById("examPath").addEventListener("click", () => openSetup("exam"));
     document.getElementById("missedPath").addEventListener("click", () => openSetup("missed"));
@@ -917,13 +1100,15 @@
     document.getElementById("setupHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("resultsHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("progressHomeButton").addEventListener("click", () => showScreen("home"));
-    document.getElementById("practiceAgainButton").addEventListener("click", () => openSetup("practice"));
+    document.getElementById("pricingHomeButton").addEventListener("click", () => showScreen("home"));
+    document.getElementById("practiceAgainButton").addEventListener("click", handlePracticeAgain);
     document.getElementById("progressMissedButton").addEventListener("click", () => openSetup("missed"));
     document.getElementById("resetProgressButton").addEventListener("click", resetProgress);
     document.getElementById("navHome").addEventListener("click", () => showScreen("home"));
     document.getElementById("navPractice").addEventListener("click", () => openSetup("practice"));
     document.getElementById("navExam").addEventListener("click", () => openSetup("exam"));
     document.getElementById("navStats").addEventListener("click", () => showScreen("progress"));
+    els.introSkip?.addEventListener("click", hideIntro);
     els.topic.addEventListener("change", populateCounts);
     els.simulator.addEventListener("change", populateCounts);
     els.start.addEventListener("click", startSession);
@@ -934,6 +1119,15 @@
     els.check.addEventListener("click", checkOrNext);
     els.finish.addEventListener("click", finishSession);
     els.reviewLastMissed.addEventListener("click", reviewLastMissed);
+    document.getElementById("signupForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      showPlaceholderStatus("supabaseComing");
+    });
+    document.getElementById("loginForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      showPlaceholderStatus("loginComing");
+    });
+    document.querySelectorAll(".subscribe-placeholder").forEach((button) => button.addEventListener("click", () => showPlaceholderStatus("accountComingSoon")));
   }
 
   function setLanguage(language) {
@@ -949,8 +1143,35 @@
     localize();
   }
 
+  function setupIntro() {
+    if (!els.intro) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduceMotion) {
+      hideIntro(true);
+      return;
+    }
+
+    document.body.classList.add("intro-active");
+    window.setTimeout(hideIntro, 2850);
+  }
+
+  function hideIntro(immediate = false) {
+    if (!els.intro) return;
+    document.body.classList.remove("intro-active");
+    els.intro.classList.add("is-hidden");
+    if (immediate) {
+      els.intro.classList.add("hidden");
+      return;
+    }
+    window.setTimeout(() => {
+      els.intro.classList.add("hidden");
+    }, 460);
+  }
+
   bindEvents();
   applyTheme();
   localize();
   showScreen("home");
+  setupIntro();
 })();

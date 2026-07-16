@@ -54,7 +54,8 @@ body.intro-active {
 }
 
 button,
-select {
+select,
+input {
   font: inherit;
 }
 
@@ -475,6 +476,11 @@ button:disabled {
   border-color: color-mix(in srgb, var(--blue), var(--line) 45%);
 }
 
+.path-card.trial-card {
+  border-color: color-mix(in srgb, var(--gold), var(--line) 45%);
+  background: color-mix(in srgb, var(--gold), var(--panel) 88%);
+}
+
 .path-icon {
   width: 38px;
   height: 38px;
@@ -520,6 +526,20 @@ select {
   background: var(--panel);
   color: var(--ink);
   padding: 0 12px;
+}
+
+input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 0 12px;
+}
+
+input::placeholder {
+  color: color-mix(in srgb, var(--muted), transparent 20%);
 }
 
 .status-box {
@@ -708,10 +728,117 @@ select {
   font-size: 2.1rem;
 }
 
+.score-circle.locked b {
+  font-size: 1.05rem;
+}
+
 .topic-rows,
 .history-list {
   display: grid;
   gap: 10px;
+}
+
+.pricing-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.account-grid,
+.plan-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.auth-card,
+.plan-card,
+.included-list {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel), var(--soft) 18%);
+  padding: 16px;
+}
+
+.auth-card h3,
+.plan-card h3,
+.included-list h3 {
+  margin: 0 0 14px;
+  line-height: 1.15;
+}
+
+.auth-card label + label {
+  margin-top: 12px;
+}
+
+.auth-card .button {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.auth-card .muted {
+  margin-bottom: 0;
+}
+
+.plan-card {
+  display: grid;
+  gap: 10px;
+}
+
+.plan-card.featured {
+  border-color: color-mix(in srgb, var(--gold), var(--line) 30%);
+  background: color-mix(in srgb, var(--gold), var(--panel) 84%);
+}
+
+.plan-price {
+  margin: 0;
+  color: var(--blue-strong);
+  font-size: 2rem;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.plan-price span {
+  font-size: 0.95rem;
+  font-weight: 850;
+}
+
+.included-list {
+  margin-top: 14px;
+}
+
+.included-list ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.55;
+  font-weight: 720;
+}
+
+.price-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 14px;
+  text-align: left;
+}
+
+.price-card.featured {
+  border-color: color-mix(in srgb, var(--gold), var(--line) 35%);
+  background: color-mix(in srgb, var(--gold), var(--panel) 84%);
+}
+
+.price-card strong {
+  display: block;
+  color: var(--blue-strong);
+  font-size: 1.05rem;
+}
+
+.price-card p {
+  margin: 6px 0 0;
+}
+
+.price-card .button {
+  margin-top: 10px;
 }
 
 .topic-row,
@@ -735,6 +862,24 @@ select {
   color: var(--muted);
   text-align: center;
   font-size: 0.78rem;
+}
+
+.disclaimer-note {
+  max-width: 880px;
+  margin: 20px auto 0;
+  border: 1px solid color-mix(in srgb, var(--gold), var(--line) 55%);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--gold), #ffffff 86%);
+  color: var(--navy);
+  padding: 12px 14px;
+  font-size: 0.82rem;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+[data-theme="dark"] .disclaimer-note {
+  background: rgba(214, 179, 74, 0.12);
+  color: #f4d37a;
 }
 
 .mobile-nav {
@@ -796,7 +941,16 @@ select {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .pricing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .control-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .account-grid,
+  .plan-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 

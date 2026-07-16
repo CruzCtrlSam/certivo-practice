@@ -1,7 +1,7 @@
 {
   "name": "Certivo Practice",
   "short_name": "Certivo",
-  "description": "Bilingual Texas Life Insurance practice and exam trainer.",
+  "description": "Bilingual certification practice and exam trainer.",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#f5f7fb",
