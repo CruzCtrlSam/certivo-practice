@@ -16,6 +16,33 @@
       freeTrialDesc: "Right or wrong only",
       examSimulation: "Exam Simulation",
       dashboard: "Dashboard",
+      account: "Account",
+      plans: "Plans",
+      accountDesc: "Create an account to save progress and unlock paid access.",
+      freeTrialStatus: "Free Trial",
+      createAccount: "Create account",
+      logIn: "Log in",
+      email: "Email",
+      password: "Password",
+      supabaseComing: "Supabase signup will connect here in the next step.",
+      loginComing: "Login will connect after Supabase is created.",
+      accountPlaceholder: "Account system is not connected yet. This screen is ready for Supabase.",
+      unlockFullTrainer: "Unlock the full trainer",
+      plansDesc: "Choose the access length that fits your study timeline.",
+      flexible: "Flexible",
+      weeklyAccess: "Weekly Access",
+      perWeek: "/ week",
+      weeklyDesc: "Best if you only need a short final review window.",
+      chooseWeekly: "Choose weekly",
+      bestValue: "Best value",
+      ninetyDayAccess: "90-Day Access",
+      bundleDesc: "Best if you want room to study, review missed questions, and retake practice exams.",
+      chooseNinety: "Choose 90-day",
+      paidIncludes: "Paid access includes",
+      includeQuestions: "Full 300-question trainer",
+      includeExplanations: "Correct answers, explanations, and memory phrases",
+      includeProgress: "Saved progress, missed review, filters, and exam mode",
+      includeLanguage: "Full English and Spanish practice",
       view: "View",
       answered: "Answered",
       accuracy: "Accuracy",
@@ -108,6 +135,33 @@
       freeTrialDesc: "Solo correcto o incorrecto",
       examSimulation: "Simulación de examen",
       dashboard: "Panel",
+      account: "Cuenta",
+      plans: "Planes",
+      accountDesc: "Crea una cuenta para guardar progreso y desbloquear acceso pagado.",
+      freeTrialStatus: "Prueba gratis",
+      createAccount: "Crear cuenta",
+      logIn: "Iniciar sesión",
+      email: "Correo electrónico",
+      password: "Contraseña",
+      supabaseComing: "El registro con Supabase se conectará en el siguiente paso.",
+      loginComing: "El inicio de sesión se conectará después de crear Supabase.",
+      accountPlaceholder: "El sistema de cuenta aún no está conectado. Esta pantalla está lista para Supabase.",
+      unlockFullTrainer: "Desbloquear el entrenador completo",
+      plansDesc: "Elige el tiempo de acceso que se ajuste a tu plan de estudio.",
+      flexible: "Flexible",
+      weeklyAccess: "Acceso semanal",
+      perWeek: "/ semana",
+      weeklyDesc: "Ideal si solo necesitas un repaso final corto.",
+      chooseWeekly: "Elegir semanal",
+      bestValue: "Mejor valor",
+      ninetyDayAccess: "Acceso de 90 días",
+      bundleDesc: "Ideal si quieres tiempo para estudiar, repasar falladas y repetir simulaciones de examen.",
+      chooseNinety: "Elegir 90 días",
+      paidIncludes: "El acceso pagado incluye",
+      includeQuestions: "Entrenador completo de 300 preguntas",
+      includeExplanations: "Respuestas correctas, explicaciones y frases para memorizar",
+      includeProgress: "Progreso guardado, repaso de falladas, filtros y modo examen",
+      includeLanguage: "Práctica completa en inglés y español",
       view: "Ver",
       answered: "Respondidas",
       accuracy: "Precisión",
@@ -196,7 +250,9 @@
       setup: document.getElementById("setupScreen"),
       quiz: document.getElementById("quizScreen"),
       results: document.getElementById("resultsScreen"),
-      progress: document.getElementById("progressScreen")
+      progress: document.getElementById("progressScreen"),
+      account: document.getElementById("accountScreen"),
+      pricing: document.getElementById("pricingScreen")
     },
     langEn: document.getElementById("langEn"),
     langEs: document.getElementById("langEs"),
@@ -346,7 +402,7 @@
     activeScreen = name;
     Object.entries(els.screens).forEach(([screen, node]) => node.classList.toggle("hidden", screen !== name));
     els.navButtons.forEach((button) => button.classList.remove("active"));
-    const navMap = { home: "navHome", setup: session?.mode === "exam" ? "navExam" : "navPractice", quiz: session?.mode === "exam" ? "navExam" : "navPractice", results: "navStats", progress: "navStats" };
+    const navMap = { home: "navHome", setup: session?.mode === "exam" ? "navExam" : "navPractice", quiz: session?.mode === "exam" ? "navExam" : "navPractice", results: "navStats", progress: "navStats", account: "navStats", pricing: "navStats" };
     const active = document.getElementById(navMap[name]);
     if (active) active.classList.add("active");
     if (name === "progress") renderProgress();
@@ -901,21 +957,31 @@
       <article class="price-card">
         <strong>${t("weeklyPlan")}</strong>
         <p class="muted">${t("unlockResults")}</p>
+        <button class="button primary compact plan-jump" type="button">${t("viewPlans")}</button>
       </article>
       <article class="price-card featured">
         <strong>${t("bundlePlan")}</strong>
         <p class="muted">${t("accountComingSoon")}</p>
+        <button class="button primary compact plan-jump" type="button">${t("viewPlans")}</button>
       </article>
     `;
     els.topicBreakdown.appendChild(panel);
+    panel.querySelectorAll(".plan-jump").forEach((button) => button.addEventListener("click", () => showScreen("pricing")));
   }
 
   function handlePracticeAgain() {
     if (isTrialSession()) {
-      els.topicBreakdown.scrollIntoView({ behavior: "smooth", block: "start" });
+      showScreen("pricing");
       return;
     }
     openSetup("practice");
+  }
+
+  function showPlaceholderStatus(messageKey = "accountPlaceholder") {
+    const status = document.getElementById("accountStatus");
+    status.textContent = t(messageKey);
+    status.classList.add("visible");
+    showScreen("account");
   }
 
   function renderTopicBreakdown() {
@@ -1020,6 +1086,8 @@
     els.langEn.addEventListener("click", () => setLanguage("en"));
     els.langEs.addEventListener("click", () => setLanguage("es"));
     els.theme.addEventListener("click", toggleTheme);
+    document.getElementById("accountButton").addEventListener("click", () => showScreen("account"));
+    document.getElementById("plansButton").addEventListener("click", () => showScreen("pricing"));
     document.getElementById("homeTrialButton").addEventListener("click", startTrialSession);
     document.getElementById("homePracticeButton").addEventListener("click", () => openSetup("practice"));
     document.getElementById("homeExamButton").addEventListener("click", () => openSetup("exam"));
@@ -1032,6 +1100,7 @@
     document.getElementById("setupHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("resultsHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("progressHomeButton").addEventListener("click", () => showScreen("home"));
+    document.getElementById("pricingHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("practiceAgainButton").addEventListener("click", handlePracticeAgain);
     document.getElementById("progressMissedButton").addEventListener("click", () => openSetup("missed"));
     document.getElementById("resetProgressButton").addEventListener("click", resetProgress);
@@ -1050,6 +1119,15 @@
     els.check.addEventListener("click", checkOrNext);
     els.finish.addEventListener("click", finishSession);
     els.reviewLastMissed.addEventListener("click", reviewLastMissed);
+    document.getElementById("signupForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      showPlaceholderStatus("supabaseComing");
+    });
+    document.getElementById("loginForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      showPlaceholderStatus("loginComing");
+    });
+    document.querySelectorAll(".subscribe-placeholder").forEach((button) => button.addEventListener("click", () => showPlaceholderStatus("accountComingSoon")));
   }
 
   function setLanguage(language) {

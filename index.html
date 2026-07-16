@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/certivo-apple-touch-icon-v3.png">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=2.1-free-trial">
+    <link rel="stylesheet" href="./styles.css?v=2.2-account-plans">
   </head>
   <body>
     <section class="intro" id="introScreen" aria-label="Certivo intro">
@@ -125,7 +125,9 @@
             <button id="langEs" type="button">Español</button>
           </div>
           <button class="pill-button" id="themeToggle" type="button" data-i18n="darkMode">Dark mode</button>
-          <span class="pill">v2.1</span>
+          <button class="pill-button" id="accountButton" type="button" data-i18n="account">Account</button>
+          <button class="pill-button" id="plansButton" type="button" data-i18n="plans">Plans</button>
+          <span class="pill">v2.2</span>
           <span class="pill" id="bankPill">300 questions</span>
         </div>
       </header>
@@ -317,6 +319,92 @@
         </section>
       </main>
 
+      <main class="screen hidden" id="accountScreen">
+        <section class="panel account-panel">
+          <div class="section-title">
+            <div>
+              <h2 data-i18n="account">Account</h2>
+              <p class="muted" data-i18n="accountDesc">Create an account to save progress and unlock paid access.</p>
+            </div>
+            <span class="badge accent" data-i18n="freeTrialStatus">Free Trial</span>
+          </div>
+
+          <div class="account-grid">
+            <form class="auth-card" id="signupForm">
+              <h3 data-i18n="createAccount">Create account</h3>
+              <label>
+                <span data-i18n="email">Email</span>
+                <input id="signupEmail" type="email" autocomplete="email" placeholder="student@example.com">
+              </label>
+              <label>
+                <span data-i18n="password">Password</span>
+                <input id="signupPassword" type="password" autocomplete="new-password" placeholder="••••••••">
+              </label>
+              <button class="button primary" type="submit" data-i18n="createAccount">Create account</button>
+              <p class="muted" data-i18n="supabaseComing">Supabase signup will connect here in the next step.</p>
+            </form>
+
+            <form class="auth-card" id="loginForm">
+              <h3 data-i18n="logIn">Log in</h3>
+              <label>
+                <span data-i18n="email">Email</span>
+                <input id="loginEmail" type="email" autocomplete="email" placeholder="student@example.com">
+              </label>
+              <label>
+                <span data-i18n="password">Password</span>
+                <input id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••••">
+              </label>
+              <button class="button secondary" type="submit" data-i18n="logIn">Log in</button>
+              <p class="muted" data-i18n="loginComing">Login will connect after Supabase is created.</p>
+            </form>
+          </div>
+
+          <div class="status-box visible" id="accountStatus" data-i18n="accountPlaceholder">
+            Account system is not connected yet. This screen is ready for Supabase.
+          </div>
+        </section>
+      </main>
+
+      <main class="screen hidden" id="pricingScreen">
+        <section class="panel">
+          <div class="section-title">
+            <div>
+              <h2 data-i18n="unlockFullTrainer">Unlock the full trainer</h2>
+              <p class="muted" data-i18n="plansDesc">Choose the access length that fits your study timeline.</p>
+            </div>
+            <button class="button quiet compact" id="pricingHomeButton" type="button" data-i18n="home">Home</button>
+          </div>
+
+          <div class="plan-grid">
+            <article class="plan-card">
+              <span class="badge" data-i18n="flexible">Flexible</span>
+              <h3 data-i18n="weeklyAccess">Weekly Access</h3>
+              <p class="plan-price">$14.99 <span data-i18n="perWeek">/ week</span></p>
+              <p class="muted" data-i18n="weeklyDesc">Best if you only need a short final review window.</p>
+              <button class="button primary subscribe-placeholder" type="button" data-i18n="chooseWeekly">Choose weekly</button>
+            </article>
+
+            <article class="plan-card featured">
+              <span class="badge accent" data-i18n="bestValue">Best value</span>
+              <h3 data-i18n="ninetyDayAccess">90-Day Access</h3>
+              <p class="plan-price">$149.99</p>
+              <p class="muted" data-i18n="bundleDesc">Best if you want room to study, review missed questions, and retake practice exams.</p>
+              <button class="button primary subscribe-placeholder" type="button" data-i18n="chooseNinety">Choose 90-day</button>
+            </article>
+          </div>
+
+          <div class="included-list">
+            <h3 data-i18n="paidIncludes">Paid access includes</h3>
+            <ul>
+              <li data-i18n="includeQuestions">Full 300-question trainer</li>
+              <li data-i18n="includeExplanations">Correct answers, explanations, and memory phrases</li>
+              <li data-i18n="includeProgress">Saved progress, missed review, filters, and exam mode</li>
+              <li data-i18n="includeLanguage">Full English and Spanish practice</li>
+            </ul>
+          </div>
+        </section>
+      </main>
+
       <aside class="disclaimer-note" data-i18n="disclaimer">
         Certivo is a training tool only. Using this app does not grant a certification, license, or guarantee a passing score. You must still take and pass the official exam required by the certifying authority.
       </aside>
@@ -331,7 +419,7 @@
       <button class="nav-button" id="navStats" type="button" data-i18n="stats">Stats</button>
     </nav>
 
-    <script src="./questions.js?v=2.1-free-trial"></script>
-    <script src="./app.js?v=2.1-free-trial"></script>
+    <script src="./questions.js?v=2.2-account-plans"></script>
+    <script src="./app.js?v=2.2-account-plans"></script>
   </body>
 </html>
