@@ -4,6 +4,11 @@
   const PREF_KEY = "certivoPracticePrefs";
   const SUPABASE_URL = "https://ulvvofbakrlpcevunbyi.supabase.co";
   const SUPABASE_KEY = "sb_publishable_R1dz6grndk0MOu0I-IVWOA_KbGkq8Lb";
+  const CHECKOUT_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/create-checkout-session`;
+  const PRICE_IDS = {
+    weekly: "price_1TtfWp0TcCPzwDfBL5E60kgn",
+    ninety: "price_1TtfYz0TcCPzwDfBjIKv18nv"
+  };
 
   const text = {
     en: {
@@ -29,8 +34,8 @@
       signedInAs: "Signed in as",
       email: "Email",
       password: "Password",
-      supabaseComing: "Creating your account...",
-      loginComing: "Logging you in...",
+      supabaseComing: "Create your account with Supabase Auth.",
+      loginComing: "Log in with your Certivo account.",
       accountPlaceholder: "Create an account or log in to prepare for paid access.",
       authUnavailable: "Supabase could not load. Check your internet connection and try again.",
       signupSuccess: "Account created. Check your email if Supabase asks you to confirm before logging in.",
@@ -38,6 +43,15 @@
       logoutSuccess: "You are logged out.",
       authError: "Account action could not be completed. Check the email/password and try again.",
       paidPlaceholder: "Payment status will connect after Stripe is added.",
+      accessFree: "Free trial access. Subscribe to unlock the full trainer.",
+      accessActive: "Full trainer unlocked.",
+      paymentChecking: "Checking your access...",
+      paymentSuccess: "Payment complete. Your access will unlock after Stripe confirms it.",
+      paymentCanceled: "Checkout was canceled. You can choose a plan when you are ready.",
+      mustLogin: "Create an account or log in before choosing a paid plan.",
+      checkoutStarting: "Opening secure Stripe checkout...",
+      checkoutError: "Checkout could not be started. Please try again.",
+      paidRequired: "The full trainer requires paid access. Try 10 free questions or choose a plan.",
       unlockFullTrainer: "Unlock the full trainer",
       plansDesc: "Choose the access length that fits your study timeline.",
       flexible: "Flexible",
@@ -157,8 +171,8 @@
       signedInAs: "Sesión iniciada como",
       email: "Correo electrónico",
       password: "Contraseña",
-      supabaseComing: "Creando tu cuenta...",
-      loginComing: "Iniciando sesión...",
+      supabaseComing: "Crea tu cuenta con Supabase Auth.",
+      loginComing: "Inicia sesión con tu cuenta de Certivo.",
       accountPlaceholder: "Crea una cuenta o inicia sesión para prepararte para el acceso pagado.",
       authUnavailable: "Supabase no pudo cargar. Revisa tu conexión a internet e inténtalo otra vez.",
       signupSuccess: "Cuenta creada. Revisa tu correo si Supabase te pide confirmar antes de iniciar sesión.",
@@ -166,6 +180,15 @@
       logoutSuccess: "Has cerrado sesión.",
       authError: "No se pudo completar la acción de cuenta. Revisa el correo/contraseña e inténtalo otra vez.",
       paidPlaceholder: "El estado de pago se conectará después de agregar Stripe.",
+      accessFree: "Acceso de prueba gratis. Suscríbete para desbloquear el entrenador completo.",
+      accessActive: "Entrenador completo desbloqueado.",
+      paymentChecking: "Revisando tu acceso...",
+      paymentSuccess: "Pago completado. Tu acceso se desbloqueará cuando Stripe lo confirme.",
+      paymentCanceled: "Se canceló el pago. Puedes elegir un plan cuando estés listo.",
+      mustLogin: "Crea una cuenta o inicia sesión antes de elegir un plan pagado.",
+      checkoutStarting: "Abriendo el pago seguro de Stripe...",
+      checkoutError: "No se pudo iniciar el pago. Inténtalo otra vez.",
+      paidRequired: "El entrenador completo requiere acceso pagado. Prueba 10 preguntas gratis o elige un plan.",
       unlockFullTrainer: "Desbloquear el entrenador completo",
       plansDesc: "Elige el tiempo de acceso que se ajuste a tu plan de estudio.",
       flexible: "Flexible",
@@ -316,6 +339,7 @@
     accountStatus: document.getElementById("accountStatus"),
     currentAccountCard: document.getElementById("currentAccountCard"),
     accountEmail: document.getElementById("accountEmail"),
+    paidStatus: document.getElementById("paidStatus"),
     progressAnswered: document.getElementById("progressAnswered"),
     progressCorrect: document.getElementById("progressCorrect"),
     progressAccuracy: document.getElementById("progressAccuracy"),
@@ -333,6 +357,7 @@
   let timerId = null;
   let supabaseClient = null;
   let authUser = null;
+  let accessState = { status: "free", plan: "free", access_until: null };
 
   function defaultProgress() {
     return { answers: {}, missed: {}, flagged: {}, history: [] };
@@ -374,6 +399,12 @@
 
   function isTrialSession() {
     return session?.mode === "trial";
+  }
+
+  function hasFullAccess() {
+    if (accessState.status !== "active") return false;
+    if (!accessState.access_until) return true;
+    return new Date(accessState.access_until).getTime() > Date.now();
   }
 
   function givesInstantFeedback() {
@@ -430,10 +461,13 @@
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     supabaseClient.auth.getSession().then(({ data }) => {
       authUser = data.session?.user || null;
+      handleCheckoutReturn();
+      refreshAccess();
       updateAuthUi();
     });
     supabaseClient.auth.onAuthStateChange((_event, currentSession) => {
       authUser = currentSession?.user || null;
+      refreshAccess();
       updateAuthUi();
     });
   }
@@ -449,7 +483,37 @@
     els.currentAccountCard.classList.toggle("hidden", !isLoggedIn);
     els.accountBadge.textContent = isLoggedIn ? t("activeStatus") : t("freeTrialStatus");
     els.accountEmail.textContent = authUser?.email || "";
+    if (els.paidStatus) {
+      els.paidStatus.textContent = hasFullAccess() ? t("accessActive") : t("accessFree");
+    }
     if (!isLoggedIn && !els.accountStatus.textContent.trim()) setAccountStatus(t("accountPlaceholder"));
+  }
+
+  async function refreshAccess() {
+    if (!supabaseClient || !authUser) {
+      accessState = { status: "free", plan: "free", access_until: null };
+      updateAuthUi();
+      return;
+    }
+    setAccountStatus(t("paymentChecking"));
+    const { data, error } = await supabaseClient
+      .from("certivo_access")
+      .select("status, plan, access_until")
+      .eq("user_id", authUser.id)
+      .maybeSingle();
+
+    if (!error && data) {
+      accessState = data;
+    } else {
+      accessState = { status: "free", plan: "free", access_until: null };
+    }
+    updateAuthUi();
+  }
+
+  function handleCheckoutReturn() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("checkout") === "success") setAccountStatus(t("paymentSuccess"));
+    if (params.get("checkout") === "cancelled") setAccountStatus(t("paymentCanceled"));
   }
 
   function authErrorMessage(error) {
@@ -530,6 +594,11 @@
   }
 
   function startSession() {
+    if (!hasFullAccess()) {
+      setAccountStatus(t("paidRequired"));
+      showScreen("pricing");
+      return;
+    }
     const deck = buildDeck();
     if (!deck.length) {
       renderMessage(els.sessionSummary, t("noQuestions"));
@@ -1093,6 +1162,42 @@
     updateAuthUi();
   }
 
+  async function startCheckout(plan) {
+    if (!supabaseClient) {
+      showPlaceholderStatus("authUnavailable");
+      return;
+    }
+    const { data } = await supabaseClient.auth.getSession();
+    const token = data.session?.access_token;
+    if (!token) {
+      setAccountStatus(t("mustLogin"));
+      showScreen("account");
+      return;
+    }
+
+    setAccountStatus(t("checkoutStarting"));
+    try {
+      const response = await fetch(CHECKOUT_FUNCTION_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          plan,
+          priceId: PRICE_IDS[plan],
+          language: prefs.language
+        })
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload.url) throw new Error(payload.error || "Missing checkout URL");
+      window.location.href = payload.url;
+    } catch (error) {
+      setAccountStatus(`${t("checkoutError")} ${error.message || ""}`.trim());
+      showScreen("account");
+    }
+  }
+
   function renderTopicBreakdown() {
     const byTopic = {};
     session.deck.forEach((deckItem) => {
@@ -1231,7 +1336,7 @@
     document.getElementById("signupForm").addEventListener("submit", handleSignup);
     document.getElementById("loginForm").addEventListener("submit", handleLogin);
     document.getElementById("logoutButton").addEventListener("click", handleLogout);
-    document.querySelectorAll(".subscribe-placeholder").forEach((button) => button.addEventListener("click", () => showPlaceholderStatus("accountComingSoon")));
+    document.querySelectorAll("[data-plan]").forEach((button) => button.addEventListener("click", () => startCheckout(button.dataset.plan)));
   }
 
   function setLanguage(language) {

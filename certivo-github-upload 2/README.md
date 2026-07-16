@@ -1,6 +1,6 @@
 # Certivo Practice
 
-Certivo Practice is a static, mobile-first bilingual Texas Life Insurance practice app for GitHub Pages. It uses plain HTML, CSS, and JavaScript: no backend, build step, package install, or API key.
+Certivo Practice is a mobile-first bilingual certification practice app. The student-facing app uses plain HTML, CSS, and JavaScript on GitHub Pages. Account login and payment checks use Supabase Auth, Supabase Edge Functions, and Stripe Checkout.
 
 ## What Is Included
 
@@ -15,6 +15,9 @@ Certivo Practice is a static, mobile-first bilingual Texas Life Insurance practi
 - Dark mode
 - Mobile bottom navigation
 - Certivo logo, favicon, and installable app icons
+- Free 10-question trial
+- Supabase login/signup
+- Stripe plan buttons for weekly and 90-day access
 
 ## Files
 
@@ -23,8 +26,27 @@ Certivo Practice is a static, mobile-first bilingual Texas Life Insurance practi
 - `app.js` - quiz behavior, progress, scoring, flags, history, and filters
 - `questions.js` - structured bilingual question database
 - `manifest.webmanifest` - installable app metadata
-- `assets/` - Certivo logo and app icon files
+- `supabase/sql/certivo_access.sql` - database table for paid access
+- `supabase/functions/create-checkout-session/` - secure Stripe Checkout function
+- `supabase/functions/stripe-webhook/` - Stripe payment confirmation function
 - `README.md` - this file
+
+## Supabase And Stripe Setup
+
+The website must never contain private Stripe or Supabase service keys. Store private keys only in Supabase Edge Function secrets.
+
+Supabase secrets needed:
+
+- `STRIPE_SECRET_KEY`
+- `SERVICE_ROLE_KEY`
+- `STRIPE_WEBHOOK_SECRET` after the Stripe webhook is created
+
+Stripe price ids currently used in `app.js`:
+
+- Weekly access: `price_1TtfWp0TcCPzwDfBL5E60kgn`
+- 90-day access: `price_1TtfYz0TcCPzwDfBjIKv18nv`
+
+Before payments unlock access, run the SQL in `supabase/sql/certivo_access.sql` inside the Supabase SQL Editor, then deploy the two Edge Functions.
 
 ## Question Format
 
@@ -64,12 +86,10 @@ Keep answer ids identical between English and Spanish. The app shuffles answers 
    - `app.js`
    - `questions.js`
    - `manifest.webmanifest`
-   - `assets/certivo-mark.svg`
-   - `assets/certivo-icon.svg`
-   - `assets/certivo-icon-512.png`
-   - `assets/certivo-apple-touch-icon.png`
+   - `favicon.png`
+   - `apple-touch-icon.png`
    - `README.md`
-3. Make sure the four image files stay inside an `assets` folder in the repository root.
+3. Keep the Supabase files locally or in GitHub for reference, but deploy Edge Functions from Supabase.
 4. Go to **Settings > Pages**.
 5. Set the source to the main branch and root folder.
 6. Save. The app will be available at:

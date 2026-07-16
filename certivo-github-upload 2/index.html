@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/certivo-apple-touch-icon-v3.png?v=2.3-flat-icon">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png?v=2.3-flat-icon">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=2.4-supabase-auth">
+    <link rel="stylesheet" href="./styles.css?v=2.5-stripe-checkout">
   </head>
   <body>
     <section class="intro" id="introScreen" aria-label="Certivo intro">
@@ -127,7 +127,7 @@
           <button class="pill-button" id="themeToggle" type="button" data-i18n="darkMode">Dark mode</button>
           <button class="pill-button" id="accountButton" type="button" data-i18n="account">Account</button>
           <button class="pill-button" id="plansButton" type="button" data-i18n="plans">Plans</button>
-          <span class="pill">v2.4</span>
+          <span class="pill">v2.5</span>
           <span class="pill" id="bankPill">300 questions</span>
         </div>
       </header>
@@ -341,7 +341,7 @@
                 <input id="signupPassword" type="password" autocomplete="new-password" placeholder="••••••••">
               </label>
               <button class="button primary" type="submit" data-i18n="createAccount">Create account</button>
-              <p class="muted" data-i18n="supabaseComing">Supabase signup will connect here in the next step.</p>
+              <p class="muted" data-i18n="supabaseComing">Create your account with Supabase Auth.</p>
             </form>
 
             <form class="auth-card" id="loginForm">
@@ -355,18 +355,18 @@
                 <input id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••••">
               </label>
               <button class="button secondary" type="submit" data-i18n="logIn">Log in</button>
-              <p class="muted" data-i18n="loginComing">Login will connect after Supabase is created.</p>
+              <p class="muted" data-i18n="loginComing">Log in with your Certivo account.</p>
             </form>
           </div>
 
           <div class="status-box visible" id="accountStatus" data-i18n="accountPlaceholder">
-            Account system is not connected yet. This screen is ready for Supabase.
+            Create an account or log in to prepare for paid access.
           </div>
 
           <div class="auth-card hidden" id="currentAccountCard">
             <h3 data-i18n="signedInAs">Signed in as</h3>
             <p class="account-email" id="accountEmail"></p>
-            <p class="muted" data-i18n="paidPlaceholder">Payment status will connect after Stripe is added.</p>
+            <p class="muted" id="paidStatus" data-i18n="paidPlaceholder">Payment status will connect after Stripe is added.</p>
             <button class="button quiet" id="logoutButton" type="button" data-i18n="logOut">Log out</button>
           </div>
         </section>
@@ -388,7 +388,7 @@
               <h3 data-i18n="weeklyAccess">Weekly Access</h3>
               <p class="plan-price">$14.99 <span data-i18n="perWeek">/ week</span></p>
               <p class="muted" data-i18n="weeklyDesc">Best if you only need a short final review window.</p>
-              <button class="button primary subscribe-placeholder" type="button" data-i18n="chooseWeekly">Choose weekly</button>
+              <button class="button primary" type="button" data-plan="weekly" data-i18n="chooseWeekly">Choose weekly</button>
             </article>
 
             <article class="plan-card featured">
@@ -396,7 +396,7 @@
               <h3 data-i18n="ninetyDayAccess">90-Day Access</h3>
               <p class="plan-price">$149.99</p>
               <p class="muted" data-i18n="bundleDesc">Best if you want room to study, review missed questions, and retake practice exams.</p>
-              <button class="button primary subscribe-placeholder" type="button" data-i18n="chooseNinety">Choose 90-day</button>
+              <button class="button primary" type="button" data-plan="ninety" data-i18n="chooseNinety">Choose 90-day</button>
             </article>
           </div>
 
@@ -427,7 +427,7 @@
     </nav>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./questions.js?v=2.4-supabase-auth"></script>
-    <script src="./app.js?v=2.4-supabase-auth"></script>
+    <script src="./questions.js?v=2.5-stripe-checkout"></script>
+    <script src="./app.js?v=2.5-stripe-checkout"></script>
   </body>
 </html>
