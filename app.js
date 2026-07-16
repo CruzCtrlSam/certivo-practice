@@ -80,7 +80,8 @@
       keepPracticing: "Keep practicing",
       youScored: "You scored",
       reviewingMissed: "Reviewing missed",
-      noQuestions: "No questions match those filters."
+      noQuestions: "No questions match those filters.",
+      disclaimer: "Certivo is a training tool only. Using this app does not grant a certification, license, or guarantee a passing score. You must still take and pass the official exam required by the certifying authority."
     },
     es: {
       subTitle: "Entrenador para exámenes de certificación",
@@ -158,7 +159,8 @@
       keepPracticing: "Sigue practicando",
       youScored: "Tu resultado",
       reviewingMissed: "Repasando falladas",
-      noQuestions: "Ninguna pregunta coincide con esos filtros."
+      noQuestions: "Ninguna pregunta coincide con esos filtros.",
+      disclaimer: "Certivo es solo una herramienta de entrenamiento. Usar esta aplicación no otorga una certificación, licencia ni garantiza una calificación aprobatoria. Aún debes tomar y aprobar el examen oficial requerido por la autoridad certificadora."
     }
   };
 

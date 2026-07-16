@@ -737,6 +737,24 @@ select {
   font-size: 0.78rem;
 }
 
+.disclaimer-note {
+  max-width: 880px;
+  margin: 20px auto 0;
+  border: 1px solid color-mix(in srgb, var(--gold), var(--line) 55%);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--gold), #ffffff 86%);
+  color: var(--navy);
+  padding: 12px 14px;
+  font-size: 0.82rem;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+[data-theme="dark"] .disclaimer-note {
+  background: rgba(214, 179, 74, 0.12);
+  color: #f4d37a;
+}
+
 .mobile-nav {
   position: fixed;
   left: 0;
