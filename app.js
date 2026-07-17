@@ -18,6 +18,14 @@
       homeTitle: "Continue Studying",
       homeDesc: "Bilingual Texas Life practice with saved progress.",
       readiness: "Readiness",
+      study: "Study",
+      studyGuide: "Study Guide",
+      studyPathDesc: "Free chapters and terms",
+      studyDesc: "Free study chapters, quick explanations, and bilingual key terms.",
+      chapter: "Chapter",
+      keyTerms: "Key terms",
+      practiceThisTopic: "Practice this topic",
+      spanishStudyNote: "Study chapters are currently available in Spanish. Bilingual key terms are shown below, and English chapter translations can be added later.",
       startPractice: "Start Practice",
       freeTrial: "Try 10 Free Questions",
       freeTrialDesc: "Right or wrong only",
@@ -155,6 +163,14 @@
       homeTitle: "Continúa estudiando",
       homeDesc: "Práctica bilingüe de Texas Life con progreso guardado.",
       readiness: "Preparación",
+      study: "Estudiar",
+      studyGuide: "Guía de estudio",
+      studyPathDesc: "Capítulos y términos gratis",
+      studyDesc: "Capítulos de estudio gratis, explicaciones rápidas y términos clave bilingües.",
+      chapter: "Capítulo",
+      keyTerms: "Términos clave",
+      practiceThisTopic: "Practicar este tema",
+      spanishStudyNote: "Los capítulos de estudio están disponibles gratis. Los términos clave aparecen en español e inglés para ayudarte a reconocer vocabulario del examen.",
       startPractice: "Iniciar práctica",
       freeTrial: "Probar 10 preguntas gratis",
       freeTrialDesc: "Solo correcto o incorrecto",
@@ -290,6 +306,7 @@
   const els = {
     screens: {
       home: document.getElementById("homeScreen"),
+      study: document.getElementById("studyScreen"),
       setup: document.getElementById("setupScreen"),
       quiz: document.getElementById("quizScreen"),
       results: document.getElementById("resultsScreen"),
@@ -303,6 +320,12 @@
     bankPill: document.getElementById("bankPill"),
     accountBadge: document.getElementById("accountBadge"),
     readinessBar: document.getElementById("readinessBar"),
+    studyChapterSelect: document.getElementById("studyChapterSelect"),
+    studyChapterTitle: document.getElementById("studyChapterTitle"),
+    studyContent: document.getElementById("studyContent"),
+    studyTerms: document.getElementById("studyTerms"),
+    studyLanguageNote: document.getElementById("studyLanguageNote"),
+    studyPracticeButton: document.getElementById("studyPracticeButton"),
     statAnswered: document.getElementById("statAnswered"),
     statAccuracy: document.getElementById("statAccuracy"),
     statMissed: document.getElementById("statMissed"),
@@ -457,6 +480,7 @@
     if (activeScreen === "quiz" && session) renderQuestion();
     if (activeScreen === "results" && session) renderResults();
     if (activeScreen === "progress") renderProgress();
+    if (activeScreen === "study") renderStudy();
     updateAuthForm();
     updateAuthUi();
   }
@@ -555,10 +579,11 @@
     activeScreen = name;
     Object.entries(els.screens).forEach(([screen, node]) => node.classList.toggle("hidden", screen !== name));
     els.navButtons.forEach((button) => button.classList.remove("active"));
-    const navMap = { home: "navHome", setup: session?.mode === "exam" ? "navExam" : "navPractice", quiz: session?.mode === "exam" ? "navExam" : "navPractice", results: "navStats", progress: "navStats", account: "navStats", pricing: "navStats" };
+    const navMap = { home: "navHome", study: "navStudy", setup: session?.mode === "exam" ? "navExam" : "navPractice", quiz: session?.mode === "exam" ? "navExam" : "navPractice", results: "navStats", progress: "navStats", account: "navStats", pricing: "navStats" };
     const active = document.getElementById(navMap[name]);
     if (active) active.classList.add("active");
     if (name === "progress") renderProgress();
+    if (name === "study") renderStudy();
     if (name === "home") updateDashboard();
     window.scrollTo({ top: 0, behavior: "instant" });
     tickTimer();
@@ -572,6 +597,161 @@
     fillSelect(els.topic, [{ value: "all", label: t("allTopics") }, { value: "missed", label: t("reviewMissed") }, ...topics.map((topic) => ({ value: topic, label: topicLabel(topic) }))], previousTopic);
     fillSelect(els.simulator, [{ value: "all", label: t("allSimulators") }, ...simulators.map((sim) => ({ value: String(sim), label: `${t("simulator")} ${sim}` }))], previousSimulator);
     populateCounts();
+  }
+
+  function populateStudyChapters() {
+    if (!els.studyChapterSelect || !window.CERTIVO_STUDY?.chapters?.length) return;
+    const selected = els.studyChapterSelect.value;
+    fillSelect(
+      els.studyChapterSelect,
+      window.CERTIVO_STUDY.chapters.map((chapter) => ({
+        value: chapter.id,
+        label: `${t("chapter")} ${chapter.number}: ${chapter.title.es || chapter.title.en}`
+      })),
+      selected || window.CERTIVO_STUDY.chapters[0].id
+    );
+  }
+
+  function currentStudyChapter() {
+    return window.CERTIVO_STUDY?.chapters?.find((chapter) => chapter.id === els.studyChapterSelect.value) || window.CERTIVO_STUDY?.chapters?.[0];
+  }
+
+  function renderStudy() {
+    if (!window.CERTIVO_STUDY?.chapters?.length) return;
+    populateStudyChapters();
+    const chapter = currentStudyChapter();
+    if (!chapter) return;
+    els.studyChapterTitle.textContent = `${t("chapter")} ${chapter.number}: ${chapter.title[prefs.language] || chapter.title.es || chapter.title.en}`;
+    els.studyLanguageNote.textContent = t("spanishStudyNote");
+    els.studyContent.innerHTML = "";
+    chapter.sections.forEach((section) => {
+      const article = document.createElement("article");
+      article.className = "study-section";
+      const heading = document.createElement("h3");
+      heading.textContent = section.heading[prefs.language] || section.heading.es || section.heading.en;
+      const body = document.createElement("div");
+      body.className = "study-markdown";
+      body.innerHTML = markdownToHtml(section.markdown[prefs.language] || section.markdown.es || section.markdown.en || "");
+      article.append(heading, body);
+      els.studyContent.appendChild(article);
+    });
+    renderStudyTerms(chapter.number);
+  }
+
+  function renderStudyTerms(chapterNumber) {
+    els.studyTerms.innerHTML = "";
+    const terms = (window.CERTIVO_STUDY?.concepts || []).filter((concept) => Number(concept.chapter) === Number(chapterNumber)).slice(0, 24);
+    if (!terms.length) {
+      const empty = document.createElement("p");
+      empty.className = "muted";
+      empty.textContent = t("noQuestions");
+      els.studyTerms.appendChild(empty);
+      return;
+    }
+    terms.forEach((concept) => {
+      const card = document.createElement("article");
+      card.className = "term-card";
+      const definition = concept.definition[prefs.language] || concept.definition.es || concept.definition.en;
+      card.innerHTML = `<strong>${escapeHtml(concept.term)}</strong><p>${escapeHtml(definition)}</p>`;
+      els.studyTerms.appendChild(card);
+    });
+  }
+
+  function markdownToHtml(markdown) {
+    const lines = String(markdown).split(/\r?\n/);
+    const html = [];
+    let listOpen = false;
+    const closeList = () => {
+      if (listOpen) {
+        html.push("</ul>");
+        listOpen = false;
+      }
+    };
+
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        closeList();
+        return;
+      }
+      if (/^---+$/.test(trimmed)) {
+        closeList();
+        html.push("<hr>");
+        return;
+      }
+      const heading = trimmed.match(/^(#{1,4})\s+(.+)$/);
+      if (heading) {
+        closeList();
+        const level = Math.min(4, heading[1].length + 2);
+        html.push(`<h${level}>${inlineMarkdown(heading[2])}</h${level}>`);
+        return;
+      }
+      if (trimmed.startsWith(">")) {
+        closeList();
+        html.push(`<blockquote>${inlineMarkdown(trimmed.replace(/^>\s*/, ""))}</blockquote>`);
+        return;
+      }
+      if (/^[-*]\s+/.test(trimmed)) {
+        if (!listOpen) {
+          html.push("<ul>");
+          listOpen = true;
+        }
+        html.push(`<li>${inlineMarkdown(trimmed.replace(/^[-*]\s+/, ""))}</li>`);
+        return;
+      }
+      closeList();
+      html.push(`<p>${inlineMarkdown(trimmed)}</p>`);
+    });
+    closeList();
+    return html.join("");
+  }
+
+  function inlineMarkdown(value) {
+    return escapeHtml(value)
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>");
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function practiceStudyChapter() {
+    const chapter = currentStudyChapter();
+    const chapterQuestions = CERTIVO_QUESTIONS.filter((question) => Number(question.chapter || 0) === Number(chapter?.number || 0));
+    if (chapterQuestions.length) {
+      const firstTopic = chapterQuestions[0].topic;
+      openSetup("practice");
+      els.topic.value = firstTopic;
+      populateCounts();
+      return;
+    }
+    const mappedTopic = {
+      1: "general",
+      2: "general",
+      3: "contracts",
+      4: "life insurance",
+      5: "policy provisions",
+      6: "policy provisions",
+      7: "riders",
+      8: "retirement",
+      9: "annuities",
+      10: "taxes",
+      11: "underwriting",
+      12: "underwriting",
+      13: "texas",
+      14: "ethics"
+    }[chapter?.number];
+    openSetup("practice");
+    if (mappedTopic && [...els.topic.options].some((option) => option.value === mappedTopic)) {
+      els.topic.value = mappedTopic;
+      populateCounts();
+    }
   }
 
   function populateCounts() {
@@ -1366,6 +1546,7 @@
     document.getElementById("homeExamButton").addEventListener("click", () => openSetup("exam"));
     document.getElementById("viewProgressButton").addEventListener("click", () => showScreen("progress"));
     document.getElementById("freeTrialPath").addEventListener("click", startTrialSession);
+    document.getElementById("studyPath").addEventListener("click", () => showScreen("study"));
     document.getElementById("practicePath").addEventListener("click", () => openSetup("practice"));
     document.getElementById("examPath").addEventListener("click", () => openSetup("exam"));
     document.getElementById("missedPath").addEventListener("click", () => openSetup("missed"));
@@ -1373,17 +1554,21 @@
     document.getElementById("setupHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("resultsHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("progressHomeButton").addEventListener("click", () => showScreen("home"));
+    document.getElementById("studyHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("pricingHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("practiceAgainButton").addEventListener("click", handlePracticeAgain);
     document.getElementById("progressMissedButton").addEventListener("click", () => openSetup("missed"));
     document.getElementById("resetProgressButton").addEventListener("click", resetProgress);
     document.getElementById("navHome").addEventListener("click", () => showScreen("home"));
+    document.getElementById("navStudy").addEventListener("click", () => showScreen("study"));
     document.getElementById("navPractice").addEventListener("click", () => openSetup("practice"));
     document.getElementById("navExam").addEventListener("click", () => openSetup("exam"));
     document.getElementById("navStats").addEventListener("click", () => showScreen("progress"));
     els.introSkip?.addEventListener("click", hideIntro);
     els.topic.addEventListener("change", populateCounts);
     els.simulator.addEventListener("change", populateCounts);
+    els.studyChapterSelect?.addEventListener("change", renderStudy);
+    els.studyPracticeButton?.addEventListener("click", practiceStudyChapter);
     els.start.addEventListener("click", startSession);
     els.resume.addEventListener("click", resumeSession);
     els.clearSession.addEventListener("click", clearSession);

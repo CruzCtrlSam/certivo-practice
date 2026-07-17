@@ -13,9 +13,10 @@ Certivo Practice is a mobile-first bilingual certification practice app. The stu
 - Review missed questions
 - Saved local progress, history, missed questions, and flags
 - Dark mode
-- Mobile bottom navigation
+- Header navigation
 - Certivo logo, favicon, and installable app icons
 - Free 10-question trial
+- Free Study Guide section with chapters and bilingual key terms
 - Supabase login/signup
 - Stripe plan buttons for weekly and 90-day access
 
@@ -25,6 +26,7 @@ Certivo Practice is a mobile-first bilingual certification practice app. The stu
 - `styles.css` - responsive light/dark styling
 - `app.js` - quiz behavior, progress, scoring, flags, history, and filters
 - `questions.js` - structured bilingual question database
+- `study.js` - free study chapters and glossary terms
 - `manifest.webmanifest` - installable app metadata
 - `supabase/sql/certivo_access.sql` - database table for paid access
 - `supabase/functions/create-checkout-session/` - secure Stripe Checkout function
@@ -85,6 +87,7 @@ Keep answer ids identical between English and Spanish. The app shuffles answers 
    - `styles.css`
    - `app.js`
    - `questions.js`
+   - `study.js`
    - `manifest.webmanifest`
    - `favicon.png`
    - `apple-touch-icon.png`

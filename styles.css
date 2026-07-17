@@ -733,7 +733,8 @@ input::placeholder {
 }
 
 .topic-rows,
-.history-list {
+.history-list,
+.study-content {
   display: grid;
   gap: 10px;
 }
@@ -748,6 +749,94 @@ input::placeholder {
   display: grid;
   gap: 14px;
   margin-top: 18px;
+}
+
+.study-controls {
+  align-items: end;
+  margin-top: 16px;
+}
+
+.study-controls .button {
+  width: 100%;
+  min-height: 54px;
+}
+
+.study-section {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel), var(--soft) 12%);
+  padding: 16px;
+}
+
+.study-section h3 {
+  margin: 0 0 12px;
+  color: var(--blue-strong);
+  line-height: 1.2;
+}
+
+.study-markdown {
+  color: var(--ink);
+  line-height: 1.6;
+  font-weight: 620;
+}
+
+.study-markdown p,
+.study-markdown ul,
+.study-markdown blockquote {
+  margin: 0 0 12px;
+}
+
+.study-markdown h3,
+.study-markdown h4,
+.study-markdown h5,
+.study-markdown h6 {
+  margin: 18px 0 8px;
+  color: var(--blue-strong);
+  line-height: 1.2;
+}
+
+.study-markdown ul {
+  padding-left: 20px;
+}
+
+.study-markdown blockquote {
+  border-left: 4px solid var(--gold);
+  border-radius: 0 8px 8px 0;
+  background: color-mix(in srgb, var(--gold), var(--panel) 86%);
+  padding: 12px 14px;
+  color: var(--blue-strong);
+  font-weight: 760;
+}
+
+.study-markdown hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 18px 0;
+}
+
+.study-terms {
+  display: grid;
+  gap: 10px;
+}
+
+.term-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 12px;
+}
+
+.term-card strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--blue-strong);
+}
+
+.term-card p {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 720;
+  line-height: 1.4;
 }
 
 .account-auth-card {
@@ -921,7 +1010,7 @@ input::placeholder {
 
 .mobile-nav {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
   margin: -8px 0 20px;
   border: 1px solid var(--line);
@@ -936,8 +1025,8 @@ input::placeholder {
   border-radius: 8px;
   background: transparent;
   color: var(--muted);
-  padding: 8px 10px;
-  font-size: 0.85rem;
+  padding: 8px 6px;
+  font-size: 0.82rem;
   font-weight: 850;
 }
 
@@ -976,6 +1065,10 @@ input::placeholder {
   }
 
   .pricing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .study-terms {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 

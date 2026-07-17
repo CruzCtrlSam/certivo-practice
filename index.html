@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/certivo-apple-touch-icon-v3.png?v=2.3-flat-icon">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png?v=2.3-flat-icon">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=2.6-account-nav">
+    <link rel="stylesheet" href="./styles.css?v=2.7-study-guide">
   </head>
   <body>
     <section class="intro" id="introScreen" aria-label="Certivo intro">
@@ -127,13 +127,14 @@
           <button class="pill-button" id="themeToggle" type="button" data-i18n="darkMode">Dark mode</button>
           <button class="pill-button" id="accountButton" type="button" data-i18n="account">Account</button>
           <button class="pill-button" id="plansButton" type="button" data-i18n="plans">Plans</button>
-          <span class="pill">v2.6</span>
+          <span class="pill">v2.7</span>
           <span class="pill" id="bankPill">300 questions</span>
         </div>
       </header>
 
       <nav class="mobile-nav" aria-label="Primary">
         <button class="nav-button active" id="navHome" type="button" data-i18n="home">Home</button>
+        <button class="nav-button" id="navStudy" type="button" data-i18n="study">Study</button>
         <button class="nav-button" id="navPractice" type="button" data-i18n="practice">Practice</button>
         <button class="nav-button" id="navExam" type="button" data-i18n="exam">Exam</button>
         <button class="nav-button" id="navStats" type="button" data-i18n="stats">Stats</button>
@@ -181,6 +182,11 @@
               <strong data-i18n="freeTrial">Try 10 Free Questions</strong>
               <small data-i18n="freeTrialDesc">Right or wrong only</small>
             </button>
+            <button class="path-card" id="studyPath" type="button">
+              <span class="path-icon">G</span>
+              <strong data-i18n="studyGuide">Study Guide</strong>
+              <small data-i18n="studyPathDesc">Free chapters and terms</small>
+            </button>
             <button class="path-card" id="practicePath" type="button">
               <span class="path-icon">P</span>
               <strong data-i18n="practiceMode">Practice Mode</strong>
@@ -202,6 +208,40 @@
               <small data-i18n="progressDesc">History and stats</small>
             </button>
           </div>
+        </section>
+      </main>
+
+      <main class="screen hidden" id="studyScreen">
+        <section class="panel study-hero-panel">
+          <div class="section-title">
+            <div>
+              <h2 data-i18n="studyGuide">Study Guide</h2>
+              <p class="muted" data-i18n="studyDesc">Free study chapters, quick explanations, and bilingual key terms.</p>
+            </div>
+            <button class="button quiet compact" id="studyHomeButton" type="button" data-i18n="home">Home</button>
+          </div>
+          <div class="control-grid study-controls">
+            <label>
+              <span data-i18n="chapter">Chapter</span>
+              <select id="studyChapterSelect"></select>
+            </label>
+            <button class="button primary" id="studyPracticeButton" type="button" data-i18n="practiceThisTopic">Practice this topic</button>
+          </div>
+          <div class="status-box visible" id="studyLanguageNote"></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-title">
+            <h2 id="studyChapterTitle">Chapter</h2>
+          </div>
+          <div class="study-content" id="studyContent"></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-title">
+            <h2 data-i18n="keyTerms">Key terms</h2>
+          </div>
+          <div class="study-terms" id="studyTerms"></div>
         </section>
       </main>
 
@@ -446,7 +486,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./questions.js?v=2.6-account-nav"></script>
-    <script src="./app.js?v=2.6-account-nav"></script>
+    <script src="./questions.js?v=2.7-study-guide"></script>
+    <script src="./study.js?v=2.7-study-guide"></script>
+    <script src="./app.js?v=2.7-study-guide"></script>
   </body>
 </html>
