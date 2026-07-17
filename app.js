@@ -606,7 +606,7 @@
       els.studyChapterSelect,
       window.CERTIVO_STUDY.chapters.map((chapter) => ({
         value: chapter.id,
-        label: `${t("chapter")} ${chapter.number}: ${chapter.title.es || chapter.title.en}`
+        label: `${t("chapter")} ${chapter.number}: ${chapter.title[prefs.language] || chapter.title.en || chapter.title.es}`
       })),
       selected || window.CERTIVO_STUDY.chapters[0].id
     );
