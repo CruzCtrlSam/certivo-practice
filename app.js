@@ -107,6 +107,8 @@
       missed: "Missed",
       flagged: "Flagged",
       choosePath: "Choose a path",
+      quickActions: "Quick actions",
+      studyTools: "Study tools",
       practiceMode: "Practice Mode",
       practiceDesc: "Instant explanations",
       examMode: "Exam Mode",
@@ -264,6 +266,8 @@
       missed: "Falladas",
       flagged: "Marcadas",
       choosePath: "Elige una ruta",
+      quickActions: "Acciones rápidas",
+      studyTools: "Herramientas de estudio",
       practiceMode: "Modo práctica",
       practiceDesc: "Explicaciones inmediatas",
       examMode: "Modo examen",
@@ -1685,8 +1689,8 @@
     document.getElementById("homeExamButton").addEventListener("click", () => openSetup("exam"));
     document.getElementById("viewProgressButton").addEventListener("click", () => showScreen("progress"));
     document.getElementById("freeTrialPath").addEventListener("click", startTrialSession);
-    document.getElementById("studyPath").addEventListener("click", () => showScreen("study"));
-    document.getElementById("flashcardsPath").addEventListener("click", openFlashcards);
+    document.getElementById("studyGuideToolPath").addEventListener("click", () => document.getElementById("studyChapterTitle")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    document.getElementById("flashcardsStudyPath").addEventListener("click", openFlashcards);
     document.getElementById("practicePath").addEventListener("click", () => openSetup("practice"));
     document.getElementById("examPath").addEventListener("click", () => openSetup("exam"));
     document.getElementById("missedPath").addEventListener("click", () => openSetup("missed"));

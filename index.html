@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/certivo-apple-touch-icon-v3.png?v=2.3-flat-icon">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png?v=2.3-flat-icon">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=3.2-flashcard-brand-fix">
+    <link rel="stylesheet" href="./styles.css?v=3.3-study-tools-layout">
   </head>
   <body>
     <section class="intro" id="introScreen" aria-label="Certivo intro">
@@ -127,7 +127,7 @@
           <button class="pill-button" id="themeToggle" type="button" data-i18n="darkMode">Dark mode</button>
           <button class="pill-button" id="accountButton" type="button" data-i18n="account">Account</button>
           <button class="pill-button" id="plansButton" type="button" data-i18n="plans">Plans</button>
-          <span class="pill">v3.2</span>
+          <span class="pill">v3.3</span>
           <span class="pill" id="bankPill">300 questions</span>
         </div>
       </header>
@@ -174,23 +174,13 @@
 
         <section class="panel path-panel">
           <div class="section-title">
-            <h2 data-i18n="choosePath">Choose a path</h2>
+            <h2 data-i18n="quickActions">Quick actions</h2>
           </div>
           <div class="path-grid">
             <button class="path-card trial-card" id="freeTrialPath" type="button">
               <span class="path-icon">10</span>
               <strong data-i18n="freeTrial">Try 10 Free Questions</strong>
               <small data-i18n="freeTrialDesc">Right or wrong only</small>
-            </button>
-            <button class="path-card" id="studyPath" type="button">
-              <span class="path-icon">G</span>
-              <strong data-i18n="studyGuide">Study Guide</strong>
-              <small data-i18n="studyPathDesc">Free chapters and terms</small>
-            </button>
-            <button class="path-card flashcard-path-card" id="flashcardsPath" type="button">
-              <span class="path-icon">F</span>
-              <strong data-i18n="flashcards">Flashcards</strong>
-              <small data-i18n="flashcardsPathDesc">10 free preview cards</small>
             </button>
             <button class="path-card" id="practicePath" type="button">
               <span class="path-icon">P</span>
@@ -234,6 +224,24 @@
             <button class="button secondary" id="studyFlashcardsButton" type="button" data-i18n="studyFlashcards">Study flashcards</button>
           </div>
           <div class="status-box visible" id="studyLanguageNote"></div>
+        </section>
+
+        <section class="panel study-tools-panel">
+          <div class="section-title">
+            <h2 data-i18n="studyTools">Study tools</h2>
+          </div>
+          <div class="path-grid study-tool-grid">
+            <button class="path-card" id="studyGuideToolPath" type="button">
+              <span class="path-icon">G</span>
+              <strong data-i18n="studyGuide">Study Guide</strong>
+              <small data-i18n="studyPathDesc">Free chapters and terms</small>
+            </button>
+            <button class="path-card flashcard-path-card" id="flashcardsStudyPath" type="button">
+              <span class="path-icon">F</span>
+              <strong data-i18n="flashcards">Flashcards</strong>
+              <small data-i18n="flashcardsPathDesc">10 free preview cards</small>
+            </button>
+          </div>
         </section>
 
         <section class="panel">
@@ -526,8 +534,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./questions.js?v=3.2-flashcard-brand-fix"></script>
-    <script src="./study.js?v=3.2-flashcard-brand-fix"></script>
-    <script src="./app.js?v=3.2-flashcard-brand-fix"></script>
+    <script src="./questions.js?v=3.3-study-tools-layout"></script>
+    <script src="./study.js?v=3.3-study-tools-layout"></script>
+    <script src="./app.js?v=3.3-study-tools-layout"></script>
   </body>
 </html>
