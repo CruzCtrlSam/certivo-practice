@@ -31,6 +31,36 @@
       homeTitle: "Continue Studying",
       homeDesc: "Bilingual Texas Life practice with saved progress.",
       readiness: "Readiness",
+      missionControl: "Mission Control",
+      missionPrompt: "What should I study right now?",
+      readinessScore: "Readiness Score",
+      continueLearning: "Continue Learning",
+      resumeLastSession: "Resume Last Session",
+      fixWeaknesses: "Fix My Weaknesses",
+      weaknessDesc: "Start with the concepts that are most likely to cost you points.",
+      estimatedPassChance: "Estimated chance of passing",
+      studyTimeRemaining: "Study time remaining",
+      currentStreak: "Current streak",
+      topicsMastered: "Topics mastered",
+      weakestTopic: "Weakest topic",
+      todaysGoal: "Today's study goal",
+      dailyMissions: "Daily Missions",
+      needsWork: "Needs Work",
+      improving: "Improving",
+      nearlyReady: "Nearly Ready",
+      examReady: "Exam Ready",
+      noWeaknessesYet: "No weaknesses yet. Start a practice set so Certivo can find your weak spots.",
+      miniLesson: "Mini lesson",
+      targetedQuiz: "Targeted quiz",
+      reviewFlashcards: "Flashcards",
+      mastery: "Mastery",
+      missionQuestions: "Answer 10 questions",
+      missionWeakTopic: "Review your weakest topic",
+      missionFlashcards: "Flip 10 flashcards",
+      xp: "XP",
+      days: "days",
+      hours: "hours",
+      startWithPractice: "Start with practice",
       study: "Study",
       studyGuide: "Study Guide",
       studyPathDesc: "Free chapters and terms",
@@ -190,6 +220,36 @@
       homeTitle: "Continúa estudiando",
       homeDesc: "Práctica bilingüe de Texas Life con progreso guardado.",
       readiness: "Preparación",
+      missionControl: "Centro de control",
+      missionPrompt: "¿Qué debo estudiar ahora?",
+      readinessScore: "Nivel de preparación",
+      continueLearning: "Continuar estudiando",
+      resumeLastSession: "Continuar sesión",
+      fixWeaknesses: "Corregir mis puntos débiles",
+      weaknessDesc: "Empieza con los conceptos que más probablemente te pueden costar puntos.",
+      estimatedPassChance: "Probabilidad estimada de aprobar",
+      studyTimeRemaining: "Tiempo de estudio restante",
+      currentStreak: "Racha actual",
+      topicsMastered: "Temas dominados",
+      weakestTopic: "Tema más débil",
+      todaysGoal: "Meta de hoy",
+      dailyMissions: "Misiones diarias",
+      needsWork: "Necesita trabajo",
+      improving: "Mejorando",
+      nearlyReady: "Casi listo",
+      examReady: "Listo para examen",
+      noWeaknessesYet: "Todavía no hay puntos débiles. Inicia una práctica para que Certivo los encuentre.",
+      miniLesson: "Mini lección",
+      targetedQuiz: "Quiz enfocado",
+      reviewFlashcards: "Tarjetas",
+      mastery: "Dominio",
+      missionQuestions: "Contesta 10 preguntas",
+      missionWeakTopic: "Repasa tu tema más débil",
+      missionFlashcards: "Voltea 10 tarjetas",
+      xp: "XP",
+      days: "días",
+      hours: "horas",
+      startWithPractice: "Empieza con práctica",
       study: "Estudiar",
       studyGuide: "Guía de estudio",
       studyPathDesc: "Capítulos y términos gratis",
@@ -347,6 +407,7 @@
   const els = {
     screens: {
       home: document.getElementById("homeScreen"),
+      weakness: document.getElementById("weaknessScreen"),
       study: document.getElementById("studyScreen"),
       flashcards: document.getElementById("flashcardsScreen"),
       setup: document.getElementById("setupScreen"),
@@ -362,6 +423,16 @@
     bankPill: document.getElementById("bankPill"),
     accountBadge: document.getElementById("accountBadge"),
     readinessBar: document.getElementById("readinessBar"),
+    missionReadinessScore: document.getElementById("missionReadinessScore"),
+    missionReadinessLabel: document.getElementById("missionReadinessLabel"),
+    missionPassingChance: document.getElementById("missionPassingChance"),
+    missionStudyTime: document.getElementById("missionStudyTime"),
+    missionStreak: document.getElementById("missionStreak"),
+    missionMastered: document.getElementById("missionMastered"),
+    missionWeakestTopic: document.getElementById("missionWeakestTopic"),
+    missionTodayGoal: document.getElementById("missionTodayGoal"),
+    dailyMissionsList: document.getElementById("dailyMissionsList"),
+    weaknessList: document.getElementById("weaknessList"),
     studyChapterSelect: document.getElementById("studyChapterSelect"),
     studyChapterTitle: document.getElementById("studyChapterTitle"),
     studyContent: document.getElementById("studyContent"),
@@ -535,6 +606,7 @@
     if (activeScreen === "quiz" && session) renderQuestion();
     if (activeScreen === "results" && session) renderResults();
     if (activeScreen === "progress") renderProgress();
+    if (activeScreen === "weakness") renderWeaknessCenter();
     if (activeScreen === "study") renderStudy();
     if (activeScreen === "flashcards") renderFlashcards();
     updateAuthForm();
@@ -635,10 +707,11 @@
     activeScreen = name;
     Object.entries(els.screens).forEach(([screen, node]) => node.classList.toggle("hidden", screen !== name));
     els.navButtons.forEach((button) => button.classList.remove("active"));
-    const navMap = { home: "navHome", study: "navStudy", flashcards: "navStudy", setup: session?.mode === "exam" ? "navExam" : "navPractice", quiz: session?.mode === "exam" ? "navExam" : "navPractice", results: "navStats", progress: "navStats", account: "navStats", pricing: "navStats" };
+    const navMap = { home: "navHome", weakness: "navHome", study: "navStudy", flashcards: "navStudy", setup: session?.mode === "exam" ? "navExam" : "navPractice", quiz: session?.mode === "exam" ? "navExam" : "navPractice", results: "navStats", progress: "navStats", account: "navStats", pricing: "navStats" };
     const active = document.getElementById(navMap[name]);
     if (active) active.classList.add("active");
     if (name === "progress") renderProgress();
+    if (name === "weakness") renderWeaknessCenter();
     if (name === "study") renderStudy();
     if (name === "flashcards") renderFlashcards();
     if (name === "home") updateDashboard();
@@ -1622,6 +1695,210 @@
     renderQuestion();
   }
 
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function totalAnswered() {
+    return Object.values(progress.answers || {}).reduce((sum, record) => sum + (Number(record.seen) || 0), 0);
+  }
+
+  function topicStats() {
+    const stats = {};
+    CERTIVO_QUESTIONS.forEach((question) => {
+      stats[question.topic] ||= { topic: question.topic, seen: 0, correct: 0, wrong: 0, missed: 0, total: 0 };
+      stats[question.topic].total += 1;
+      const record = progress.answers?.[question.id];
+      if (record) {
+        stats[question.topic].seen += Number(record.seen) || 0;
+        stats[question.topic].correct += Number(record.correct) || 0;
+        stats[question.topic].wrong += Number(record.wrong) || 0;
+      }
+      if (progress.missed?.[question.id]) stats[question.topic].missed += 1;
+    });
+    return Object.values(stats).map((item) => ({
+      ...item,
+      accuracy: item.seen ? Math.round((item.correct / item.seen) * 100) : 0,
+      weakness: item.missed * 18 + item.wrong * 9 + (item.seen ? Math.max(0, 78 - Math.round((item.correct / item.seen) * 100)) : 8)
+    }));
+  }
+
+  function studyStreak() {
+    const days = new Set((progress.history || []).map((entry) => new Date(entry.date).toDateString()));
+    if (!days.size) return 0;
+    let streak = 0;
+    const cursor = new Date();
+    for (let index = 0; index < 30; index += 1) {
+      if (days.has(cursor.toDateString())) streak += 1;
+      else if (index > 0) break;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    return streak;
+  }
+
+  function recentAccuracy() {
+    const recent = (progress.history || []).slice(0, 5);
+    const total = recent.reduce((sum, entry) => sum + (Number(entry.total) || 0), 0);
+    const correct = recent.reduce((sum, entry) => sum + (Number(entry.correct) || 0), 0);
+    return total ? Math.round((correct / total) * 100) : null;
+  }
+
+  function readinessModel() {
+    const records = Object.values(progress.answers || {});
+    const answered = records.reduce((sum, record) => sum + (Number(record.seen) || 0), 0);
+    const correct = records.reduce((sum, record) => sum + (Number(record.correct) || 0), 0);
+    const accuracy = answered ? Math.round((correct / answered) * 100) : 0;
+    const stats = topicStats();
+    const mastered = stats.filter((item) => item.seen >= 3 && item.accuracy >= 80 && item.missed === 0).length;
+    const masteryPercent = stats.length ? Math.round((mastered / stats.length) * 100) : 0;
+    const recent = recentAccuracy();
+    const consistency = clamp(studyStreak() * 12, 0, 100);
+    const readiness = answered
+      ? Math.round(accuracy * 0.42 + (recent ?? accuracy) * 0.26 + masteryPercent * 0.22 + consistency * 0.1)
+      : 0;
+    const weakest = stats
+      .filter((item) => item.seen || item.missed)
+      .sort((a, b) => b.weakness - a.weakness)[0];
+    const label = readiness >= 84 ? t("examReady") : readiness >= 70 ? t("nearlyReady") : readiness >= 45 ? t("improving") : t("needsWork");
+    return {
+      answered,
+      correct,
+      accuracy,
+      readiness: clamp(readiness, 0, 100),
+      passingChance: answered ? clamp(Math.round(readiness + 6), 5, 95) : 0,
+      studyHours: answered ? clamp(Math.ceil((100 - readiness) / 7), 1, 12) : 6,
+      streak: studyStreak(),
+      mastered,
+      weakest,
+      label
+    };
+  }
+
+  function renderMissionControl() {
+    if (!els.missionReadinessScore) return;
+    const model = readinessModel();
+    const weakestLabel = model.weakest ? topicLabel(model.weakest.topic) : t("startWithPractice");
+    els.statAnswered.textContent = String(model.answered);
+    els.statAccuracy.textContent = `${model.accuracy}%`;
+    els.statMissed.textContent = String(Object.keys(progress.missed || {}).length);
+    els.statFlagged.textContent = String(Object.keys(progress.flagged || {}).length);
+    els.readinessBar.style.width = `${model.readiness}%`;
+    els.missionReadinessScore.textContent = `${model.readiness}%`;
+    els.missionReadinessLabel.textContent = model.label;
+    els.missionPassingChance.textContent = `${model.passingChance}%`;
+    els.missionStudyTime.textContent = `${model.studyHours} ${t("hours")}`;
+    els.missionStreak.textContent = `${model.streak} ${t("days")}`;
+    els.missionMastered.textContent = String(model.mastered);
+    els.missionWeakestTopic.textContent = weakestLabel;
+    els.missionTodayGoal.textContent = model.weakest ? `${t("missionWeakTopic")}: ${weakestLabel}` : t("missionQuestions");
+    renderDailyMissions(model);
+  }
+
+  function renderDailyMissions(model) {
+    if (!els.dailyMissionsList) return;
+    const missions = [
+      { label: t("missionQuestions"), detail: model.answered ? `${model.answered} ${t("answered")}` : t("startWithPractice"), xp: 25 },
+      { label: model.weakest ? `${t("missionWeakTopic")}: ${topicLabel(model.weakest.topic)}` : t("missionWeakTopic"), detail: t("targetedQuiz"), xp: 40 },
+      { label: t("missionFlashcards"), detail: t("reviewFlashcards"), xp: 15 }
+    ];
+    els.dailyMissionsList.innerHTML = "";
+    missions.forEach((mission, index) => {
+      const item = document.createElement("button");
+      item.className = "daily-mission";
+      item.type = "button";
+      item.dataset.mission = String(index);
+      item.innerHTML = `<span>${escapeHtml(mission.label)}</span><small>${escapeHtml(mission.detail)}</small><b>+${mission.xp} ${t("xp")}</b>`;
+      els.dailyMissionsList.appendChild(item);
+    });
+  }
+
+  function startTopicPractice(topic) {
+    openSetup("practice");
+    if (topic && [...els.topic.options].some((option) => option.value === topic)) {
+      els.topic.value = topic;
+      populateCounts();
+    }
+  }
+
+  function openWeakTopicStudy(topic) {
+    const chapterByTopic = {
+      general: 1,
+      contracts: 3,
+      "life insurance": 4,
+      "policy provisions": 5,
+      riders: 7,
+      retirement: 8,
+      annuities: 9,
+      taxes: 10,
+      underwriting: 11,
+      texas: 13,
+      ethics: 14,
+      beneficiaries: 4,
+      calculation: 4,
+      "best interest": 14
+    };
+    showScreen("study");
+    const chapterNumber = chapterByTopic[topic];
+    const chapter = window.CERTIVO_STUDY?.chapters?.find((item) => Number(item.number) === Number(chapterNumber));
+    if (chapter && els.studyChapterSelect) {
+      els.studyChapterSelect.value = chapter.id;
+      renderStudy();
+    }
+  }
+
+  function weaknessExplanation(topic) {
+    const label = topicLabel(topic);
+    if (prefs.language === "es") {
+      return `Si fallas ${label}, no memorices solamente la respuesta. Estudia la regla sencilla, mira un ejemplo y luego contesta preguntas del mismo tema hasta que puedas explicar por qué las otras opciones son incorrectas.`;
+    }
+    return `If you are missing ${label}, do not just memorize the answer. Study the simple rule, look at one example, then answer questions from this topic until you can explain why the other choices are wrong.`;
+  }
+
+  function masteryLabel(item) {
+    if (!item.seen) return "Bronze";
+    if (item.accuracy >= 90 && item.seen >= 8 && item.missed === 0) return "Master";
+    if (item.accuracy >= 80 && item.seen >= 5) return "Gold";
+    if (item.accuracy >= 65) return "Silver";
+    return "Bronze";
+  }
+
+  function renderWeaknessCenter() {
+    if (!els.weaknessList) return;
+    const weaknesses = topicStats()
+      .filter((item) => item.seen || item.missed)
+      .sort((a, b) => b.weakness - a.weakness)
+      .slice(0, 5);
+    els.weaknessList.innerHTML = "";
+    if (!weaknesses.length) {
+      const empty = document.createElement("p");
+      empty.className = "muted";
+      empty.textContent = t("noWeaknessesYet");
+      els.weaknessList.appendChild(empty);
+      return;
+    }
+    weaknesses.forEach((item, index) => {
+      const card = document.createElement("article");
+      card.className = "weakness-card";
+      card.innerHTML = `
+        <div class="weakness-rank">${index + 1}</div>
+        <div>
+          <div class="topic-top"><strong>${escapeHtml(topicLabel(item.topic))}</strong><span>${item.accuracy}% · ${item.seen} ${t("answered")}</span></div>
+          <p>${escapeHtml(weaknessExplanation(item.topic))}</p>
+          <div class="weakness-meta">
+            <span>${t("mastery")}: ${escapeHtml(masteryLabel(item))}</span>
+            <span>${t("missed")}: ${item.missed}</span>
+          </div>
+          <div class="actions">
+            <button class="button secondary compact" type="button" data-action="study" data-topic="${escapeHtml(item.topic)}">${t("miniLesson")}</button>
+            <button class="button primary compact" type="button" data-action="quiz" data-topic="${escapeHtml(item.topic)}">${t("targetedQuiz")}</button>
+            <button class="button quiet compact" type="button" data-action="cards">${t("reviewFlashcards")}</button>
+          </div>
+        </div>
+      `;
+      els.weaknessList.appendChild(card);
+    });
+  }
+
   function updateDashboard() {
     const records = Object.values(progress.answers || {});
     const answered = records.reduce((sum, record) => sum + record.seen, 0);
@@ -1632,6 +1909,7 @@
     els.statMissed.textContent = String(Object.keys(progress.missed || {}).length);
     els.statFlagged.textContent = String(Object.keys(progress.flagged || {}).length);
     els.readinessBar.style.width = `${accuracy}%`;
+    renderMissionControl();
   }
 
   function renderProgress() {
@@ -1684,9 +1962,17 @@
     els.theme.addEventListener("click", toggleTheme);
     document.getElementById("accountButton").addEventListener("click", () => showScreen("account"));
     document.getElementById("plansButton").addEventListener("click", () => showScreen("pricing"));
-    document.getElementById("homeTrialButton").addEventListener("click", startTrialSession);
-    document.getElementById("homePracticeButton").addEventListener("click", () => openSetup("practice"));
-    document.getElementById("homeExamButton").addEventListener("click", () => openSetup("exam"));
+    document.getElementById("missionContinueButton").addEventListener("click", () => {
+      const model = readinessModel();
+      if (model.weakest) startTopicPractice(model.weakest.topic);
+      else openSetup("practice");
+    });
+    document.getElementById("missionResumeButton").addEventListener("click", () => {
+      const saved = loadJson(SESSION_KEY, null);
+      if (saved?.deck?.length) resumeSession();
+      else openSetup("practice");
+    });
+    document.getElementById("missionWeaknessButton").addEventListener("click", () => showScreen("weakness"));
     document.getElementById("viewProgressButton").addEventListener("click", () => showScreen("progress"));
     document.getElementById("freeTrialPath").addEventListener("click", startTrialSession);
     document.getElementById("studyGuideToolPath").addEventListener("click", () => document.getElementById("studyChapterTitle")?.scrollIntoView({ behavior: "smooth", block: "start" }));
@@ -1695,6 +1981,7 @@
     document.getElementById("examPath").addEventListener("click", () => openSetup("exam"));
     document.getElementById("missedPath").addEventListener("click", () => openSetup("missed"));
     document.getElementById("progressPath").addEventListener("click", () => showScreen("progress"));
+    document.getElementById("weaknessHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("setupHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("resultsHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("progressHomeButton").addEventListener("click", () => showScreen("home"));
@@ -1715,6 +2002,21 @@
     els.studyChapterSelect?.addEventListener("change", renderStudy);
     els.studyPracticeButton?.addEventListener("click", practiceStudyChapter);
     els.studyFlashcardsButton?.addEventListener("click", openFlashcards);
+    els.dailyMissionsList?.addEventListener("click", (event) => {
+      const button = event.target.closest(".daily-mission");
+      if (!button) return;
+      const model = readinessModel();
+      if (button.dataset.mission === "2") openFlashcards();
+      else if (model.weakest) startTopicPractice(model.weakest.topic);
+      else openSetup("practice");
+    });
+    els.weaknessList?.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-action]");
+      if (!button) return;
+      if (button.dataset.action === "study") openWeakTopicStudy(button.dataset.topic);
+      if (button.dataset.action === "quiz") startTopicPractice(button.dataset.topic);
+      if (button.dataset.action === "cards") openFlashcards();
+    });
     els.flashcardFlipButton?.addEventListener("click", () => {
       flashcardFlipped = !flashcardFlipped;
       renderFlashcards();

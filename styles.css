@@ -430,6 +430,182 @@ button:disabled {
   gap: 10px;
 }
 
+.mission-grid {
+  align-items: stretch;
+}
+
+.mission-panel {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--navy), var(--panel) 6%), color-mix(in srgb, var(--blue), var(--navy) 52%));
+  color: #ffffff;
+  overflow: hidden;
+  position: relative;
+}
+
+.mission-panel .muted,
+.mission-panel .mission-kicker {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.mission-score-card {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.mission-kicker {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mission-score-card strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--gold);
+  font-size: clamp(3.2rem, 12vw, 6.5rem);
+  line-height: 0.95;
+}
+
+.mission-summary-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.mission-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mission-metric,
+.mission-next {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel), var(--soft) 35%);
+  padding: 14px;
+}
+
+.mission-metric span,
+.mission-next span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.mission-metric strong,
+.mission-next strong {
+  display: block;
+  color: var(--blue-strong);
+  line-height: 1.12;
+}
+
+.mission-metric strong {
+  margin-top: 6px;
+  font-size: 1.45rem;
+}
+
+.mission-metric.primary-metric strong {
+  color: var(--gold);
+  font-size: 2.7rem;
+}
+
+.mission-next {
+  display: grid;
+  gap: 6px;
+}
+
+.mission-next strong + span {
+  margin-top: 8px;
+}
+
+.daily-missions {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.daily-mission {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 12px;
+  align-items: center;
+  min-height: 72px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 14px;
+  text-align: left;
+}
+
+.daily-mission span {
+  font-weight: 900;
+}
+
+.daily-mission small {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.daily-mission b {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.weakness-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.weakness-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel), var(--soft) 24%);
+  padding: 14px;
+}
+
+.weakness-rank {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 950;
+}
+
+.weakness-card p {
+  margin: 10px 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.weakness-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.weakness-meta span {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--gold), var(--panel) 76%);
+  color: var(--navy);
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
 .stat {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -1160,6 +1336,15 @@ input::placeholder {
 
   .path-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .daily-missions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .mission-score-card {
+    grid-template-columns: minmax(160px, auto) 1fr;
+    align-items: end;
   }
 
   .study-tool-grid {

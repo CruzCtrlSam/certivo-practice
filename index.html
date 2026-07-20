@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/certivo-apple-touch-icon-v3.png?v=2.3-flat-icon">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png?v=2.3-flat-icon">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=3.3-study-tools-layout">
+    <link rel="stylesheet" href="./styles.css?v=4.0-mission-control">
   </head>
   <body>
     <section class="intro" id="introScreen" aria-label="Certivo intro">
@@ -127,7 +127,7 @@
           <button class="pill-button" id="themeToggle" type="button" data-i18n="darkMode">Dark mode</button>
           <button class="pill-button" id="accountButton" type="button" data-i18n="account">Account</button>
           <button class="pill-button" id="plansButton" type="button" data-i18n="plans">Plans</button>
-          <span class="pill">v3.3</span>
+          <span class="pill">v4.0</span>
           <span class="pill" id="bankPill">300 questions</span>
         </div>
       </header>
@@ -141,36 +141,61 @@
       </nav>
 
       <main class="screen" id="homeScreen">
-        <div class="dashboard-grid">
-          <section class="panel">
+        <div class="dashboard-grid mission-grid">
+          <section class="panel mission-panel">
             <div class="section-title">
-              <h2 data-i18n="homeTitle">Continue Studying</h2>
-              <span class="badge accent" data-i18n="readiness">Readiness</span>
+              <div>
+                <h2 data-i18n="missionControl">Mission Control</h2>
+                <p class="muted" data-i18n="missionPrompt">What should I study right now?</p>
+              </div>
+              <span class="badge accent" id="missionReadinessLabel">Needs Work</span>
             </div>
-            <p class="muted" data-i18n="homeDesc">Bilingual Texas Life practice with saved progress.</p>
-            <div class="progress-track large" aria-hidden="true">
-              <div class="progress-fill" id="readinessBar"></div>
+            <div class="mission-score-card">
+              <div>
+                <span class="mission-kicker" data-i18n="readinessScore">Readiness Score</span>
+                <strong id="missionReadinessScore">0%</strong>
+              </div>
+              <div class="progress-track large" aria-hidden="true">
+                <div class="progress-fill" id="readinessBar"></div>
+              </div>
             </div>
             <div class="actions">
-              <button class="button primary" id="homeTrialButton" type="button" data-i18n="freeTrial">Try 10 Free Questions</button>
-              <button class="button primary" id="homePracticeButton" type="button" data-i18n="startPractice">Start Practice</button>
-              <button class="button secondary" id="homeExamButton" type="button" data-i18n="examSimulation">Exam Simulation</button>
+              <button class="button primary" id="missionContinueButton" type="button" data-i18n="continueLearning">Continue Learning</button>
+              <button class="button secondary" id="missionResumeButton" type="button" data-i18n="resumeLastSession">Resume Last Session</button>
+              <button class="button quiet" id="missionWeaknessButton" type="button" data-i18n="fixWeaknesses">Fix My Weaknesses</button>
             </div>
           </section>
 
-          <aside class="panel">
-            <div class="section-title">
-              <h2 data-i18n="dashboard">Dashboard</h2>
-              <button class="button quiet compact" id="viewProgressButton" type="button" data-i18n="view">View</button>
+          <aside class="panel mission-summary-panel">
+            <div class="mission-metric primary-metric">
+              <span data-i18n="estimatedPassChance">Estimated chance of passing</span>
+              <strong id="missionPassingChance">0%</strong>
             </div>
-            <div class="stats-grid">
-              <div class="stat"><b id="statAnswered">0</b><span data-i18n="answered">Answered</span></div>
-              <div class="stat"><b id="statAccuracy">0%</b><span data-i18n="accuracy">Accuracy</span></div>
-              <div class="stat"><b id="statMissed">0</b><span data-i18n="missed">Missed</span></div>
-              <div class="stat"><b id="statFlagged">0</b><span data-i18n="flagged">Flagged</span></div>
+            <div class="mission-metrics">
+              <div class="mission-metric"><span data-i18n="studyTimeRemaining">Study time remaining</span><strong id="missionStudyTime">--</strong></div>
+              <div class="mission-metric"><span data-i18n="currentStreak">Current streak</span><strong id="missionStreak">0</strong></div>
+              <div class="mission-metric"><span data-i18n="topicsMastered">Topics mastered</span><strong id="missionMastered">0</strong></div>
+              <div class="mission-metric"><span data-i18n="answered">Answered</span><strong id="statAnswered">0</strong></div>
             </div>
+            <div class="mission-next">
+              <span data-i18n="weakestTopic">Weakest topic</span>
+              <strong id="missionWeakestTopic">Start with practice</strong>
+              <span data-i18n="todaysGoal">Today's study goal</span>
+              <strong id="missionTodayGoal">Answer 10 questions</strong>
+            </div>
+            <span class="hidden" id="statAccuracy">0%</span>
+            <span class="hidden" id="statMissed">0</span>
+            <span class="hidden" id="statFlagged">0</span>
           </aside>
         </div>
+
+        <section class="panel daily-missions-panel">
+          <div class="section-title">
+            <h2 data-i18n="dailyMissions">Daily Missions</h2>
+            <button class="button quiet compact" id="viewProgressButton" type="button" data-i18n="view">View</button>
+          </div>
+          <div class="daily-missions" id="dailyMissionsList"></div>
+        </section>
 
         <section class="panel path-panel">
           <div class="section-title">
@@ -203,6 +228,19 @@
               <small data-i18n="progressDesc">History and stats</small>
             </button>
           </div>
+        </section>
+      </main>
+
+      <main class="screen hidden" id="weaknessScreen">
+        <section class="panel">
+          <div class="section-title">
+            <div>
+              <h2 data-i18n="fixWeaknesses">Fix My Weaknesses</h2>
+              <p class="muted" data-i18n="weaknessDesc">Start with the concepts that are most likely to cost you points.</p>
+            </div>
+            <button class="button quiet compact" id="weaknessHomeButton" type="button" data-i18n="home">Home</button>
+          </div>
+          <div class="weakness-list" id="weaknessList"></div>
         </section>
       </main>
 
@@ -534,8 +572,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./questions.js?v=3.3-study-tools-layout"></script>
-    <script src="./study.js?v=3.3-study-tools-layout"></script>
-    <script src="./app.js?v=3.3-study-tools-layout"></script>
+    <script src="./questions.js?v=4.0-mission-control"></script>
+    <script src="./study.js?v=4.0-mission-control"></script>
+    <script src="./app.js?v=4.0-mission-control"></script>
   </body>
 </html>

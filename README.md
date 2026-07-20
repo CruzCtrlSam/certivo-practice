@@ -14,9 +14,12 @@ Certivo Practice is a mobile-first bilingual certification practice app. The stu
 - Saved local progress, history, missed questions, and flags
 - Dark mode
 - Header navigation
+- Mission Control home screen with readiness, daily missions, and weakest-topic guidance
+- Weakness Center with mini lesson, targeted quiz, and flashcard actions
 - Certivo logo, favicon, and installable app icons
 - Free 10-question trial
 - Free Study Guide section with English/Spanish chapters and bilingual key terms
+- Flashcards with a 10-card free preview and paid full-deck access
 - Supabase login/signup
 - Stripe plan buttons for weekly and 90-day access
 
