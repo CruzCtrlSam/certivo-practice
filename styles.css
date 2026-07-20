@@ -854,9 +854,9 @@ input::placeholder {
 
 .flashcard-watermark {
   position: absolute;
-  right: -28px;
-  bottom: -92px;
-  width: min(62vw, 310px);
+  right: 42px;
+  bottom: 28px;
+  width: min(34vw, 190px);
   opacity: 0.3;
   pointer-events: none;
 }

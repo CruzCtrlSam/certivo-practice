@@ -10,6 +10,18 @@
     ninety: "price_1TtfYz0TcCPzwDfBjIKv18nv"
   };
   const FREE_FLASHCARD_LIMIT = 10;
+  const FLASHCARD_TERM_ES = {
+    "Risk transfer": "Transferencia de riesgo",
+    "Pure risk": "Riesgo puro",
+    "Speculative risk": "Riesgo especulativo",
+    "Peril": "Peligro",
+    "Hazard": "Condición que aumenta el riesgo",
+    "Law of Large Numbers": "Ley de los grandes números",
+    "Pooling": "Mancomunación del riesgo",
+    "Adverse selection": "Selección adversa",
+    "Insurable interest": "Interés asegurable",
+    "Insurable interest (vida)": "Interés asegurable en vida"
+  };
 
   const text = {
     en: {
@@ -716,6 +728,11 @@
     return hasFullAccess() ? deck : deck.slice(0, FREE_FLASHCARD_LIMIT);
   }
 
+  function flashcardTerm(card) {
+    if (prefs.language === "es") return FLASHCARD_TERM_ES[card.term] || card.term;
+    return card.term;
+  }
+
   function renderFlashcards() {
     if (!els.flashcardCard) return;
     const deck = availableFlashcards();
@@ -741,7 +758,7 @@
     els.flashcardsStatus.textContent = "";
     els.flashcardCard.classList.remove("is-locked");
     els.flashcardChapter.textContent = `${t("chapter")} ${card.chapter}${chapterTitle ? ` · ${chapterTitle}` : ""}`;
-    els.flashcardFront.textContent = card.term;
+    els.flashcardFront.textContent = flashcardTerm(card);
     els.flashcardBack.textContent = flashcardFlipped ? definition : prefs.language === "es" ? "Toca voltear para ver la definición." : "Tap flip to see the definition.";
     els.flashcardBack.classList.toggle("is-hidden-answer", !flashcardFlipped);
     els.flashcardsAccessBadge.textContent = fullAccess ? t("flashcardUnlocked") : t("flashcardPreview");
