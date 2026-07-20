@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/certivo-apple-touch-icon-v3.png?v=2.3-flat-icon">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png?v=2.3-flat-icon">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=2.9-study-selector-fix">
+    <link rel="stylesheet" href="./styles.css?v=3.0-flashcards">
   </head>
   <body>
     <section class="intro" id="introScreen" aria-label="Certivo intro">
@@ -127,7 +127,7 @@
           <button class="pill-button" id="themeToggle" type="button" data-i18n="darkMode">Dark mode</button>
           <button class="pill-button" id="accountButton" type="button" data-i18n="account">Account</button>
           <button class="pill-button" id="plansButton" type="button" data-i18n="plans">Plans</button>
-          <span class="pill">v2.9</span>
+          <span class="pill">v3.0</span>
           <span class="pill" id="bankPill">300 questions</span>
         </div>
       </header>
@@ -187,6 +187,11 @@
               <strong data-i18n="studyGuide">Study Guide</strong>
               <small data-i18n="studyPathDesc">Free chapters and terms</small>
             </button>
+            <button class="path-card flashcard-path-card" id="flashcardsPath" type="button">
+              <span class="path-icon">F</span>
+              <strong data-i18n="flashcards">Flashcards</strong>
+              <small data-i18n="flashcardsPathDesc">10 free preview cards</small>
+            </button>
             <button class="path-card" id="practicePath" type="button">
               <span class="path-icon">P</span>
               <strong data-i18n="practiceMode">Practice Mode</strong>
@@ -226,6 +231,7 @@
               <select id="studyChapterSelect"></select>
             </label>
             <button class="button primary" id="studyPracticeButton" type="button" data-i18n="practiceThisTopic">Practice this topic</button>
+            <button class="button secondary" id="studyFlashcardsButton" type="button" data-i18n="studyFlashcards">Study flashcards</button>
           </div>
           <div class="status-box visible" id="studyLanguageNote"></div>
         </section>
@@ -242,6 +248,39 @@
             <h2 data-i18n="keyTerms">Key terms</h2>
           </div>
           <div class="study-terms" id="studyTerms"></div>
+        </section>
+      </main>
+
+      <main class="screen hidden" id="flashcardsScreen">
+        <section class="panel flashcard-hero-panel">
+          <div class="section-title">
+            <div>
+              <h2 data-i18n="flashcards">Flashcards</h2>
+              <p class="muted" data-i18n="flashcardsDesc">Review key terms quickly. The first 10 cards are free; the full deck unlocks with paid access.</p>
+            </div>
+            <button class="button quiet compact" id="flashcardsHomeButton" type="button" data-i18n="home">Home</button>
+          </div>
+          <div class="flashcard-meta">
+            <span class="badge accent" id="flashcardsAccessBadge">Preview</span>
+            <span class="muted" id="flashcardsProgress">1 of 10</span>
+          </div>
+        </section>
+
+        <section class="flashcard-stage" aria-live="polite">
+          <article class="flashcard" id="flashcardCard">
+            <img class="flashcard-watermark" src="./assets/certivo-mark.svg" alt="" aria-hidden="true">
+            <p class="eyebrow" id="flashcardChapter">Chapter</p>
+            <h2 id="flashcardFront">Term</h2>
+            <div class="flashcard-divider"></div>
+            <p id="flashcardBack">Definition</p>
+          </article>
+
+          <div class="flashcard-actions">
+            <button class="button secondary" id="flashcardFlipButton" type="button" data-i18n="flipCard">Flip card</button>
+            <button class="button quiet" id="flashcardMissedButton" type="button" data-i18n="missedIt">Missed it</button>
+            <button class="button primary" id="flashcardKnewButton" type="button" data-i18n="knewIt">I knew it</button>
+          </div>
+          <div class="status-box hidden" id="flashcardsStatus"></div>
         </section>
       </main>
 
@@ -471,6 +510,7 @@
             <ul>
               <li data-i18n="includeQuestions">Full 300-question trainer</li>
               <li data-i18n="includeExplanations">Correct answers, explanations, and memory phrases</li>
+              <li data-i18n="includeFlashcards">Full flashcard deck</li>
               <li data-i18n="includeProgress">Saved progress, missed review, filters, and exam mode</li>
               <li data-i18n="includeLanguage">Full English and Spanish practice</li>
             </ul>
@@ -486,8 +526,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./questions.js?v=2.9-study-selector-fix"></script>
-    <script src="./study.js?v=2.9-study-selector-fix"></script>
-    <script src="./app.js?v=2.9-study-selector-fix"></script>
+    <script src="./questions.js?v=3.0-flashcards"></script>
+    <script src="./study.js?v=3.0-flashcards"></script>
+    <script src="./app.js?v=3.0-flashcards"></script>
   </body>
 </html>

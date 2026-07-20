@@ -9,6 +9,7 @@
     weekly: "price_1TtfWp0TcCPzwDfBL5E60kgn",
     ninety: "price_1TtfYz0TcCPzwDfBjIKv18nv"
   };
+  const FREE_FLASHCARD_LIMIT = 10;
 
   const text = {
     en: {
@@ -22,6 +23,17 @@
       studyGuide: "Study Guide",
       studyPathDesc: "Free chapters and terms",
       studyDesc: "Free study chapters, quick explanations, and bilingual key terms.",
+      flashcards: "Flashcards",
+      flashcardsPathDesc: "10 free preview cards",
+      flashcardsDesc: "Review key terms quickly. The first 10 cards are free; the full deck unlocks with paid access.",
+      studyFlashcards: "Study flashcards",
+      flipCard: "Flip card",
+      knewIt: "I knew it",
+      missedIt: "Missed it",
+      flashcardPreview: "Free preview",
+      flashcardUnlocked: "Full deck unlocked",
+      flashcardLockedTitle: "That is the end of the free flashcard preview.",
+      flashcardLockedText: "Subscribe to unlock the full flashcard deck, explanations, practice mode, exam mode, and progress tools.",
       chapter: "Chapter",
       keyTerms: "Key terms",
       practiceThisTopic: "Practice this topic",
@@ -74,6 +86,7 @@
       paidIncludes: "Paid access includes",
       includeQuestions: "Full 300-question trainer",
       includeExplanations: "Correct answers, explanations, and memory phrases",
+      includeFlashcards: "Full flashcard deck",
       includeProgress: "Saved progress, missed review, filters, and exam mode",
       includeLanguage: "Full English and Spanish practice",
       view: "View",
@@ -167,6 +180,17 @@
       studyGuide: "Guía de estudio",
       studyPathDesc: "Capítulos y términos gratis",
       studyDesc: "Capítulos de estudio gratis, explicaciones rápidas y términos clave bilingües.",
+      flashcards: "Tarjetas",
+      flashcardsPathDesc: "10 tarjetas gratis",
+      flashcardsDesc: "Repasa términos clave rápidamente. Las primeras 10 tarjetas son gratis; el mazo completo se desbloquea con acceso pagado.",
+      studyFlashcards: "Estudiar tarjetas",
+      flipCard: "Voltear tarjeta",
+      knewIt: "La sabía",
+      missedIt: "La fallé",
+      flashcardPreview: "Vista gratis",
+      flashcardUnlocked: "Mazo completo desbloqueado",
+      flashcardLockedTitle: "Ese es el final de la vista gratis de tarjetas.",
+      flashcardLockedText: "Suscríbete para desbloquear el mazo completo de tarjetas, explicaciones, modo práctica, modo examen y herramientas de progreso.",
       chapter: "Capítulo",
       keyTerms: "Términos clave",
       practiceThisTopic: "Practicar este tema",
@@ -219,6 +243,7 @@
       paidIncludes: "El acceso pagado incluye",
       includeQuestions: "Entrenador completo de 300 preguntas",
       includeExplanations: "Respuestas correctas, explicaciones y frases para memorizar",
+      includeFlashcards: "Mazo completo de tarjetas",
       includeProgress: "Progreso guardado, repaso de falladas, filtros y modo examen",
       includeLanguage: "Práctica completa en inglés y español",
       view: "Ver",
@@ -307,6 +332,7 @@
     screens: {
       home: document.getElementById("homeScreen"),
       study: document.getElementById("studyScreen"),
+      flashcards: document.getElementById("flashcardsScreen"),
       setup: document.getElementById("setupScreen"),
       quiz: document.getElementById("quizScreen"),
       results: document.getElementById("resultsScreen"),
@@ -326,6 +352,17 @@
     studyTerms: document.getElementById("studyTerms"),
     studyLanguageNote: document.getElementById("studyLanguageNote"),
     studyPracticeButton: document.getElementById("studyPracticeButton"),
+    studyFlashcardsButton: document.getElementById("studyFlashcardsButton"),
+    flashcardsAccessBadge: document.getElementById("flashcardsAccessBadge"),
+    flashcardsProgress: document.getElementById("flashcardsProgress"),
+    flashcardCard: document.getElementById("flashcardCard"),
+    flashcardChapter: document.getElementById("flashcardChapter"),
+    flashcardFront: document.getElementById("flashcardFront"),
+    flashcardBack: document.getElementById("flashcardBack"),
+    flashcardFlipButton: document.getElementById("flashcardFlipButton"),
+    flashcardMissedButton: document.getElementById("flashcardMissedButton"),
+    flashcardKnewButton: document.getElementById("flashcardKnewButton"),
+    flashcardsStatus: document.getElementById("flashcardsStatus"),
     statAnswered: document.getElementById("statAnswered"),
     statAccuracy: document.getElementById("statAccuracy"),
     statMissed: document.getElementById("statMissed"),
@@ -389,6 +426,8 @@
   let authUser = null;
   let accessState = { status: "free", plan: "free", access_until: null };
   let authMode = "login";
+  let flashcardIndex = 0;
+  let flashcardFlipped = false;
 
   function defaultProgress() {
     return { answers: {}, missed: {}, flagged: {}, history: [] };
@@ -481,6 +520,7 @@
     if (activeScreen === "results" && session) renderResults();
     if (activeScreen === "progress") renderProgress();
     if (activeScreen === "study") renderStudy();
+    if (activeScreen === "flashcards") renderFlashcards();
     updateAuthForm();
     updateAuthUi();
   }
@@ -579,11 +619,12 @@
     activeScreen = name;
     Object.entries(els.screens).forEach(([screen, node]) => node.classList.toggle("hidden", screen !== name));
     els.navButtons.forEach((button) => button.classList.remove("active"));
-    const navMap = { home: "navHome", study: "navStudy", setup: session?.mode === "exam" ? "navExam" : "navPractice", quiz: session?.mode === "exam" ? "navExam" : "navPractice", results: "navStats", progress: "navStats", account: "navStats", pricing: "navStats" };
+    const navMap = { home: "navHome", study: "navStudy", flashcards: "navStudy", setup: session?.mode === "exam" ? "navExam" : "navPractice", quiz: session?.mode === "exam" ? "navExam" : "navPractice", results: "navStats", progress: "navStats", account: "navStats", pricing: "navStats" };
     const active = document.getElementById(navMap[name]);
     if (active) active.classList.add("active");
     if (name === "progress") renderProgress();
     if (name === "study") renderStudy();
+    if (name === "flashcards") renderFlashcards();
     if (name === "home") updateDashboard();
     window.scrollTo({ top: 0, behavior: "instant" });
     tickTimer();
@@ -655,6 +696,87 @@
       card.innerHTML = `<strong>${escapeHtml(concept.term)}</strong><p>${escapeHtml(definition)}</p>`;
       els.studyTerms.appendChild(card);
     });
+  }
+
+  function allFlashcards() {
+    return (window.CERTIVO_STUDY?.concepts || []).map((concept, index) => {
+      const chapter = window.CERTIVO_STUDY?.chapters?.find((item) => Number(item.number) === Number(concept.chapter));
+      return {
+        id: concept.id || `flashcard-${index + 1}`,
+        chapter: concept.chapter,
+        chapterTitle: chapter?.title || {},
+        term: concept.term,
+        definition: concept.definition || {}
+      };
+    });
+  }
+
+  function availableFlashcards() {
+    const deck = allFlashcards();
+    return hasFullAccess() ? deck : deck.slice(0, FREE_FLASHCARD_LIMIT);
+  }
+
+  function renderFlashcards() {
+    if (!els.flashcardCard) return;
+    const deck = availableFlashcards();
+    const fullDeck = allFlashcards();
+    const fullAccess = hasFullAccess();
+    if (!deck.length) {
+      renderFlashcardLock(t("noQuestions"));
+      return;
+    }
+    if (flashcardIndex >= deck.length) {
+      if (!fullAccess && fullDeck.length > deck.length) {
+        renderFlashcardLock(`${t("flashcardLockedTitle")} ${t("flashcardLockedText")}`);
+        return;
+      }
+      flashcardIndex = 0;
+    }
+
+    const card = deck[flashcardIndex];
+    const definition = card.definition[prefs.language] || card.definition.en || card.definition.es || "";
+    const chapterTitle = card.chapterTitle[prefs.language] || card.chapterTitle.en || card.chapterTitle.es || "";
+
+    els.flashcardsStatus.classList.add("hidden");
+    els.flashcardsStatus.textContent = "";
+    els.flashcardCard.classList.remove("is-locked");
+    els.flashcardChapter.textContent = `${t("chapter")} ${card.chapter}${chapterTitle ? ` · ${chapterTitle}` : ""}`;
+    els.flashcardFront.textContent = card.term;
+    els.flashcardBack.textContent = flashcardFlipped ? definition : prefs.language === "es" ? "Toca voltear para ver la definición." : "Tap flip to see the definition.";
+    els.flashcardBack.classList.toggle("is-hidden-answer", !flashcardFlipped);
+    els.flashcardsAccessBadge.textContent = fullAccess ? t("flashcardUnlocked") : t("flashcardPreview");
+    els.flashcardsProgress.textContent = `${flashcardIndex + 1} ${t("of")} ${deck.length}${fullAccess ? "" : ` · ${fullDeck.length} ${t("available")}`}`;
+    els.flashcardFlipButton.disabled = false;
+    els.flashcardMissedButton.disabled = !flashcardFlipped;
+    els.flashcardKnewButton.disabled = !flashcardFlipped;
+  }
+
+  function renderFlashcardLock(message) {
+    els.flashcardCard.classList.add("is-locked");
+    els.flashcardChapter.textContent = t("locked");
+    els.flashcardFront.textContent = t("flashcardLockedTitle");
+    els.flashcardBack.textContent = t("flashcardLockedText");
+    els.flashcardBack.classList.remove("is-hidden-answer");
+    els.flashcardsAccessBadge.textContent = t("flashcardPreview");
+    els.flashcardsProgress.textContent = `${FREE_FLASHCARD_LIMIT} ${t("of")} ${allFlashcards().length}`;
+    els.flashcardFlipButton.disabled = true;
+    els.flashcardMissedButton.disabled = true;
+    els.flashcardKnewButton.disabled = true;
+    els.flashcardsStatus.innerHTML = `<p>${escapeHtml(message)}</p><button class="button primary compact" type="button">${escapeHtml(t("viewPlans"))}</button>`;
+    els.flashcardsStatus.classList.remove("hidden");
+    els.flashcardsStatus.querySelector("button").addEventListener("click", () => showScreen("pricing"));
+  }
+
+  function openFlashcards() {
+    flashcardIndex = 0;
+    flashcardFlipped = false;
+    showScreen("flashcards");
+  }
+
+  function advanceFlashcard() {
+    flashcardIndex += 1;
+    flashcardFlipped = false;
+    renderFlashcards();
   }
 
   function markdownToHtml(markdown) {
@@ -1547,6 +1669,7 @@
     document.getElementById("viewProgressButton").addEventListener("click", () => showScreen("progress"));
     document.getElementById("freeTrialPath").addEventListener("click", startTrialSession);
     document.getElementById("studyPath").addEventListener("click", () => showScreen("study"));
+    document.getElementById("flashcardsPath").addEventListener("click", openFlashcards);
     document.getElementById("practicePath").addEventListener("click", () => openSetup("practice"));
     document.getElementById("examPath").addEventListener("click", () => openSetup("exam"));
     document.getElementById("missedPath").addEventListener("click", () => openSetup("missed"));
@@ -1555,6 +1678,7 @@
     document.getElementById("resultsHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("progressHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("studyHomeButton").addEventListener("click", () => showScreen("home"));
+    document.getElementById("flashcardsHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("pricingHomeButton").addEventListener("click", () => showScreen("home"));
     document.getElementById("practiceAgainButton").addEventListener("click", handlePracticeAgain);
     document.getElementById("progressMissedButton").addEventListener("click", () => openSetup("missed"));
@@ -1569,6 +1693,13 @@
     els.simulator.addEventListener("change", populateCounts);
     els.studyChapterSelect?.addEventListener("change", renderStudy);
     els.studyPracticeButton?.addEventListener("click", practiceStudyChapter);
+    els.studyFlashcardsButton?.addEventListener("click", openFlashcards);
+    els.flashcardFlipButton?.addEventListener("click", () => {
+      flashcardFlipped = !flashcardFlipped;
+      renderFlashcards();
+    });
+    els.flashcardMissedButton?.addEventListener("click", advanceFlashcard);
+    els.flashcardKnewButton?.addEventListener("click", advanceFlashcard);
     els.start.addEventListener("click", startSession);
     els.resume.addEventListener("click", resumeSession);
     els.clearSession.addEventListener("click", clearSession);
