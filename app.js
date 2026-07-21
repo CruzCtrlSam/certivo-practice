@@ -57,6 +57,15 @@
       missionQuestions: "Answer 10 questions",
       missionWeakTopic: "Review your weakest topic",
       missionFlashcards: "Flip 10 flashcards",
+      notEnoughData: "Not enough data",
+      diagnosticNeeded: "Diagnostic needed",
+      takeDiagnostic: "Take a 25-question diagnostic",
+      diagnosticDetail: "Build your baseline first",
+      reviewMissedMission: "Review missed questions",
+      examSimulationMission: "Take an exam simulation",
+      noEstimateYet: "Not enough data yet",
+      baselineGoal: "Answer at least 25 questions so Certivo can build your baseline.",
+      examScoreWeight: "Exam simulations count the most",
       xp: "XP",
       days: "days",
       hours: "hours",
@@ -246,6 +255,15 @@
       missionQuestions: "Contesta 10 preguntas",
       missionWeakTopic: "Repasa tu tema más débil",
       missionFlashcards: "Voltea 10 tarjetas",
+      notEnoughData: "Datos insuficientes",
+      diagnosticNeeded: "Necesitas diagnóstico",
+      takeDiagnostic: "Haz un diagnóstico de 25 preguntas",
+      diagnosticDetail: "Primero crea tu base",
+      reviewMissedMission: "Repasa preguntas falladas",
+      examSimulationMission: "Haz una simulación de examen",
+      noEstimateYet: "Todavía no hay datos suficientes",
+      baselineGoal: "Contesta al menos 25 preguntas para que Certivo cree tu base.",
+      examScoreWeight: "Las simulaciones cuentan más",
       xp: "XP",
       days: "días",
       hours: "horas",
@@ -1900,34 +1918,62 @@
     return total ? Math.round((correct / total) * 100) : null;
   }
 
+  function examHistory() {
+    return (progress.history || []).filter((entry) => entry.mode === "exam" && Number(entry.total) >= 25);
+  }
+
+  function weightedExamScore() {
+    const exams = examHistory().slice(0, 3);
+    if (!exams.length) return null;
+    const weights = [3, 2, 1];
+    const totalWeight = exams.reduce((sum, _entry, index) => sum + weights[index], 0);
+    return Math.round(exams.reduce((sum, entry, index) => sum + Number(entry.percent || 0) * weights[index], 0) / totalWeight);
+  }
+
+  function nextStudyAction(model) {
+    if (!model.hasBaseline) return { kind: "diagnostic", label: t("takeDiagnostic"), detail: t("diagnosticDetail") };
+    if (Object.keys(progress.missed || {}).length >= 5) return { kind: "missed", label: t("reviewMissedMission"), detail: t("missedDesc") };
+    if (model.weakest) return { kind: "weakness", label: `${t("missionWeakTopic")}: ${topicLabel(model.weakest.topic)}`, detail: t("targetedQuiz") };
+    if (model.readiness >= 70) return { kind: "exam", label: t("examSimulationMission"), detail: t("examScoreWeight") };
+    return { kind: "practice", label: t("missionQuestions"), detail: t("practiceDesc") };
+  }
+
   function readinessModel() {
     const records = Object.values(progress.answers || {});
     const answered = records.reduce((sum, record) => sum + (Number(record.seen) || 0), 0);
     const correct = records.reduce((sum, record) => sum + (Number(record.correct) || 0), 0);
     const accuracy = answered ? Math.round((correct / answered) * 100) : 0;
     const stats = topicStats();
-    const mastered = stats.filter((item) => item.seen >= 3 && item.accuracy >= 80 && item.missed === 0).length;
+    const mastered = stats.filter((item) => item.seen >= 5 && item.accuracy >= 82 && item.missed === 0).length;
     const masteryPercent = stats.length ? Math.round((mastered / stats.length) * 100) : 0;
     const recent = recentAccuracy();
+    const examScore = weightedExamScore();
+    const examsTaken = examHistory().length;
     const consistency = clamp(studyStreak() * 12, 0, 100);
-    const readiness = answered
-      ? Math.round(accuracy * 0.42 + (recent ?? accuracy) * 0.26 + masteryPercent * 0.22 + consistency * 0.1)
-      : 0;
+    const hasBaseline = answered >= 25 || examsTaken > 0;
+    const readiness = hasBaseline
+      ? Math.round((examScore ?? accuracy) * 0.45 + (recent ?? accuracy) * 0.25 + accuracy * 0.15 + masteryPercent * 0.1 + consistency * 0.05)
+      : null;
     const weakest = stats
       .filter((item) => item.seen || item.missed)
       .sort((a, b) => b.weakness - a.weakness)[0];
-    const label = readiness >= 84 ? t("examReady") : readiness >= 70 ? t("nearlyReady") : readiness >= 45 ? t("improving") : t("needsWork");
+    const safeReadiness = readiness === null ? 0 : clamp(readiness, 0, 100);
+    const label = !hasBaseline ? t("notEnoughData") : safeReadiness >= 84 ? t("examReady") : safeReadiness >= 70 ? t("nearlyReady") : safeReadiness >= 45 ? t("improving") : t("needsWork");
+    const passingChance = !hasBaseline ? null : clamp(Math.round(safeReadiness + (examScore !== null ? 4 : -4)), 10, 95);
     return {
       answered,
       correct,
       accuracy,
-      readiness: clamp(readiness, 0, 100),
-      passingChance: answered ? clamp(Math.round(readiness + 6), 5, 95) : 0,
-      studyHours: answered ? clamp(Math.ceil((100 - readiness) / 7), 1, 12) : 6,
+      readiness: safeReadiness,
+      passingChance,
+      studyHours: hasBaseline ? clamp(Math.ceil((100 - safeReadiness) / 7), 1, 12) : 6,
       streak: studyStreak(),
       mastered,
       weakest,
-      label
+      label,
+      hasBaseline,
+      examScore,
+      examsTaken
     };
   }
 
@@ -1935,27 +1981,30 @@
     if (!els.missionReadinessScore) return;
     const model = readinessModel();
     const weakestLabel = model.weakest ? topicLabel(model.weakest.topic) : t("startWithPractice");
+    const action = nextStudyAction(model);
     els.statAnswered.textContent = String(model.answered);
     els.statAccuracy.textContent = `${model.accuracy}%`;
     els.statMissed.textContent = String(Object.keys(progress.missed || {}).length);
     els.statFlagged.textContent = String(Object.keys(progress.flagged || {}).length);
     els.readinessBar.style.width = `${model.readiness}%`;
-    els.missionReadinessScore.textContent = `${model.readiness}%`;
+    els.missionReadinessScore.textContent = model.hasBaseline ? `${model.readiness}%` : "--";
     els.missionReadinessLabel.textContent = model.label;
-    els.missionPassingChance.textContent = `${model.passingChance}%`;
+    els.missionPassingChance.textContent = model.passingChance === null ? t("noEstimateYet") : `${model.passingChance}%`;
+    els.missionPassingChance.classList.toggle("is-text", model.passingChance === null);
     els.missionStudyTime.textContent = `${model.studyHours} ${t("hours")}`;
     els.missionStreak.textContent = `${model.streak} ${t("days")}`;
     els.missionMastered.textContent = String(model.mastered);
     els.missionWeakestTopic.textContent = weakestLabel;
-    els.missionTodayGoal.textContent = model.weakest ? `${t("missionWeakTopic")}: ${weakestLabel}` : t("missionQuestions");
+    els.missionTodayGoal.textContent = model.hasBaseline ? action.label : t("baselineGoal");
     renderDailyMissions(model);
   }
 
   function renderDailyMissions(model) {
     if (!els.dailyMissionsList) return;
+    const action = nextStudyAction(model);
     const missions = [
-      { label: t("missionQuestions"), detail: model.answered ? `${model.answered} ${t("answered")}` : t("startWithPractice"), xp: 25 },
-      { label: model.weakest ? `${t("missionWeakTopic")}: ${topicLabel(model.weakest.topic)}` : t("missionWeakTopic"), detail: t("targetedQuiz"), xp: 40 },
+      { label: action.label, detail: action.detail, xp: model.hasBaseline ? 35 : 30 },
+      { label: model.weakest ? `${t("missionWeakTopic")}: ${topicLabel(model.weakest.topic)}` : t("missionQuestions"), detail: model.hasBaseline ? t("targetedQuiz") : `${model.answered} ${t("answered")}`, xp: 40 },
       { label: t("missionFlashcards"), detail: t("reviewFlashcards"), xp: 15 }
     ];
     els.dailyMissionsList.innerHTML = "";
@@ -1975,6 +2024,21 @@
       els.topic.value = topic;
       populateCounts();
     }
+  }
+
+  function openDiagnostic() {
+    openSetup("practice");
+    els.topic.value = "all";
+    els.simulator.value = "all";
+    populateCounts();
+    if ([...els.count.options].some((option) => option.value === "25")) els.count.value = "25";
+  }
+
+  function openExamSimulation() {
+    openSetup("exam");
+    els.topic.value = "all";
+    els.simulator.value = "all";
+    populateCounts();
   }
 
   function openWeakTopicStudy(topic) {
@@ -2121,8 +2185,12 @@
     document.getElementById("plansButton").addEventListener("click", () => showScreen("pricing"));
     document.getElementById("missionContinueButton").addEventListener("click", () => {
       const model = readinessModel();
-      if (model.weakest) startTopicPractice(model.weakest.topic);
-      else openSetup("practice");
+      const action = nextStudyAction(model);
+      if (action.kind === "diagnostic") openDiagnostic();
+      else if (action.kind === "missed") openSetup("missed");
+      else if (action.kind === "exam") openExamSimulation();
+      else if (model.weakest) startTopicPractice(model.weakest.topic);
+      else openDiagnostic();
     });
     document.getElementById("missionResumeButton").addEventListener("click", () => {
       const saved = loadJson(SESSION_KEY, null);
@@ -2163,9 +2231,13 @@
       const button = event.target.closest(".daily-mission");
       if (!button) return;
       const model = readinessModel();
+      const action = nextStudyAction(model);
       if (button.dataset.mission === "2") openFlashcards();
+      else if (button.dataset.mission === "0" && action.kind === "diagnostic") openDiagnostic();
+      else if (button.dataset.mission === "0" && action.kind === "missed") openSetup("missed");
+      else if (button.dataset.mission === "0" && action.kind === "exam") openExamSimulation();
       else if (model.weakest) startTopicPractice(model.weakest.topic);
-      else openSetup("practice");
+      else openDiagnostic();
     });
     els.weaknessList?.addEventListener("click", (event) => {
       const button = event.target.closest("[data-action]");

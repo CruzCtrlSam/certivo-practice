@@ -528,6 +528,11 @@ button:disabled {
   font-size: 2.7rem;
 }
 
+.mission-metric.primary-metric strong.is-text {
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
 .mission-next {
   display: grid;
   gap: 6px;
