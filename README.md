@@ -4,7 +4,8 @@ Certivo Practice is a mobile-first bilingual certification practice app. The stu
 
 ## What Is Included
 
-- 300 paired English/Spanish questions
+- 10 public preview questions
+- Protected Supabase question bank for the full 300 paired English/Spanish questions
 - Practice Mode with instant explanations
 - Exam Mode with grading at the end
 - Topic and simulator filters
@@ -19,8 +20,9 @@ Certivo Practice is a mobile-first bilingual certification practice app. The stu
 - Certivo logo, favicon, and installable app icons
 - Free 10-question trial
 - Free Study Guide section with English/Spanish chapters and bilingual key terms
-- Flashcards with a 10-card free preview and paid full-deck access
+- Protected Supabase flashcard deck with a 10-card free preview and paid full-deck access
 - Supabase login/signup
+- Supabase cloud progress sync for signed-in students
 - Stripe plan buttons for weekly and 90-day access
 
 ## Files
@@ -28,10 +30,11 @@ Certivo Practice is a mobile-first bilingual certification practice app. The stu
 - `index.html` - app screens
 - `styles.css` - responsive light/dark styling
 - `app.js` - quiz behavior, progress, scoring, flags, history, and filters
-- `questions.js` - structured bilingual question database
+- `questions.js` - public 10-question preview only
 - `study.js` - free bilingual study chapters and glossary terms
 - `manifest.webmanifest` - installable app metadata
 - `supabase/sql/certivo_access.sql` - database table for paid access
+- `supabase/sql/certivo_content_tables.sql` - protected question table and RLS policies, no question text
 - `supabase/functions/create-checkout-session/` - secure Stripe Checkout function
 - `supabase/functions/stripe-webhook/` - Stripe payment confirmation function
 - `README.md` - this file
@@ -51,7 +54,15 @@ Stripe price ids currently used in `app.js`:
 - Weekly access: `price_1TtfWp0TcCPzwDfBL5E60kgn`
 - 90-day access: `price_1TtfYz0TcCPzwDfBjIKv18nv`
 
-Before payments unlock access, run the SQL in `supabase/sql/certivo_access.sql` inside the Supabase SQL Editor, then deploy the two Edge Functions.
+Before payments unlock access and signed-in progress sync works, run the SQL in `supabase/sql/certivo_access.sql` inside the Supabase SQL Editor, then deploy the two Edge Functions.
+
+To protect the question bank and flashcard deck, also run `supabase/sql/certivo_content_tables.sql` in Supabase. Then run these private seed files from your computer:
+
+`/Users/samcruz/Documents/Certivo App/SUPABASE_PRIVATE_SETUP/certivo_questions_private_seed.sql`
+
+`/Users/samcruz/Documents/Certivo App/SUPABASE_PRIVATE_SETUP/certivo_flashcards_private_seed.sql`
+
+Do not upload the private seed files to GitHub. They contain the full question bank and full flashcard deck.
 
 ## Question Format
 

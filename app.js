@@ -506,6 +506,8 @@
 
   let prefs = loadJson(PREF_KEY, { language: "en", theme: "light" });
   let progress = loadJson(PROGRESS_KEY, defaultProgress());
+  let questionBank = Array.isArray(window.CERTIVO_QUESTIONS) ? [...window.CERTIVO_QUESTIONS] : [...CERTIVO_QUESTIONS];
+  let flashcardBank = Array.isArray(window.CERTIVO_STUDY?.concepts) ? [...window.CERTIVO_STUDY.concepts] : [];
   let session = loadJson(SESSION_KEY, null);
   let activeScreen = "home";
   let timerId = null;
@@ -515,9 +517,57 @@
   let authMode = "login";
   let flashcardIndex = 0;
   let flashcardFlipped = false;
+  let progressSyncTimer = null;
 
   function defaultProgress() {
     return { answers: {}, missed: {}, flagged: {}, history: [] };
+  }
+
+  function normalizeProgress(value) {
+    return {
+      answers: value?.answers && typeof value.answers === "object" ? value.answers : {},
+      missed: value?.missed && typeof value.missed === "object" ? value.missed : {},
+      flagged: value?.flagged && typeof value.flagged === "object" ? value.flagged : {},
+      history: Array.isArray(value?.history) ? value.history : []
+    };
+  }
+
+  function mergeProgress(localValue, cloudValue) {
+    const local = normalizeProgress(localValue);
+    const cloud = normalizeProgress(cloudValue);
+    const merged = defaultProgress();
+    const answerIds = new Set([...Object.keys(cloud.answers), ...Object.keys(local.answers)]);
+    answerIds.forEach((id) => {
+      const localRecord = local.answers[id];
+      const cloudRecord = cloud.answers[id];
+      if (!localRecord) {
+        merged.answers[id] = cloudRecord;
+        return;
+      }
+      if (!cloudRecord) {
+        merged.answers[id] = localRecord;
+        return;
+      }
+      merged.answers[id] = (Number(localRecord.seen) || 0) >= (Number(cloudRecord.seen) || 0) ? localRecord : cloudRecord;
+    });
+
+    Object.keys(cloud.missed).forEach((id) => {
+      if (!local.answers[id]) merged.missed[id] = true;
+    });
+    Object.keys(local.missed).forEach((id) => {
+      merged.missed[id] = true;
+    });
+    merged.flagged = { ...cloud.flagged, ...local.flagged };
+
+    const historyMap = new Map();
+    [...cloud.history, ...local.history].forEach((entry) => {
+      if (!entry?.date) return;
+      historyMap.set(`${entry.date}-${entry.mode}-${entry.total}-${entry.percent}`, entry);
+    });
+    merged.history = [...historyMap.values()]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 20);
+    return merged;
   }
 
   function loadJson(key, fallback) {
@@ -533,12 +583,17 @@
     localStorage.setItem(key, JSON.stringify(value));
   }
 
+  function saveProgress(sync = true) {
+    saveJson(PROGRESS_KEY, progress);
+    if (sync) queueProgressSync();
+  }
+
   function t(key) {
     return text[prefs.language][key] || text.en[key] || key;
   }
 
   function qById(id) {
-    return CERTIVO_QUESTIONS.find((question) => question.id === id);
+    return questionBank.find((question) => question.id === id);
   }
 
   function shuffle(items) {
@@ -599,7 +654,7 @@
     els.langEn.classList.toggle("active", prefs.language === "en");
     els.langEs.classList.toggle("active", prefs.language === "es");
     els.theme.textContent = prefs.theme === "dark" ? t("lightMode") : t("darkMode");
-    els.bankPill.textContent = `${CERTIVO_QUESTIONS.length} ${prefs.language === "es" ? "preguntas" : "questions"}`;
+    els.bankPill.textContent = `${questionBank.length} ${prefs.language === "es" ? "preguntas" : "questions"}`;
     populateFilters();
     updateDashboard();
     renderSessionSummary();
@@ -620,15 +675,21 @@
       return;
     }
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    supabaseClient.auth.getSession().then(({ data }) => {
+    supabaseClient.auth.getSession().then(async ({ data }) => {
       authUser = data.session?.user || null;
       handleCheckoutReturn();
-      refreshAccess();
+      await refreshAccess();
+      await loadQuestionBank();
+      await loadFlashcardBank();
+      await loadCloudProgress();
       updateAuthUi();
     });
-    supabaseClient.auth.onAuthStateChange((_event, currentSession) => {
+    supabaseClient.auth.onAuthStateChange(async (_event, currentSession) => {
       authUser = currentSession?.user || null;
-      refreshAccess();
+      await refreshAccess();
+      await loadQuestionBank();
+      await loadFlashcardBank();
+      await loadCloudProgress();
       updateAuthUi();
     });
   }
@@ -670,6 +731,76 @@
       accessState = { status: "free", plan: "free", access_until: null };
     }
     updateAuthUi();
+  }
+
+  async function loadQuestionBank() {
+    if (!supabaseClient) return;
+    const query = supabaseClient
+      .from("certivo_questions")
+      .select("question")
+      .order("sort_order", { ascending: true });
+    const { data, error } = await query;
+    if (error || !Array.isArray(data) || !data.length) {
+      questionBank = Array.isArray(CERTIVO_QUESTIONS) ? [...CERTIVO_QUESTIONS] : questionBank;
+      return;
+    }
+    questionBank = data.map((row) => row.question).filter(Boolean);
+    populateFilters();
+    updateDashboard();
+    if (activeScreen === "setup") renderSessionSummary();
+    if (activeScreen === "progress") renderProgress();
+    if (activeScreen === "weakness") renderWeaknessCenter();
+    if (activeScreen === "home") renderMissionControl();
+    els.bankPill.textContent = `${questionBank.length} ${prefs.language === "es" ? "preguntas" : "questions"}`;
+  }
+
+  async function loadFlashcardBank() {
+    if (!supabaseClient) return;
+    const { data, error } = await supabaseClient
+      .from("certivo_flashcards")
+      .select("card")
+      .order("sort_order", { ascending: true });
+    if (error || !Array.isArray(data) || !data.length) {
+      flashcardBank = Array.isArray(window.CERTIVO_STUDY?.concepts) ? [...window.CERTIVO_STUDY.concepts] : flashcardBank;
+      return;
+    }
+    flashcardBank = data.map((row) => row.card).filter(Boolean);
+    if (window.CERTIVO_STUDY) window.CERTIVO_STUDY.concepts = flashcardBank;
+    if (activeScreen === "study") renderStudy();
+    if (activeScreen === "flashcards") renderFlashcards();
+  }
+
+  async function loadCloudProgress() {
+    if (!supabaseClient || !authUser) return;
+    const { data, error } = await supabaseClient
+      .from("certivo_progress")
+      .select("progress")
+      .eq("user_id", authUser.id)
+      .maybeSingle();
+    if (error) return;
+    progress = mergeProgress(progress, data?.progress || defaultProgress());
+    saveProgress(false);
+    renderSessionSummary();
+    updateDashboard();
+    if (activeScreen === "progress") renderProgress();
+    if (activeScreen === "weakness") renderWeaknessCenter();
+    queueProgressSync();
+  }
+
+  function queueProgressSync() {
+    window.clearTimeout(progressSyncTimer);
+    progressSyncTimer = window.setTimeout(syncProgressToCloud, 800);
+  }
+
+  async function syncProgressToCloud() {
+    if (!supabaseClient || !authUser) return;
+    await supabaseClient
+      .from("certivo_progress")
+      .upsert({
+        user_id: authUser.id,
+        progress: normalizeProgress(progress),
+        updated_at: new Date().toISOString()
+      });
   }
 
   function handleCheckoutReturn() {
@@ -722,8 +853,8 @@
   function populateFilters() {
     const previousTopic = els.topic.value || "all";
     const previousSimulator = els.simulator.value || "all";
-    const topics = [...new Set(CERTIVO_QUESTIONS.map((question) => question.topic))].sort();
-    const simulators = [...new Set(CERTIVO_QUESTIONS.map((question) => question.simulator))].sort((a, b) => a - b);
+    const topics = [...new Set(questionBank.map((question) => question.topic))].sort();
+    const simulators = [...new Set(questionBank.map((question) => question.simulator))].sort((a, b) => a - b);
     fillSelect(els.topic, [{ value: "all", label: t("allTopics") }, { value: "missed", label: t("reviewMissed") }, ...topics.map((topic) => ({ value: topic, label: topicLabel(topic) }))], previousTopic);
     fillSelect(els.simulator, [{ value: "all", label: t("allSimulators") }, ...simulators.map((sim) => ({ value: String(sim), label: `${t("simulator")} ${sim}` }))], previousSimulator);
     populateCounts();
@@ -788,7 +919,7 @@
   }
 
   function allFlashcards() {
-    return (window.CERTIVO_STUDY?.concepts || []).map((concept, index) => {
+    return (flashcardBank || []).map((concept, index) => {
       const chapter = window.CERTIVO_STUDY?.chapters?.find((item) => Number(item.number) === Number(concept.chapter));
       return {
         id: concept.id || `flashcard-${index + 1}`,
@@ -939,7 +1070,7 @@
 
   function practiceStudyChapter() {
     const chapter = currentStudyChapter();
-    const chapterQuestions = CERTIVO_QUESTIONS.filter((question) => Number(question.chapter || 0) === Number(chapter?.number || 0));
+    const chapterQuestions = questionBank.filter((question) => Number(question.chapter || 0) === Number(chapter?.number || 0));
     if (chapterQuestions.length) {
       const firstTopic = chapterQuestions[0].topic;
       openSetup("practice");
@@ -991,7 +1122,7 @@
   }
 
   function filteredQuestions() {
-    return CERTIVO_QUESTIONS.filter((question) => {
+    return questionBank.filter((question) => {
       const topicMatch = els.topic.value === "all" || els.topic.value === "" || question.topic === els.topic.value || (els.topic.value === "missed" && progress.missed[question.id]);
       const simulatorMatch = els.simulator.value === "all" || els.simulator.value === "" || String(question.simulator) === String(els.simulator.value);
       return topicMatch && simulatorMatch;
@@ -1042,7 +1173,7 @@
   }
 
   function startTrialSession() {
-    const deck = shuffle(CERTIVO_QUESTIONS).slice(0, 10).map((question) => ({
+    const deck = shuffle(questionBank).slice(0, 10).map((question) => ({
       id: question.id,
       answerOrder: shuffle(question.en.answers.map((answer) => answer.id))
     }));
@@ -1411,7 +1542,7 @@
       progress.missed[question.id] = true;
     }
     progress.answers[question.id] = existing;
-    saveJson(PROGRESS_KEY, progress);
+    saveProgress();
   }
 
   function previousQuestion() {
@@ -1428,7 +1559,7 @@
     } else {
       progress.flagged[question.id] = true;
     }
-    saveJson(PROGRESS_KEY, progress);
+    saveProgress();
     renderQuestion();
     updateDashboard();
   }
@@ -1458,7 +1589,7 @@
     if (!isTrialSession()) {
       progress.history.unshift({ date: new Date().toISOString(), mode: session.mode, language: prefs.language, correct, total, percent });
       progress.history = progress.history.slice(0, 20);
-      saveJson(PROGRESS_KEY, progress);
+      saveProgress();
     }
     saveJson(SESSION_KEY, session);
     showScreen("results");
@@ -1705,7 +1836,7 @@
 
   function topicStats() {
     const stats = {};
-    CERTIVO_QUESTIONS.forEach((question) => {
+    questionBank.forEach((question) => {
       stats[question.topic] ||= { topic: question.topic, seen: 0, correct: 0, wrong: 0, missed: 0, total: 0 };
       stats[question.topic].total += 1;
       const record = progress.answers?.[question.id];
@@ -1943,7 +2074,7 @@
   function resetProgress() {
     if (!window.confirm(t("resetConfirm"))) return;
     progress = defaultProgress();
-    saveJson(PROGRESS_KEY, progress);
+    saveProgress();
     renderProgress();
     updateDashboard();
   }
