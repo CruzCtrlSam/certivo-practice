@@ -611,6 +611,31 @@ button:disabled {
   line-height: 1.45;
 }
 
+.weakness-coaching {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.weakness-coaching section {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel), var(--soft) 34%);
+  padding: 12px;
+}
+
+.weakness-coaching span {
+  display: block;
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.weakness-coaching p {
+  margin: 6px 0 0;
+}
+
 .weakness-meta {
   display: flex;
   flex-wrap: wrap;

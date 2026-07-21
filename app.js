@@ -54,6 +54,10 @@
       targetedQuiz: "Targeted quiz",
       reviewFlashcards: "Flashcards",
       mastery: "Mastery",
+      whyWeak: "Why this matters",
+      commonMistake: "Common mistake",
+      memoryTip: "Memory phrase",
+      recommendedFix: "Recommended fix",
       missionQuestions: "Answer 10 questions",
       missionWeakTopic: "Review your weakest topic",
       missionFlashcards: "Flip 10 flashcards",
@@ -252,6 +256,10 @@
       targetedQuiz: "Quiz enfocado",
       reviewFlashcards: "Tarjetas",
       mastery: "Dominio",
+      whyWeak: "Por qué importa",
+      commonMistake: "Error común",
+      memoryTip: "Frase para memorizar",
+      recommendedFix: "Corrección recomendada",
       missionQuestions: "Contesta 10 preguntas",
       missionWeakTopic: "Repasa tu tema más débil",
       missionFlashcards: "Voltea 10 tarjetas",
@@ -2067,12 +2075,185 @@
     }
   }
 
+  const WEAKNESS_COACHING = {
+    en: {
+      annuities: {
+        why: "Annuity questions test whether you know when money is growing, when payments begin, and who carries the risk.",
+        mistake: "Students mix immediate annuities with deferred annuities, or confuse annuities with life insurance.",
+        memory: "Life insurance creates money when someone dies. Annuities protect against living too long.",
+        fix: "Review annuity timing, then do a focused annuity quiz."
+      },
+      beneficiaries: {
+        why: "Beneficiary rules decide who receives the death benefit and whether the policyowner can change that person.",
+        mistake: "Students forget that irrevocable beneficiaries usually must consent to major changes.",
+        memory: "Revocable can be revised. Irrevocable is locked in.",
+        fix: "Practice owner, insured, beneficiary, and consent questions together."
+      },
+      "best interest": {
+        why: "Best-interest questions test whether the agent put the client first and documented the recommendation.",
+        mistake: "Students choose the product that sounds profitable instead of the step that protects the client.",
+        memory: "Know the client before you sell the product.",
+        fix: "Review suitability facts, disclosure, replacement, and documentation."
+      },
+      contracts: {
+        why: "Contract questions are vocabulary traps: aleatory, adhesion, unilateral, conditional, and personal.",
+        mistake: "Students confuse unilateral with bilateral, or aleatory with equal exchange.",
+        memory: "A-A-U-C-P: Adhesion, Aleatory, Unilateral, Conditional, Personal.",
+        fix: "Study each contract word as a clue, then quiz only contract characteristics."
+      },
+      ethics: {
+        why: "Ethics questions test agent behavior, disclosure, misrepresentation, twisting, and client-first conduct.",
+        mistake: "Students pick the answer that closes the sale instead of the answer that protects the consumer.",
+        memory: "If it hides, pressures, or misleads, it is wrong.",
+        fix: "Review unfair trade practices and best-interest examples."
+      },
+      general: {
+        why: "General insurance concepts are the foundation for almost every later chapter.",
+        mistake: "Students memorize words but cannot tell risk, peril, hazard, and pooling apart in a scenario.",
+        memory: "Risk is uncertainty. Peril causes loss. Hazard makes loss more likely.",
+        fix: "Review the foundation lesson, then do a 25-question diagnostic."
+      },
+      "life insurance": {
+        why: "Life insurance questions test what type of policy fits the need: temporary, permanent, cash value, or protection.",
+        mistake: "Students confuse term with whole life or forget that life insurance pays on death.",
+        memory: "Term is temporary. Whole life is permanent.",
+        fix: "Compare term, whole, universal, and variable life side by side."
+      },
+      "policy provisions": {
+        why: "Policy provisions are the rules inside the policy: grace period, reinstatement, loans, incontestability, and riders.",
+        mistake: "Students mix up time limits and what happens after missed premiums.",
+        memory: "Provisions are the policy's rulebook.",
+        fix: "Make a quick timeline of grace, reinstatement, contestability, and free-look rules."
+      },
+      retirement: {
+        why: "Retirement questions test tax treatment, rollovers, qualified plans, and income timing.",
+        mistake: "Students confuse contribution rules with distribution rules.",
+        memory: "Qualified plans get tax favors because they follow tax rules.",
+        fix: "Review qualified vs nonqualified and when taxes are paid."
+      },
+      riders: {
+        why: "Riders change or add benefits to the base policy.",
+        mistake: "Students choose the policy type instead of the rider that solves the specific problem.",
+        memory: "A rider rides on top of the policy.",
+        fix: "Match each rider to the problem it solves."
+      },
+      taxes: {
+        why: "Tax questions test what is taxable, what is not, and when money is taxed.",
+        mistake: "Students assume every insurance payment is taxable.",
+        memory: "Death benefits are usually tax-free; gains and interest usually are not.",
+        fix: "Review premium, death benefit, cash value, loan, and annuity taxation separately."
+      },
+      texas: {
+        why: "Texas questions test state-specific rules, deadlines, licensing, replacement, and consumer protections.",
+        mistake: "Students answer with a general insurance rule when Texas has a specific rule.",
+        memory: "If the question says Texas, look for the Texas rule.",
+        fix: "Review Texas deadlines and required notices, then quiz Texas-only questions."
+      },
+      underwriting: {
+        why: "Underwriting questions test how insurers classify risk and decide whether to issue coverage.",
+        mistake: "Students confuse field underwriting, home office underwriting, and premium classification.",
+        memory: "Field gathers. Home office decides.",
+        fix: "Review application, medical info, risk classes, and agent responsibilities."
+      }
+    },
+    es: {
+      annuities: {
+        why: "Las anualidades evalúan si sabes cuándo crece el dinero, cuándo empiezan los pagos y quién carga el riesgo.",
+        mistake: "Los estudiantes mezclan anualidades inmediatas con diferidas, o confunden anualidades con seguro de vida.",
+        memory: "Vida crea dinero al morir. Anualidad protege si vives demasiado.",
+        fix: "Repasa el tiempo de las anualidades y luego haz un quiz enfocado."
+      },
+      beneficiaries: {
+        why: "Las reglas de beneficiarios deciden quién recibe el beneficio por muerte y si se puede cambiar.",
+        mistake: "Se olvida que el beneficiario irrevocable normalmente debe consentir cambios importantes.",
+        memory: "Revocable se revisa. Irrevocable queda fijo.",
+        fix: "Practica preguntas de dueño, asegurado, beneficiario y consentimiento."
+      },
+      "best interest": {
+        why: "Mejor interés evalúa si el agente puso al cliente primero y documentó la recomendación.",
+        mistake: "Se elige el producto que suena rentable en vez del paso que protege al cliente.",
+        memory: "Conoce al cliente antes de vender el producto.",
+        fix: "Repasa datos de idoneidad, divulgación, reemplazo y documentación."
+      },
+      contracts: {
+        why: "Contratos son trampas de vocabulario: aleatorio, adhesión, unilateral, condicional y personal.",
+        mistake: "Se confunde unilateral con bilateral, o aleatorio con intercambio igual.",
+        memory: "A-A-U-C-P: Adhesión, Aleatorio, Unilateral, Condicional, Personal.",
+        fix: "Estudia cada palabra como pista y luego practica características del contrato."
+      },
+      ethics: {
+        why: "Ética evalúa conducta del agente, divulgación, tergiversación, presión y protección del consumidor.",
+        mistake: "Se escoge la respuesta que cierra la venta en vez de la que protege al consumidor.",
+        memory: "Si oculta, presiona o engaña, está mal.",
+        fix: "Repasa prácticas injustas y ejemplos de mejor interés."
+      },
+      general: {
+        why: "Los conceptos generales son la base de casi todos los capítulos.",
+        mistake: "Se memorizan palabras sin distinguir riesgo, peligro, hazard y pooling en escenarios.",
+        memory: "Riesgo es incertidumbre. Peligro causa pérdida. Hazard aumenta la probabilidad.",
+        fix: "Repasa la lección base y luego haz un diagnóstico de 25 preguntas."
+      },
+      "life insurance": {
+        why: "Seguro de vida evalúa qué póliza encaja con la necesidad: temporal, permanente, valor en efectivo o protección.",
+        mistake: "Se confunde term con whole life o se olvida que vida paga al morir.",
+        memory: "Term es temporal. Whole life es permanente.",
+        fix: "Compara term, whole, universal y variable lado a lado."
+      },
+      "policy provisions": {
+        why: "Las cláusulas son las reglas dentro de la póliza: gracia, reinstalación, préstamos e incontestabilidad.",
+        mistake: "Se mezclan límites de tiempo y consecuencias de no pagar primas.",
+        memory: "Las cláusulas son el reglamento de la póliza.",
+        fix: "Haz una línea de tiempo de gracia, reinstalación, contestabilidad y free-look."
+      },
+      retirement: {
+        why: "Retiro evalúa impuestos, rollovers, planes calificados y momento de ingresos.",
+        mistake: "Se confunden reglas de contribución con reglas de distribución.",
+        memory: "Planes calificados reciben favor fiscal porque siguen reglas fiscales.",
+        fix: "Repasa calificado vs no calificado y cuándo se pagan impuestos."
+      },
+      riders: {
+        why: "Los riders cambian o agregan beneficios a la póliza base.",
+        mistake: "Se escoge el tipo de póliza en vez del rider que resuelve el problema.",
+        memory: "Un rider viaja encima de la póliza.",
+        fix: "Une cada rider con el problema que resuelve."
+      },
+      taxes: {
+        why: "Impuestos evalúa qué es taxable, qué no, y cuándo se paga impuesto.",
+        mistake: "Se asume que todo pago de seguro paga impuestos.",
+        memory: "Beneficio por muerte normalmente no paga impuestos; ganancias e interés normalmente sí.",
+        fix: "Repasa primas, beneficio por muerte, valor en efectivo, préstamos y anualidades por separado."
+      },
+      texas: {
+        why: "Texas evalúa reglas estatales, fechas límite, licencia, reemplazo y protección del consumidor.",
+        mistake: "Se contesta con regla general cuando Texas tiene una regla específica.",
+        memory: "Si la pregunta dice Texas, busca la regla de Texas.",
+        fix: "Repasa fechas límite y avisos obligatorios de Texas."
+      },
+      underwriting: {
+        why: "Underwriting evalúa cómo la aseguradora clasifica riesgo y decide si emite cobertura.",
+        mistake: "Se confunde field underwriting, home office underwriting y clasificación de prima.",
+        memory: "El campo recopila. La oficina central decide.",
+        fix: "Repasa solicitud, información médica, clases de riesgo y responsabilidades del agente."
+      }
+    }
+  };
+
   function weaknessExplanation(topic) {
     const label = topicLabel(topic);
     if (prefs.language === "es") {
       return `Si fallas ${label}, no memorices solamente la respuesta. Estudia la regla sencilla, mira un ejemplo y luego contesta preguntas del mismo tema hasta que puedas explicar por qué las otras opciones son incorrectas.`;
     }
     return `If you are missing ${label}, do not just memorize the answer. Study the simple rule, look at one example, then answer questions from this topic until you can explain why the other choices are wrong.`;
+  }
+
+  function weaknessCoaching(topic) {
+    const fallback = {
+      why: weaknessExplanation(topic),
+      mistake: prefs.language === "es" ? "El error común es escoger una respuesta que suena familiar sin probarla contra la regla." : "The common mistake is choosing an answer that sounds familiar without testing it against the rule.",
+      memory: prefs.language === "es" ? "Regla primero, respuesta después." : "Rule first, answer second.",
+      fix: prefs.language === "es" ? "Repasa la mini lección y luego haz un quiz enfocado." : "Review the mini lesson, then take a targeted quiz."
+    };
+    return WEAKNESS_COACHING[prefs.language]?.[topic] || WEAKNESS_COACHING.en[topic] || fallback;
   }
 
   function masteryLabel(item) {
@@ -2098,13 +2279,31 @@
       return;
     }
     weaknesses.forEach((item, index) => {
+      const coaching = weaknessCoaching(item.topic);
       const card = document.createElement("article");
       card.className = "weakness-card";
       card.innerHTML = `
         <div class="weakness-rank">${index + 1}</div>
         <div>
           <div class="topic-top"><strong>${escapeHtml(topicLabel(item.topic))}</strong><span>${item.accuracy}% · ${item.seen} ${t("answered")}</span></div>
-          <p>${escapeHtml(weaknessExplanation(item.topic))}</p>
+          <div class="weakness-coaching">
+            <section>
+              <span>${t("whyWeak")}</span>
+              <p>${escapeHtml(coaching.why)}</p>
+            </section>
+            <section>
+              <span>${t("commonMistake")}</span>
+              <p>${escapeHtml(coaching.mistake)}</p>
+            </section>
+            <section>
+              <span>${t("memoryTip")}</span>
+              <p>${escapeHtml(coaching.memory)}</p>
+            </section>
+            <section>
+              <span>${t("recommendedFix")}</span>
+              <p>${escapeHtml(coaching.fix)}</p>
+            </section>
+          </div>
           <div class="weakness-meta">
             <span>${t("mastery")}: ${escapeHtml(masteryLabel(item))}</span>
             <span>${t("missed")}: ${item.missed}</span>
