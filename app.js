@@ -91,6 +91,17 @@
       chapterCoach: "Chapter cheat code",
       examMove: "Exam move",
       nextStep: "Next step",
+      chapterProgress: "Chapter progress",
+      chaptersStudied: "chapters studied",
+      currentChapterDone: "Current chapter started",
+      currentChapterNotDone: "Open this chapter to count it",
+      continueFreeStudy: "Continue free study",
+      unlockPracticeLoop: "Unlock the practice loop",
+      freeIncludes: "Free includes",
+      paidUnlocks: "Paid unlocks",
+      freeStudyList: "Study chapters, bilingual key terms, 10 quiz questions, and 10 preview flashcards.",
+      paidStudyList: "300 questions, full explanations, full flashcard deck, saved progress, exam mode, and weakness review.",
+      sectionGuide: "Section guide",
       freeStudyPaidPractice: "Study is free. Practice, explanations, and the full card deck unlock with paid access.",
       previewUpgradeNote: "Preview · full deck is paid",
       chapterCardCount: "cards in this set",
@@ -305,6 +316,17 @@
       chapterCoach: "Clave del capítulo",
       examMove: "Movimiento de examen",
       nextStep: "Siguiente paso",
+      chapterProgress: "Progreso por capítulo",
+      chaptersStudied: "capítulos estudiados",
+      currentChapterDone: "Capítulo actual iniciado",
+      currentChapterNotDone: "Abre este capítulo para contarlo",
+      continueFreeStudy: "Continuar estudio gratis",
+      unlockPracticeLoop: "Desbloquear práctica completa",
+      freeIncludes: "Gratis incluye",
+      paidUnlocks: "Pagado desbloquea",
+      freeStudyList: "Capítulos de estudio, términos clave bilingües, 10 preguntas y 10 tarjetas de vista previa.",
+      paidStudyList: "300 preguntas, explicaciones completas, mazo completo de tarjetas, progreso guardado, modo examen y repaso de puntos débiles.",
+      sectionGuide: "Guía de secciones",
       freeStudyPaidPractice: "El estudio es gratis. La práctica, explicaciones y el mazo completo se desbloquean con acceso pagado.",
       previewUpgradeNote: "Vista gratis · mazo completo pagado",
       chapterCardCount: "tarjetas en este mazo",
@@ -485,10 +507,13 @@
     weaknessList: document.getElementById("weaknessList"),
     studyChapterSelect: document.getElementById("studyChapterSelect"),
     studyChapterTitle: document.getElementById("studyChapterTitle"),
+    studyChapterProgress: document.getElementById("studyChapterProgress"),
+    studySectionNav: document.getElementById("studySectionNav"),
     studyContent: document.getElementById("studyContent"),
     studyTerms: document.getElementById("studyTerms"),
     studyLanguageNote: document.getElementById("studyLanguageNote"),
     studyChapterSummary: document.getElementById("studyChapterSummary"),
+    studyUpgradePrompt: document.getElementById("studyUpgradePrompt"),
     studyPracticeButton: document.getElementById("studyPracticeButton"),
     studyFlashcardsButton: document.getElementById("studyFlashcardsButton"),
     flashcardsAccessBadge: document.getElementById("flashcardsAccessBadge"),
@@ -503,6 +528,7 @@
     flashcardMissedButton: document.getElementById("flashcardMissedButton"),
     flashcardKnewButton: document.getElementById("flashcardKnewButton"),
     flashcardsStatus: document.getElementById("flashcardsStatus"),
+    flashcardsUpgradePrompt: document.getElementById("flashcardsUpgradePrompt"),
     statAnswered: document.getElementById("statAnswered"),
     statAccuracy: document.getElementById("statAccuracy"),
     statMissed: document.getElementById("statMissed"),
@@ -574,15 +600,19 @@
   let progressSyncTimer = null;
 
   function defaultProgress() {
-    return { answers: {}, missed: {}, flagged: {}, history: [] };
+    return { answers: {}, missed: {}, flagged: {}, history: [], study: { chapters: {} } };
   }
 
   function normalizeProgress(value) {
+    const study = value?.study && typeof value.study === "object" ? value.study : {};
     return {
       answers: value?.answers && typeof value.answers === "object" ? value.answers : {},
       missed: value?.missed && typeof value.missed === "object" ? value.missed : {},
       flagged: value?.flagged && typeof value.flagged === "object" ? value.flagged : {},
-      history: Array.isArray(value?.history) ? value.history : []
+      history: Array.isArray(value?.history) ? value.history : [],
+      study: {
+        chapters: study.chapters && typeof study.chapters === "object" ? study.chapters : {}
+      }
     };
   }
 
@@ -621,6 +651,14 @@
     merged.history = [...historyMap.values()]
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       .slice(0, 20);
+    const chapterIds = new Set([...Object.keys(cloud.study.chapters), ...Object.keys(local.study.chapters)]);
+    chapterIds.forEach((chapterId) => {
+      const cloudChapter = cloud.study.chapters[chapterId] || {};
+      const localChapter = local.study.chapters[chapterId] || {};
+      const cloudSeen = new Date(cloudChapter.updatedAt || cloudChapter.viewedAt || 0).getTime();
+      const localSeen = new Date(localChapter.updatedAt || localChapter.viewedAt || 0).getTime();
+      merged.study.chapters[chapterId] = cloudSeen >= localSeen ? cloudChapter : localChapter;
+    });
     return merged;
   }
 
@@ -1039,20 +1077,116 @@
     `;
   }
 
+  function markChapterStudied(chapter) {
+    if (!chapter?.id) return;
+    progress.study = progress.study || { chapters: {} };
+    progress.study.chapters = progress.study.chapters || {};
+    const current = progress.study.chapters[chapter.id];
+    if (current?.viewed) return;
+    progress.study.chapters[chapter.id] = {
+      viewed: true,
+      number: chapter.number,
+      updatedAt: new Date().toISOString()
+    };
+    saveProgress();
+  }
+
+  function renderChapterProgress(chapter) {
+    if (!els.studyChapterProgress || !window.CERTIVO_STUDY?.chapters?.length) return;
+    const chapters = window.CERTIVO_STUDY.chapters;
+    const studied = progress.study?.chapters || {};
+    const studiedCount = chapters.filter((item) => studied[item.id]?.viewed).length;
+    const percent = chapters.length ? Math.round((studiedCount / chapters.length) * 100) : 0;
+    const currentDone = Boolean(studied[chapter.id]?.viewed);
+    const chapterButtons = chapters.map((item) => {
+      const title = item.title[prefs.language] || item.title.en || item.title.es || "";
+      const state = studied[item.id]?.viewed ? "is-studied" : "";
+      const current = item.id === chapter.id ? "is-current" : "";
+      return `<button class="chapter-dot ${state} ${current}" type="button" data-chapter-id="${escapeHtml(item.id)}" title="${escapeHtml(title)}">${escapeHtml(item.number)}</button>`;
+    }).join("");
+    els.studyChapterProgress.innerHTML = `
+      <div class="chapter-progress-head">
+        <div>
+          <span>${escapeHtml(t("chapterProgress"))}</span>
+          <strong>${percent}%</strong>
+        </div>
+        <p>${escapeHtml(studiedCount)} ${escapeHtml(t("of"))} ${escapeHtml(chapters.length)} ${escapeHtml(t("chaptersStudied"))}</p>
+      </div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" style="width:${percent}%"></div></div>
+      <div class="chapter-dot-grid">${chapterButtons}</div>
+      <p class="chapter-current-note">${escapeHtml(currentDone ? t("currentChapterDone") : t("currentChapterNotDone"))}</p>
+    `;
+    els.studyChapterProgress.querySelectorAll("[data-chapter-id]").forEach((button) => {
+      button.addEventListener("click", () => {
+        els.studyChapterSelect.value = button.dataset.chapterId;
+        renderStudy();
+      });
+    });
+  }
+
+  function renderSectionGuide(chapter) {
+    if (!els.studySectionNav) return;
+    const sections = chapter.sections || [];
+    els.studySectionNav.innerHTML = "";
+    if (!sections.length) return;
+    const label = document.createElement("span");
+    label.textContent = t("sectionGuide");
+    els.studySectionNav.appendChild(label);
+    sections.forEach((section, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = `${index + 1}. ${section.heading[prefs.language] || section.heading.es || section.heading.en}`;
+      button.addEventListener("click", () => {
+        document.getElementById(`study-section-${index + 1}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      els.studySectionNav.appendChild(button);
+    });
+  }
+
+  function upgradePromptHtml() {
+    return `
+      <div>
+        <span>${escapeHtml(t("freeIncludes"))}</span>
+        <p>${escapeHtml(t("freeStudyList"))}</p>
+      </div>
+      <div>
+        <span>${escapeHtml(t("paidUnlocks"))}</span>
+        <p>${escapeHtml(t("paidStudyList"))}</p>
+      </div>
+      <button class="button primary compact" type="button">${escapeHtml(t("unlockPracticeLoop"))}</button>
+    `;
+  }
+
+  function renderUpgradePrompt(node) {
+    if (!node) return;
+    node.classList.toggle("hidden", hasFullAccess());
+    if (hasFullAccess()) {
+      node.innerHTML = "";
+      return;
+    }
+    node.innerHTML = upgradePromptHtml();
+    node.querySelector("button")?.addEventListener("click", () => showScreen("pricing"));
+  }
+
   function renderStudy() {
     if (!window.CERTIVO_STUDY?.chapters?.length) return;
     populateStudyChapters();
     const chapter = currentStudyChapter();
     if (!chapter) return;
+    markChapterStudied(chapter);
     els.studyChapterTitle.textContent = `${t("chapter")} ${chapter.number}: ${chapter.title[prefs.language] || chapter.title.es || chapter.title.en}`;
     els.studyLanguageNote.textContent = `${t("spanishStudyNote")} ${t("freeStudyPaidPractice")}`;
     renderStudySummary(chapter);
+    renderChapterProgress(chapter);
+    renderSectionGuide(chapter);
+    renderUpgradePrompt(els.studyUpgradePrompt);
     els.studyContent.innerHTML = "";
-    chapter.sections.forEach((section) => {
+    chapter.sections.forEach((section, index) => {
       const article = document.createElement("article");
       article.className = "study-section";
+      article.id = `study-section-${index + 1}`;
       const heading = document.createElement("h3");
-      heading.textContent = section.heading[prefs.language] || section.heading.es || section.heading.en;
+      heading.innerHTML = `<span>${index + 1}</span>${escapeHtml(section.heading[prefs.language] || section.heading.es || section.heading.en)}`;
       const body = document.createElement("div");
       body.className = "study-markdown";
       body.innerHTML = markdownToHtml(section.markdown[prefs.language] || section.markdown.es || section.markdown.en || "");
@@ -1130,6 +1264,7 @@
   function renderFlashcards() {
     if (!els.flashcardCard) return;
     populateFlashcardChapters();
+    renderUpgradePrompt(els.flashcardsUpgradePrompt);
     const deck = availableFlashcards();
     const fullDeck = filteredFlashcards();
     const fullAccess = hasFullAccess();
@@ -1165,6 +1300,7 @@
   }
 
   function renderFlashcardLock(message) {
+    renderUpgradePrompt(els.flashcardsUpgradePrompt);
     els.flashcardCard.classList.add("is-locked");
     els.flashcardChapter.textContent = t("locked");
     els.flashcardFront.textContent = t("flashcardLockedTitle");

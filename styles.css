@@ -57,6 +57,8 @@ button,
 select,
 input {
   font: inherit;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 button {
@@ -772,14 +774,20 @@ label span {
   font-weight: 800;
 }
 
+label {
+  min-width: 0;
+}
+
 select {
   width: 100%;
   min-height: 48px;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
   color: var(--ink);
   padding: 0 12px;
+  text-overflow: ellipsis;
 }
 
 input {
@@ -1064,22 +1072,156 @@ input::placeholder {
   background: rgba(16, 33, 53, 0.44);
 }
 
+.chapter-progress-card,
+.upgrade-path-card {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel), var(--soft) 18%);
+  padding: 14px;
+}
+
+.chapter-progress-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.chapter-progress-head span,
+.upgrade-path-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.chapter-progress-head strong {
+  display: block;
+  margin-top: 2px;
+  color: var(--gold);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.chapter-progress-head p,
+.chapter-current-note,
+.upgrade-path-card p {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 760;
+  line-height: 1.4;
+}
+
+.chapter-dot-grid {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.chapter-dot {
+  min-width: 0;
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--muted);
+  font-weight: 900;
+}
+
+.chapter-dot.is-studied {
+  border-color: color-mix(in srgb, var(--gold), var(--line) 35%);
+  background: color-mix(in srgb, var(--gold), var(--panel) 80%);
+  color: var(--navy);
+}
+
+.chapter-dot.is-current {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.upgrade-path-card {
+  border-color: color-mix(in srgb, var(--gold), var(--line) 40%);
+  background: color-mix(in srgb, var(--gold), var(--panel) 92%);
+}
+
+.upgrade-path-card .button {
+  width: 100%;
+}
+
+.study-section-nav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 0 14px;
+  padding-bottom: 4px;
+}
+
+.study-section-nav span,
+.study-section-nav button {
+  flex: 0 0 auto;
+}
+
+.study-section-nav span {
+  align-self: center;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.study-section-nav button {
+  max-width: 240px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 9px 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 820;
+}
+
 .study-section {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: color-mix(in srgb, var(--panel), var(--soft) 12%);
-  padding: 16px;
+  padding: 18px;
+  scroll-margin-top: 14px;
 }
 
 .study-section h3 {
-  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
   color: var(--blue-strong);
   line-height: 1.2;
 }
 
+.study-section h3 span {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--gold), #ffffff 70%);
+  color: var(--navy);
+  font-size: 0.9rem;
+  font-weight: 950;
+}
+
 .study-markdown {
   color: var(--ink);
-  line-height: 1.6;
+  max-width: 78ch;
+  line-height: 1.68;
   font-weight: 620;
 }
 
@@ -1473,6 +1615,16 @@ input::placeholder {
     grid-template-columns: 1.2fr 0.9fr 0.9fr;
   }
 
+  .upgrade-path-card {
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+  }
+
+  .upgrade-path-card .button {
+    width: auto;
+    min-width: 170px;
+  }
+
   .pricing-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1522,6 +1674,27 @@ input::placeholder {
   #flashcardsProgress,
   .flashcard-meta {
     align-items: flex-start;
+  }
+
+  .chapter-progress-head {
+    display: grid;
+  }
+
+  .chapter-dot-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .study-section {
+    padding: 14px;
+  }
+
+  .study-section h3 {
+    align-items: flex-start;
+    font-size: 1.05rem;
+  }
+
+  .study-section-nav button {
+    max-width: 190px;
   }
 }
 

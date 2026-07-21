@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/certivo-apple-touch-icon-v3.png?v=2.3-flat-icon">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png?v=2.3-flat-icon">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css?v=5.6-learning-loop">
+    <link rel="stylesheet" href="./styles.css?v=5.7-study-progress-upgrade">
   </head>
   <body>
     <section class="intro" id="introScreen" aria-label="Certivo intro">
@@ -127,7 +127,7 @@
           <button class="pill-button" id="themeToggle" type="button" data-i18n="darkMode">Dark mode</button>
           <button class="pill-button" id="accountButton" type="button" data-i18n="account">Account</button>
           <button class="pill-button" id="plansButton" type="button" data-i18n="plans">Plans</button>
-          <span class="pill">v5.6</span>
+          <span class="pill">v5.7</span>
           <span class="pill" id="bankPill">300 questions</span>
         </div>
       </header>
@@ -262,6 +262,8 @@
             <button class="button secondary" id="studyFlashcardsButton" type="button" data-i18n="studyFlashcards">Study flashcards</button>
           </div>
           <div class="learning-loop-card" id="studyChapterSummary"></div>
+          <div class="chapter-progress-card" id="studyChapterProgress"></div>
+          <div class="upgrade-path-card hidden" id="studyUpgradePrompt"></div>
           <div class="status-box visible" id="studyLanguageNote"></div>
         </section>
 
@@ -287,6 +289,7 @@
           <div class="section-title">
             <h2 id="studyChapterTitle">Chapter</h2>
           </div>
+          <div class="study-section-nav" id="studySectionNav"></div>
           <div class="study-content" id="studyContent"></div>
         </section>
 
@@ -318,6 +321,7 @@
             </label>
             <button class="button secondary" id="flashcardPracticeChapterButton" type="button" data-i18n="practiceChapter">Practice this chapter</button>
           </div>
+          <div class="upgrade-path-card hidden" id="flashcardsUpgradePrompt"></div>
         </section>
 
         <section class="flashcard-stage" aria-live="polite">
@@ -580,8 +584,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./questions.js?v=5.6-learning-loop"></script>
-    <script src="./study.js?v=5.6-learning-loop"></script>
-    <script src="./app.js?v=5.6-learning-loop"></script>
+    <script src="./questions.js?v=5.7-study-progress-upgrade"></script>
+    <script src="./study.js?v=5.7-study-progress-upgrade"></script>
+    <script src="./app.js?v=5.7-study-progress-upgrade"></script>
   </body>
 </html>
