@@ -505,7 +505,7 @@
   els.introSkip = document.getElementById("introSkip");
 
   let prefs = loadJson(PREF_KEY, { language: "en", theme: "light" });
-  let progress = loadJson(PROGRESS_KEY, defaultProgress());
+  let progress = loadJson(`${PROGRESS_KEY}:guest`, loadJson(PROGRESS_KEY, defaultProgress()));
   let questionBank = Array.isArray(window.CERTIVO_QUESTIONS) ? [...window.CERTIVO_QUESTIONS] : [...CERTIVO_QUESTIONS];
   let flashcardBank = Array.isArray(window.CERTIVO_STUDY?.concepts) ? [...window.CERTIVO_STUDY.concepts] : [];
   let session = loadJson(SESSION_KEY, null);
@@ -583,8 +583,24 @@
     localStorage.setItem(key, JSON.stringify(value));
   }
 
+  function progressKey() {
+    return authUser?.id ? `${PROGRESS_KEY}:${authUser.id}` : `${PROGRESS_KEY}:guest`;
+  }
+
+  function loadStoredProgress() {
+    progress = loadJson(progressKey(), defaultProgress());
+  }
+
+  function refreshAfterProgressChange() {
+    renderSessionSummary();
+    updateDashboard();
+    if (activeScreen === "progress") renderProgress();
+    if (activeScreen === "weakness") renderWeaknessCenter();
+    if (activeScreen === "home") renderMissionControl();
+  }
+
   function saveProgress(sync = true) {
-    saveJson(PROGRESS_KEY, progress);
+    saveJson(progressKey(), progress);
     if (sync) queueProgressSync();
   }
 
@@ -677,19 +693,23 @@
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     supabaseClient.auth.getSession().then(async ({ data }) => {
       authUser = data.session?.user || null;
+      loadStoredProgress();
       handleCheckoutReturn();
       await refreshAccess();
       await loadQuestionBank();
       await loadFlashcardBank();
       await loadCloudProgress();
+      refreshAfterProgressChange();
       updateAuthUi();
     });
     supabaseClient.auth.onAuthStateChange(async (_event, currentSession) => {
       authUser = currentSession?.user || null;
+      loadStoredProgress();
       await refreshAccess();
       await loadQuestionBank();
       await loadFlashcardBank();
       await loadCloudProgress();
+      refreshAfterProgressChange();
       updateAuthUi();
     });
   }
@@ -1744,6 +1764,12 @@
     }
     await supabaseClient.auth.signOut();
     authUser = null;
+    accessState = { status: "free", plan: "free", access_until: null };
+    clearSession();
+    loadStoredProgress();
+    await loadQuestionBank();
+    await loadFlashcardBank();
+    refreshAfterProgressChange();
     setAccountStatus(t("logoutSuccess"));
     updateAuthUi();
   }
