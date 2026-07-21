@@ -1522,7 +1522,7 @@
         es: {
           notice: "Busca discapacidad total y pagos de prima.",
           plain: "Exención de prima significa que la póliza puede seguir activa sin que el asegurado pague primas después de una discapacidad que califica.",
-          correct: "La respuesta correcta conecta el rider con discapacidad, no con muerte, préstamos o cambios de beneficiario.",
+          correct: "La respuesta correcta conecta la cláusula adicional con discapacidad, no con muerte, préstamos o cambios de beneficiario.",
           wrong: "Tu respuesta apunta a otra característica de la póliza. La pista de discapacidad debe llevarte a exención de prima.",
           rule: "Pista de discapacidad = exención de prima."
         }
@@ -2195,36 +2195,36 @@
       },
       general: {
         why: "Los conceptos generales son la base de casi todos los capítulos.",
-        mistake: "Se memorizan palabras sin distinguir riesgo, peligro, hazard y pooling en escenarios.",
-        memory: "Riesgo es incertidumbre. Peligro causa pérdida. Hazard aumenta la probabilidad.",
+        mistake: "Se memorizan palabras sin distinguir riesgo, peligro, condición de riesgo y agrupación de riesgos en escenarios.",
+        memory: "Riesgo es incertidumbre. Peligro causa la pérdida. Una condición de riesgo aumenta la probabilidad.",
         fix: "Repasa la lección base y luego haz un diagnóstico de 25 preguntas."
       },
       "life insurance": {
         why: "Seguro de vida evalúa qué póliza encaja con la necesidad: temporal, permanente, valor en efectivo o protección.",
-        mistake: "Se confunde term con whole life o se olvida que vida paga al morir.",
-        memory: "Term es temporal. Whole life es permanente.",
-        fix: "Compara term, whole, universal y variable lado a lado."
+        mistake: "Se confunde seguro temporal con vida entera o se olvida que el seguro de vida paga al morir.",
+        memory: "Seguro temporal es temporal. Vida entera es permanente.",
+        fix: "Compara seguro temporal, vida entera, vida universal y vida variable lado a lado."
       },
       "policy provisions": {
         why: "Las cláusulas son las reglas dentro de la póliza: gracia, reinstalación, préstamos e incontestabilidad.",
         mistake: "Se mezclan límites de tiempo y consecuencias de no pagar primas.",
         memory: "Las cláusulas son el reglamento de la póliza.",
-        fix: "Haz una línea de tiempo de gracia, reinstalación, contestabilidad y free-look."
+        fix: "Haz una línea de tiempo de gracia, reinstalación, contestabilidad y periodo de revisión gratuita."
       },
       retirement: {
-        why: "Retiro evalúa impuestos, rollovers, planes calificados y momento de ingresos.",
+        why: "Retiro evalúa impuestos, traspasos, planes calificados y momento de ingresos.",
         mistake: "Se confunden reglas de contribución con reglas de distribución.",
         memory: "Planes calificados reciben favor fiscal porque siguen reglas fiscales.",
         fix: "Repasa calificado vs no calificado y cuándo se pagan impuestos."
       },
       riders: {
-        why: "Los riders cambian o agregan beneficios a la póliza base.",
-        mistake: "Se escoge el tipo de póliza en vez del rider que resuelve el problema.",
-        memory: "Un rider viaja encima de la póliza.",
-        fix: "Une cada rider con el problema que resuelve."
+        why: "Las cláusulas adicionales cambian o agregan beneficios a la póliza base.",
+        mistake: "Se escoge el tipo de póliza en vez de la cláusula adicional que resuelve el problema.",
+        memory: "Una cláusula adicional va encima de la póliza.",
+        fix: "Une cada cláusula adicional con el problema que resuelve."
       },
       taxes: {
-        why: "Impuestos evalúa qué es taxable, qué no, y cuándo se paga impuesto.",
+        why: "Impuestos evalúa qué es tributable, qué no, y cuándo se paga impuesto.",
         mistake: "Se asume que todo pago de seguro paga impuestos.",
         memory: "Beneficio por muerte normalmente no paga impuestos; ganancias e interés normalmente sí.",
         fix: "Repasa primas, beneficio por muerte, valor en efectivo, préstamos y anualidades por separado."
@@ -2236,9 +2236,9 @@
         fix: "Repasa fechas límite y avisos obligatorios de Texas."
       },
       underwriting: {
-        why: "Underwriting evalúa cómo la aseguradora clasifica riesgo y decide si emite cobertura.",
-        mistake: "Se confunde field underwriting, home office underwriting y clasificación de prima.",
-        memory: "El campo recopila. La oficina central decide.",
+        why: "La evaluación de riesgo evalúa cómo la aseguradora clasifica el riesgo y decide si emite cobertura.",
+        mistake: "Se confunde la evaluación de campo, la evaluación de oficina central y la clasificación de prima.",
+        memory: "La evaluación de campo recopila datos. La oficina central decide.",
         fix: "Repasa solicitud, información médica, clases de riesgo y responsabilidades del agente."
       }
     }
@@ -2281,15 +2281,15 @@
         "best interest": "Gather facts first, disclose before sale, document why the recommendation fits."
       },
       es: {
-        general: "Riesgo = incertidumbre. Riesgo puro se asegura. Riesgo especulativo no. Peligro causa pérdida. Hazard aumenta la probabilidad.",
+        general: "Riesgo = incertidumbre. Riesgo puro se asegura. Riesgo especulativo no. Peligro causa la pérdida. Una condición de riesgo aumenta la probabilidad.",
         annuities: "Pregunta: pagos ahora o después. Inmediata paga pronto. Diferida paga después. Fija pasa riesgo a la aseguradora. Variable deja riesgo al dueño.",
-        "life insurance": "Term es temporal. Whole life es permanente. Universal es flexible. Variable significa riesgo de valores.",
+        "life insurance": "Seguro temporal es temporal. Vida entera es permanente. Vida universal es flexible. Vida variable significa riesgo de valores.",
         "policy provisions": "Piensa en tiempos: gracia mantiene viva la póliza, reinstalación la revive, incontestabilidad limita impugnaciones.",
         underwriting: "El campo recopila datos. La oficina central decide. La clase de riesgo controla la prima.",
         taxes: "Beneficio por muerte normalmente no paga impuesto. Interés, ganancia y anualidad normalmente pagan impuesto al recibirse.",
         texas: "Si la pregunta dice Texas, deja la regla genérica y busca fecha límite, aviso o regla de licencia estatal.",
         contracts: "Adhesión favorece al asegurado si hay ambigüedad. Aleatorio significa valores desiguales. Unilateral significa una promesa exigible.",
-        riders: "Un rider es un agregado. Une el rider con el problema: discapacidad, muerte accidental, asegurable futuro, cuidado a largo plazo.",
+        riders: "Una cláusula adicional es un agregado. Une la cláusula con el problema: discapacidad, muerte accidental, asegurabilidad futura o cuidado a largo plazo.",
         retirement: "Planes calificados reciben ventaja fiscal porque obedecen reglas fiscales. Contribución, crecimiento y distribución son eventos distintos.",
         ethics: "La respuesta correcta protege al consumidor, dice la verdad, documenta hechos y evita presión.",
         beneficiaries: "Dueño controla. Asegurado está cubierto. Beneficiario recibe. Revocable cambia; irrevocable normalmente consiente.",
