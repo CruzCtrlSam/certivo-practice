@@ -51,6 +51,9 @@
       examReady: "Exam Ready",
       noWeaknessesYet: "No weaknesses yet. Start a practice set so Certivo can find your weak spots.",
       miniLesson: "Mini lesson",
+      studyChapter: "Study chapter",
+      cheatCode: "Cheat-code summary",
+      examTrap: "Exam trap",
       targetedQuiz: "Targeted quiz",
       reviewFlashcards: "Flashcards",
       mastery: "Mastery",
@@ -253,6 +256,9 @@
       examReady: "Listo para examen",
       noWeaknessesYet: "Todavía no hay puntos débiles. Inicia una práctica para que Certivo los encuentre.",
       miniLesson: "Mini lección",
+      studyChapter: "Estudiar capítulo",
+      cheatCode: "Resumen clave",
+      examTrap: "Trampa del examen",
       targetedQuiz: "Quiz enfocado",
       reviewFlashcards: "Tarjetas",
       mastery: "Dominio",
@@ -2256,6 +2262,47 @@
     return WEAKNESS_COACHING[prefs.language]?.[topic] || WEAKNESS_COACHING.en[topic] || fallback;
   }
 
+  function miniLessonCheatCode(topic, coaching) {
+    const label = topicLabel(topic);
+    const topicCheats = {
+      en: {
+        general: "Risk = uncertainty. Pure risk can be insured. Speculative risk cannot. Peril causes loss. Hazard increases the chance.",
+        annuities: "Ask: payments now or later? Immediate pays soon. Deferred pays later. Fixed shifts risk to insurer. Variable leaves investment risk with owner.",
+        "life insurance": "Term is temporary. Whole life is permanent. Universal is flexible. Variable means securities risk.",
+        "policy provisions": "Think timelines: grace keeps it alive, reinstatement brings it back, incontestability limits later challenges.",
+        underwriting: "Field gathers facts. Home office decides. Risk class controls premium.",
+        taxes: "Death benefit usually tax-free. Interest, gain, and annuity earnings are usually taxable when received.",
+        texas: "If the question says Texas, stop using generic rules and look for the state-specific deadline, notice, or license rule.",
+        contracts: "Adhesion favors insured on ambiguity. Aleatory means unequal values. Unilateral means only insurer has an enforceable promise.",
+        riders: "A rider is an add-on. Match the rider to the problem: disability, accidental death, future insurability, long-term care.",
+        retirement: "Qualified plans get tax advantages because they obey tax rules. Contributions, growth, and distributions are separate events.",
+        ethics: "The correct answer protects the consumer, tells the truth, documents facts, and avoids pressure.",
+        beneficiaries: "Owner controls. Insured is covered. Beneficiary receives. Revocable can change; irrevocable usually must consent.",
+        "best interest": "Gather facts first, disclose before sale, document why the recommendation fits."
+      },
+      es: {
+        general: "Riesgo = incertidumbre. Riesgo puro se asegura. Riesgo especulativo no. Peligro causa pérdida. Hazard aumenta la probabilidad.",
+        annuities: "Pregunta: pagos ahora o después. Inmediata paga pronto. Diferida paga después. Fija pasa riesgo a la aseguradora. Variable deja riesgo al dueño.",
+        "life insurance": "Term es temporal. Whole life es permanente. Universal es flexible. Variable significa riesgo de valores.",
+        "policy provisions": "Piensa en tiempos: gracia mantiene viva la póliza, reinstalación la revive, incontestabilidad limita impugnaciones.",
+        underwriting: "El campo recopila datos. La oficina central decide. La clase de riesgo controla la prima.",
+        taxes: "Beneficio por muerte normalmente no paga impuesto. Interés, ganancia y anualidad normalmente pagan impuesto al recibirse.",
+        texas: "Si la pregunta dice Texas, deja la regla genérica y busca fecha límite, aviso o regla de licencia estatal.",
+        contracts: "Adhesión favorece al asegurado si hay ambigüedad. Aleatorio significa valores desiguales. Unilateral significa una promesa exigible.",
+        riders: "Un rider es un agregado. Une el rider con el problema: discapacidad, muerte accidental, asegurable futuro, cuidado a largo plazo.",
+        retirement: "Planes calificados reciben ventaja fiscal porque obedecen reglas fiscales. Contribución, crecimiento y distribución son eventos distintos.",
+        ethics: "La respuesta correcta protege al consumidor, dice la verdad, documenta hechos y evita presión.",
+        beneficiaries: "Dueño controla. Asegurado está cubierto. Beneficiario recibe. Revocable cambia; irrevocable normalmente consiente.",
+        "best interest": "Recopila datos primero, divulga antes de vender y documenta por qué la recomendación encaja."
+      }
+    };
+    const cheat = topicCheats[prefs.language]?.[topic] || topicCheats.en[topic] || coaching.memory;
+    if (prefs.language === "es") {
+      return `Mini lección de ${label}: ${cheat} Trampa del examen: no escojas la respuesta que solo suena familiar; escoge la que sigue la regla exacta.`;
+    }
+    return `${label} mini lesson: ${cheat} Exam trap: do not pick the answer that merely sounds familiar; pick the answer that follows the exact rule.`;
+  }
+
   function masteryLabel(item) {
     if (!item.seen) return "Bronze";
     if (item.accuracy >= 90 && item.seen >= 8 && item.missed === 0) return "Master";
@@ -2280,6 +2327,7 @@
     }
     weaknesses.forEach((item, index) => {
       const coaching = weaknessCoaching(item.topic);
+      const miniLesson = miniLessonCheatCode(item.topic, coaching);
       const card = document.createElement("article");
       card.className = "weakness-card";
       card.innerHTML = `
@@ -2287,6 +2335,10 @@
         <div>
           <div class="topic-top"><strong>${escapeHtml(topicLabel(item.topic))}</strong><span>${item.accuracy}% · ${item.seen} ${t("answered")}</span></div>
           <div class="weakness-coaching">
+            <section class="mini-lesson-block">
+              <span>${t("cheatCode")}</span>
+              <p>${escapeHtml(miniLesson)}</p>
+            </section>
             <section>
               <span>${t("whyWeak")}</span>
               <p>${escapeHtml(coaching.why)}</p>
@@ -2309,7 +2361,7 @@
             <span>${t("missed")}: ${item.missed}</span>
           </div>
           <div class="actions">
-            <button class="button secondary compact" type="button" data-action="study" data-topic="${escapeHtml(item.topic)}">${t("miniLesson")}</button>
+            <button class="button secondary compact" type="button" data-action="study" data-topic="${escapeHtml(item.topic)}">${t("studyChapter")}</button>
             <button class="button primary compact" type="button" data-action="quiz" data-topic="${escapeHtml(item.topic)}">${t("targetedQuiz")}</button>
             <button class="button quiet compact" type="button" data-action="cards">${t("reviewFlashcards")}</button>
           </div>
