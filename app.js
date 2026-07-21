@@ -1,15 +1,16 @@
 (function () {
+  const CONFIG = window.CERTIVO_CONFIG || {};
   const SESSION_KEY = "certivoPracticeSession";
   const PROGRESS_KEY = "certivoPracticeProgress";
   const PREF_KEY = "certivoPracticePrefs";
-  const SUPABASE_URL = "https://ulvvofbakrlpcevunbyi.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_R1dz6grndk0MOu0I-IVWOA_KbGkq8Lb";
+  const SUPABASE_URL = CONFIG.supabaseUrl || "";
+  const SUPABASE_KEY = CONFIG.supabasePublishableKey || "";
   const CHECKOUT_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/create-checkout-session`;
   const PRICE_IDS = {
-    weekly: "price_1TtfWp0TcCPzwDfBL5E60kgn",
-    ninety: "price_1TtfYz0TcCPzwDfBjIKv18nv"
+    weekly: CONFIG.plans?.weekly?.priceId || "",
+    ninety: CONFIG.plans?.ninety?.priceId || ""
   };
-  const FREE_FLASHCARD_LIMIT = 10;
+  const FREE_FLASHCARD_LIMIT = Number(CONFIG.freeFlashcardLimit || 10);
   const FLASHCARD_TERM_ES = {
     "Risk transfer": "Transferencia de riesgo",
     "Pure risk": "Riesgo puro",

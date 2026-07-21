@@ -30,6 +30,7 @@ Certivo Practice is a mobile-first bilingual certification practice app. The stu
 - `index.html` - app screens
 - `styles.css` - responsive light/dark styling
 - `app.js` - quiz behavior, progress, scoring, flags, history, and filters
+- `config.js` - public app configuration, version, Supabase publishable config, free preview limit, and Stripe price ids
 - `questions.js` - public 10-question preview only
 - `study.js` - free bilingual study chapters and glossary terms
 - `manifest.webmanifest` - installable app metadata
@@ -37,6 +38,10 @@ Certivo Practice is a mobile-first bilingual certification practice app. The stu
 - `supabase/sql/certivo_content_tables.sql` - protected question table and RLS policies, no question text
 - `supabase/functions/create-checkout-session/` - secure Stripe Checkout function
 - `supabase/functions/stripe-webhook/` - Stripe payment confirmation function
+- `CHANGELOG.md` - release history
+- `QA_CHECKLIST.md` - pre-upload test checklist
+- `CONTENT_SCHEMA.md` - content structure for questions, study chapters, and flashcards
+- `RELEASE_MANIFEST.md` - exact release/upload notes
 - `README.md` - this file
 
 ## Supabase And Stripe Setup
@@ -49,7 +54,7 @@ Supabase secrets needed:
 - `SERVICE_ROLE_KEY`
 - `STRIPE_WEBHOOK_SECRET` after the Stripe webhook is created
 
-Stripe price ids currently used in `app.js`:
+Stripe price ids currently used in `config.js`:
 
 - Weekly access: `price_1TtfWp0TcCPzwDfBL5E60kgn`
 - 90-day access: `price_1TtfYz0TcCPzwDfBjIKv18nv`
@@ -100,11 +105,16 @@ Keep answer ids identical between English and Spanish. The app shuffles answers 
    - `index.html`
    - `styles.css`
    - `app.js`
+   - `config.js`
    - `questions.js`
    - `study.js`
    - `manifest.webmanifest`
    - `favicon.png`
    - `apple-touch-icon.png`
+   - `CHANGELOG.md`
+   - `QA_CHECKLIST.md`
+   - `CONTENT_SCHEMA.md`
+   - `RELEASE_MANIFEST.md`
    - `README.md`
 3. Keep the Supabase files locally or in GitHub for reference, but deploy Edge Functions from Supabase.
 4. Go to **Settings > Pages**.
@@ -122,3 +132,22 @@ python3 -m http.server 8000
 ```
 
 Then open `http://localhost:8000`.
+
+## Release Discipline
+
+Use `CHANGELOG.md` for every new version. Before uploading to GitHub, run through `QA_CHECKLIST.md`.
+
+Keep one clean current-production folder for the latest approved release. Older version folders are useful for history, but GitHub should receive only the current root files.
+
+Safe to expose in frontend:
+
+- Supabase project URL
+- Supabase publishable key
+- Stripe price ids
+
+Never expose in frontend:
+
+- Supabase service-role key
+- Stripe secret key
+- Stripe webhook secret
+- Private full question or flashcard seed files
