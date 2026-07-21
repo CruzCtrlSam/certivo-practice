@@ -85,6 +85,15 @@
       flashcardsPathDesc: "10 free preview cards",
       flashcardsDesc: "Review key terms quickly. The first 10 cards are free; the full deck unlocks with paid access.",
       studyFlashcards: "Study flashcards",
+      flashcardFilter: "Flashcard set",
+      practiceChapter: "Practice this chapter",
+      allChapters: "All chapters",
+      chapterCoach: "Chapter cheat code",
+      examMove: "Exam move",
+      nextStep: "Next step",
+      freeStudyPaidPractice: "Study is free. Practice, explanations, and the full card deck unlock with paid access.",
+      previewUpgradeNote: "Preview · full deck is paid",
+      chapterCardCount: "cards in this set",
       flipCard: "Flip card",
       knewIt: "I knew it",
       missedIt: "Missed it",
@@ -290,6 +299,15 @@
       flashcardsPathDesc: "10 tarjetas gratis",
       flashcardsDesc: "Repasa términos clave rápidamente. Las primeras 10 tarjetas son gratis; el mazo completo se desbloquea con acceso pagado.",
       studyFlashcards: "Estudiar tarjetas",
+      flashcardFilter: "Mazo de tarjetas",
+      practiceChapter: "Practicar este capítulo",
+      allChapters: "Todos los capítulos",
+      chapterCoach: "Clave del capítulo",
+      examMove: "Movimiento de examen",
+      nextStep: "Siguiente paso",
+      freeStudyPaidPractice: "El estudio es gratis. La práctica, explicaciones y el mazo completo se desbloquean con acceso pagado.",
+      previewUpgradeNote: "Vista gratis · mazo completo pagado",
+      chapterCardCount: "tarjetas en este mazo",
       flipCard: "Voltear tarjeta",
       knewIt: "La sabía",
       missedIt: "La fallé",
@@ -470,10 +488,13 @@
     studyContent: document.getElementById("studyContent"),
     studyTerms: document.getElementById("studyTerms"),
     studyLanguageNote: document.getElementById("studyLanguageNote"),
+    studyChapterSummary: document.getElementById("studyChapterSummary"),
     studyPracticeButton: document.getElementById("studyPracticeButton"),
     studyFlashcardsButton: document.getElementById("studyFlashcardsButton"),
     flashcardsAccessBadge: document.getElementById("flashcardsAccessBadge"),
     flashcardsProgress: document.getElementById("flashcardsProgress"),
+    flashcardChapterSelect: document.getElementById("flashcardChapterSelect"),
+    flashcardPracticeChapterButton: document.getElementById("flashcardPracticeChapterButton"),
     flashcardCard: document.getElementById("flashcardCard"),
     flashcardChapter: document.getElementById("flashcardChapter"),
     flashcardFront: document.getElementById("flashcardFront"),
@@ -549,6 +570,7 @@
   let authMode = "login";
   let flashcardIndex = 0;
   let flashcardFlipped = false;
+  let flashcardChapterFilter = "all";
   let progressSyncTimer = null;
 
   function defaultProgress() {
@@ -929,13 +951,102 @@
     return window.CERTIVO_STUDY?.chapters?.find((chapter) => chapter.id === els.studyChapterSelect.value) || window.CERTIVO_STUDY?.chapters?.[0];
   }
 
+  function topicForChapter(number) {
+    return {
+      1: "general",
+      2: "general",
+      3: "contracts",
+      4: "life insurance",
+      5: "policy provisions",
+      6: "policy provisions",
+      7: "riders",
+      8: "retirement",
+      9: "annuities",
+      10: "taxes",
+      11: "underwriting",
+      12: "underwriting",
+      13: "texas",
+      14: "ethics",
+      15: "general",
+      16: "general",
+      17: "general"
+    }[Number(number)] || "general";
+  }
+
+  function chapterCheatCode(chapter) {
+    const number = Number(chapter?.number || 0);
+    const lines = {
+      en: {
+        1: ["Risk is the exam's foundation: risk is uncertainty, peril causes loss, hazard makes loss more likely.", "Do not pick the word that sounds familiar. Match the scenario to risk, peril, hazard, or pooling.", "Read the short rules, then drill the General topic."],
+        2: ["Insurance works by pooling many similar risks so predictable losses can be paid from many premiums.", "If the question says the loss is predictable across a group, think law of large numbers.", "Use flashcards for pooling, adverse selection, and risk transfer."],
+        3: ["Contracts questions are vocabulary traps: adhesion, aleatory, unilateral, conditional, and personal.", "If only the insurer makes an enforceable promise, the contract is unilateral.", "Practice contracts until each word feels like a clue."],
+        4: ["Life insurance pays at death. Term is temporary protection; permanent policies can build cash value.", "Do not treat term, whole, universal, and variable as interchangeable.", "Compare policy types, then practice Life Insurance."],
+        5: ["Policy provisions are the policy rulebook: grace, reinstatement, loans, incontestability, and free-look.", "Timeline words usually decide the answer.", "Make a quick timeline and then practice provisions."],
+        6: ["Options and nonforfeiture rules answer: what happens if the owner stops paying or wants cash?", "Do not confuse dividend options with nonforfeiture options.", "Practice policy options after reading the examples."],
+        7: ["Riders are add-ons. Match the rider to the problem: disability, accidental death, future insurability, or long-term care.", "The question usually names the problem before it asks for the rider.", "Filter flashcards to this chapter before practice."],
+        8: ["Retirement plans are tax-rule machines. Contributions, growth, rollovers, and distributions are separate events.", "Do not mix contribution rules with distribution rules.", "Drill qualified vs nonqualified and IRA rules."],
+        9: ["Annuities protect against living too long. Immediate pays soon; deferred pays later; variable keeps investment risk with the owner.", "Ask who carries the risk and when payments start.", "Practice annuities after flashcards."],
+        10: ["Tax questions ask what is taxable and when. Death benefits are usually tax-free; gain and interest usually are not.", "Do not assume every insurance payment is taxable.", "Practice taxes slowly and read every money clue."],
+        11: ["Underwriting is the decision process. Field gathers facts; home office decides; risk class controls premium.", "Agents collect information, but the insurer approves or declines.", "Drill underwriting roles and risk classes."],
+        12: ["The application and delivery chapter is about signatures, receipts, delivery, and when coverage begins.", "Conditional receipt questions turn on conditions being met.", "Practice application timing questions."],
+        13: ["Texas rules are state-specific: licensing, CE, TLHIGA, replacement, prompt payment, and divorce revocation.", "When the question says Texas, stop using generic insurance rules.", "Memorize the Texas numbers with flashcards."],
+        14: ["Ethics is consumer protection: tell the truth, disclose, document, and avoid pressure.", "If it hides, pressures, or misleads, it is wrong.", "Practice unfair trade practice vocabulary."],
+        15: ["The concept bank is your rapid review list. Treat each term as a possible exam clue.", "Knowing the word is not enough; know what scenario triggers it.", "Flip flashcards until definitions are instant."],
+        16: ["Final review is about weak spots, not rereading everything.", "Do not spend equal time on topics you already know.", "Use Mission Control and Weakness Center first."],
+        17: ["Exam readiness comes from timed practice plus review, not just reading.", "A good score without review still leaves points on the table.", "Take a simulator, review misses, then retest."]
+      },
+      es: {
+        1: ["Riesgo es la base del examen: riesgo es incertidumbre, peligro causa la pérdida y una condición de riesgo aumenta la probabilidad.", "No escojas la palabra que solo suena familiar. Conecta el escenario con riesgo, peligro, condición de riesgo o agrupación de riesgos.", "Lee las reglas cortas y luego practica General."],
+        2: ["El seguro funciona agrupando muchos riesgos parecidos para pagar pérdidas previsibles con muchas primas.", "Si la pregunta habla de pérdidas previsibles en grupo, piensa en la ley de los grandes números.", "Usa tarjetas para agrupación, selección adversa y transferencia de riesgo."],
+        3: ["Contratos son trampas de vocabulario: adhesión, aleatorio, unilateral, condicional y personal.", "Si solo la aseguradora hace una promesa exigible, el contrato es unilateral.", "Practica contratos hasta que cada palabra sea una pista."],
+        4: ["El seguro de vida paga al morir. Temporal es protección por un tiempo; permanente puede crear valor en efectivo.", "No trates temporal, vida entera, universal y variable como si fueran lo mismo.", "Compara tipos de póliza y luego practica Seguro de Vida."],
+        5: ["Las cláusulas son el reglamento de la póliza: gracia, reinstalación, préstamos, incontestabilidad y revisión gratuita.", "Las palabras de tiempo casi siempre deciden la respuesta.", "Haz una línea de tiempo y luego practica cláusulas."],
+        6: ["Opciones y no caducidad contestan: qué pasa si el dueño deja de pagar o quiere valor en efectivo.", "No confundas opciones de dividendos con opciones de no caducidad.", "Practica opciones de póliza después de leer los ejemplos."],
+        7: ["Las cláusulas adicionales son agregados. Une la cláusula con el problema: discapacidad, muerte accidental, asegurabilidad futura o cuidado a largo plazo.", "La pregunta normalmente menciona el problema antes de pedir la cláusula.", "Filtra las tarjetas a este capítulo antes de practicar."],
+        8: ["Los planes de retiro son máquinas de reglas fiscales. Contribuciones, crecimiento, traspasos y distribuciones son eventos distintos.", "No mezcles reglas de contribución con reglas de distribución.", "Practica calificado vs no calificado y reglas de IRA."],
+        9: ["Las anualidades protegen contra vivir demasiado. Inmediata paga pronto; diferida paga después; variable deja riesgo de inversión al dueño.", "Pregunta quién carga el riesgo y cuándo empiezan los pagos.", "Practica anualidades después de las tarjetas."],
+        10: ["Impuestos pregunta qué paga impuesto y cuándo. Beneficio por muerte normalmente no paga; ganancia e interés normalmente sí.", "No asumas que todo pago de seguro es tributable.", "Practica impuestos despacio y lee cada pista de dinero."],
+        11: ["La evaluación de riesgo es el proceso de decisión. Campo recopila datos; oficina central decide; clase de riesgo controla la prima.", "El agente recoge información, pero la aseguradora aprueba o rechaza.", "Practica funciones de evaluación y clases de riesgo."],
+        12: ["Solicitud y entrega trata firmas, recibos, entrega y cuándo comienza la cobertura.", "Las preguntas de recibo condicional dependen de que se cumplan condiciones.", "Practica preguntas de tiempo de solicitud."],
+        13: ["Texas es específico: licencia, educación continua, TLHIGA, reemplazo, pago puntual y revocación por divorcio.", "Cuando la pregunta dice Texas, deja la regla genérica.", "Memoriza los números de Texas con tarjetas."],
+        14: ["Ética es protección del consumidor: decir la verdad, divulgar, documentar y evitar presión.", "Si oculta, presiona o engaña, está mal.", "Practica vocabulario de prácticas injustas."],
+        15: ["El banco de conceptos es tu repaso rápido. Trata cada término como una posible pista de examen.", "Saber la palabra no basta; debes saber qué escenario la activa.", "Voltea tarjetas hasta que las definiciones salgan rápido."],
+        16: ["El repaso final se basa en puntos débiles, no en leer todo otra vez.", "No le des el mismo tiempo a temas que ya dominas.", "Usa Centro de control y Puntos débiles primero."],
+        17: ["La preparación real viene de práctica con tiempo y repaso, no solo lectura.", "Un buen resultado sin repasar todavía deja puntos en la mesa.", "Haz simulador, revisa falladas y vuelve a probar."]
+      }
+    };
+    const fallbackTopic = topicForChapter(number);
+    const coaching = weaknessCoaching(fallbackTopic);
+    return lines[prefs.language]?.[number] || [coaching.memory, coaching.mistake, coaching.fix];
+  }
+
+  function renderStudySummary(chapter) {
+    if (!els.studyChapterSummary) return;
+    const [coach, trap, next] = chapterCheatCode(chapter);
+    els.studyChapterSummary.innerHTML = `
+      <div>
+        <span>${escapeHtml(t("chapterCoach"))}</span>
+        <strong>${escapeHtml(coach)}</strong>
+      </div>
+      <div>
+        <span>${escapeHtml(t("examMove"))}</span>
+        <p>${escapeHtml(trap)}</p>
+      </div>
+      <div>
+        <span>${escapeHtml(t("nextStep"))}</span>
+        <p>${escapeHtml(next)}</p>
+      </div>
+    `;
+  }
+
   function renderStudy() {
     if (!window.CERTIVO_STUDY?.chapters?.length) return;
     populateStudyChapters();
     const chapter = currentStudyChapter();
     if (!chapter) return;
     els.studyChapterTitle.textContent = `${t("chapter")} ${chapter.number}: ${chapter.title[prefs.language] || chapter.title.es || chapter.title.en}`;
-    els.studyLanguageNote.textContent = t("spanishStudyNote");
+    els.studyLanguageNote.textContent = `${t("spanishStudyNote")} ${t("freeStudyPaidPractice")}`;
+    renderStudySummary(chapter);
     els.studyContent.innerHTML = "";
     chapter.sections.forEach((section) => {
       const article = document.createElement("article");
@@ -983,8 +1094,31 @@
     });
   }
 
-  function availableFlashcards() {
+  function populateFlashcardChapters() {
+    if (!els.flashcardChapterSelect) return;
+    const cards = allFlashcards();
+    const chapterNumbers = [...new Set(cards.map((card) => Number(card.chapter)).filter(Boolean))].sort((a, b) => a - b);
+    const options = [{ value: "all", label: t("allChapters") }, ...chapterNumbers.map((number) => {
+      const chapter = window.CERTIVO_STUDY?.chapters?.find((item) => Number(item.number) === Number(number));
+      const title = chapter?.title?.[prefs.language] || chapter?.title?.en || chapter?.title?.es || "";
+      const count = cards.filter((card) => Number(card.chapter) === Number(number)).length;
+      return {
+        value: String(number),
+        label: `${t("chapter")} ${number}${title ? `: ${title}` : ""} · ${count}`
+      };
+    })];
+    fillSelect(els.flashcardChapterSelect, options, flashcardChapterFilter);
+    flashcardChapterFilter = els.flashcardChapterSelect.value || "all";
+  }
+
+  function filteredFlashcards() {
     const deck = allFlashcards();
+    if (flashcardChapterFilter === "all") return deck;
+    return deck.filter((card) => String(card.chapter) === String(flashcardChapterFilter));
+  }
+
+  function availableFlashcards() {
+    const deck = filteredFlashcards();
     return hasFullAccess() ? deck : deck.slice(0, FREE_FLASHCARD_LIMIT);
   }
 
@@ -995,11 +1129,12 @@
 
   function renderFlashcards() {
     if (!els.flashcardCard) return;
+    populateFlashcardChapters();
     const deck = availableFlashcards();
-    const fullDeck = allFlashcards();
+    const fullDeck = filteredFlashcards();
     const fullAccess = hasFullAccess();
     if (!deck.length) {
-      renderFlashcardLock(t("noQuestions"));
+      renderFlashcardLock(fullAccess ? t("noQuestions") : `${t("flashcardLockedTitle")} ${t("flashcardLockedText")}`);
       return;
     }
     if (flashcardIndex >= deck.length) {
@@ -1022,10 +1157,11 @@
     els.flashcardBack.textContent = flashcardFlipped ? definition : prefs.language === "es" ? "Toca voltear para ver la definición." : "Tap flip to see the definition.";
     els.flashcardBack.classList.toggle("is-hidden-answer", !flashcardFlipped);
     els.flashcardsAccessBadge.textContent = fullAccess ? t("flashcardUnlocked") : t("flashcardPreview");
-    els.flashcardsProgress.textContent = `${flashcardIndex + 1} ${t("of")} ${deck.length}${fullAccess ? "" : ` · ${fullDeck.length} ${t("available")}`}`;
+    els.flashcardsProgress.textContent = `${flashcardIndex + 1} ${t("of")} ${deck.length}${fullAccess ? ` · ${fullDeck.length} ${t("chapterCardCount")}` : ` · ${t("previewUpgradeNote")}`}`;
     els.flashcardFlipButton.disabled = false;
     els.flashcardMissedButton.disabled = !flashcardFlipped;
     els.flashcardKnewButton.disabled = !flashcardFlipped;
+    if (els.flashcardPracticeChapterButton) els.flashcardPracticeChapterButton.disabled = flashcardChapterFilter === "all";
   }
 
   function renderFlashcardLock(message) {
@@ -1035,16 +1171,19 @@
     els.flashcardBack.textContent = t("flashcardLockedText");
     els.flashcardBack.classList.remove("is-hidden-answer");
     els.flashcardsAccessBadge.textContent = t("flashcardPreview");
-    els.flashcardsProgress.textContent = `${FREE_FLASHCARD_LIMIT} ${t("of")} ${allFlashcards().length}`;
+    els.flashcardsProgress.textContent = `${FREE_FLASHCARD_LIMIT} ${t("of")} ${filteredFlashcards().length || allFlashcards().length}`;
     els.flashcardFlipButton.disabled = true;
     els.flashcardMissedButton.disabled = true;
     els.flashcardKnewButton.disabled = true;
+    if (els.flashcardPracticeChapterButton) els.flashcardPracticeChapterButton.disabled = flashcardChapterFilter === "all";
     els.flashcardsStatus.innerHTML = `<p>${escapeHtml(message)}</p><button class="button primary compact" type="button">${escapeHtml(t("viewPlans"))}</button>`;
     els.flashcardsStatus.classList.remove("hidden");
     els.flashcardsStatus.querySelector("button").addEventListener("click", () => showScreen("pricing"));
   }
 
-  function openFlashcards() {
+  function openFlashcards(chapterNumber = "all") {
+    flashcardChapterFilter = chapterNumber && chapterNumber !== "all" ? String(chapterNumber) : "all";
+    if (els.flashcardChapterSelect) els.flashcardChapterSelect.value = flashcardChapterFilter;
     flashcardIndex = 0;
     flashcardFlipped = false;
     showScreen("flashcards");
@@ -1130,22 +1269,17 @@
       populateCounts();
       return;
     }
-    const mappedTopic = {
-      1: "general",
-      2: "general",
-      3: "contracts",
-      4: "life insurance",
-      5: "policy provisions",
-      6: "policy provisions",
-      7: "riders",
-      8: "retirement",
-      9: "annuities",
-      10: "taxes",
-      11: "underwriting",
-      12: "underwriting",
-      13: "texas",
-      14: "ethics"
-    }[chapter?.number];
+    const mappedTopic = topicForChapter(chapter?.number);
+    openSetup("practice");
+    if (mappedTopic && [...els.topic.options].some((option) => option.value === mappedTopic)) {
+      els.topic.value = mappedTopic;
+      populateCounts();
+    }
+  }
+
+  function practiceFlashcardChapter() {
+    const chapterNumber = flashcardChapterFilter === "all" ? currentStudyChapter()?.number : flashcardChapterFilter;
+    const mappedTopic = topicForChapter(chapterNumber);
     openSetup("practice");
     if (mappedTopic && [...els.topic.options].some((option) => option.value === mappedTopic)) {
       els.topic.value = mappedTopic;
@@ -2452,7 +2586,7 @@
     document.getElementById("viewProgressButton").addEventListener("click", () => showScreen("progress"));
     document.getElementById("freeTrialPath").addEventListener("click", startTrialSession);
     document.getElementById("studyGuideToolPath").addEventListener("click", () => document.getElementById("studyChapterTitle")?.scrollIntoView({ behavior: "smooth", block: "start" }));
-    document.getElementById("flashcardsStudyPath").addEventListener("click", openFlashcards);
+    document.getElementById("flashcardsStudyPath").addEventListener("click", () => openFlashcards());
     document.getElementById("practicePath").addEventListener("click", () => openSetup("practice"));
     document.getElementById("examPath").addEventListener("click", () => openSetup("exam"));
     document.getElementById("missedPath").addEventListener("click", () => openSetup("missed"));
@@ -2477,7 +2611,14 @@
     els.simulator.addEventListener("change", populateCounts);
     els.studyChapterSelect?.addEventListener("change", renderStudy);
     els.studyPracticeButton?.addEventListener("click", practiceStudyChapter);
-    els.studyFlashcardsButton?.addEventListener("click", openFlashcards);
+    els.studyFlashcardsButton?.addEventListener("click", () => openFlashcards(currentStudyChapter()?.number || "all"));
+    els.flashcardChapterSelect?.addEventListener("change", () => {
+      flashcardChapterFilter = els.flashcardChapterSelect.value || "all";
+      flashcardIndex = 0;
+      flashcardFlipped = false;
+      renderFlashcards();
+    });
+    els.flashcardPracticeChapterButton?.addEventListener("click", practiceFlashcardChapter);
     els.dailyMissionsList?.addEventListener("click", (event) => {
       const button = event.target.closest(".daily-mission");
       if (!button) return;

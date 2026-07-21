@@ -388,6 +388,16 @@ button:disabled {
   font-weight: 850;
 }
 
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.button.quiet:disabled {
+  background: color-mix(in srgb, var(--soft), transparent 18%);
+  color: var(--muted);
+}
+
 .button.compact {
   min-height: 38px;
 }
@@ -1000,9 +1010,58 @@ input::placeholder {
   margin-top: 16px;
 }
 
-.study-controls .button {
+.study-controls .button,
+.flashcard-controls .button {
   width: 100%;
   min-height: 54px;
+}
+
+.learning-loop-card {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  border: 1px solid color-mix(in srgb, var(--gold), var(--line) 42%);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--gold), var(--panel) 90%);
+  padding: 14px;
+}
+
+.learning-loop-card div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel), transparent 6%);
+  padding: 12px;
+}
+
+.learning-loop-card span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.learning-loop-card strong,
+.learning-loop-card p {
+  display: block;
+  margin: 0;
+  color: var(--ink);
+  font-weight: 850;
+  line-height: 1.4;
+}
+
+.learning-loop-card p {
+  color: var(--muted);
+}
+
+[data-theme="dark"] .learning-loop-card {
+  background: rgba(214, 179, 74, 0.08);
+}
+
+[data-theme="dark"] .learning-loop-card div {
+  background: rgba(16, 33, 53, 0.44);
 }
 
 .study-section {
@@ -1069,6 +1128,10 @@ input::placeholder {
   align-items: center;
   gap: 10px;
   margin-top: 14px;
+}
+
+.flashcard-controls {
+  align-items: end;
 }
 
 .flashcard-stage {
@@ -1406,6 +1469,10 @@ input::placeholder {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .learning-loop-card {
+    grid-template-columns: 1.2fr 0.9fr 0.9fr;
+  }
+
   .pricing-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1450,6 +1517,11 @@ input::placeholder {
 
   .question-actions .button {
     width: 100%;
+  }
+
+  #flashcardsProgress,
+  .flashcard-meta {
+    align-items: flex-start;
   }
 }
 
