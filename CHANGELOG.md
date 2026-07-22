@@ -1,5 +1,12 @@
 # Certivo Practice Changelog
 
+## V6.0 - Texas Content Audit
+
+- Audited the protected Supabase question bank for fake option-letter answers, missing correct answer IDs, topic mismatches, and Spanish explanations with leftover English fragments.
+- Expanded key English explanations for Texas and life-insurance concepts including conditional receipts, free-look periods, TLHIGA limits, incontestability, misstatement of age or sex, nonforfeiture options, waiver of premium, Universal Life Option A/B, and incidents of ownership.
+- Rechecked the Spanish after English corrections and replaced confusing hybrid wording such as "waiver of prima," "DB," "cash value," "income tax," and raw "conditional receipt" explanations with clearer Spanish.
+- Preserved standard exam acronyms where they are the tested term, such as MEC, IRA, LIFO, RMD, MIB, and APS.
+
 ## V5.9 - Bilingual Content Quality
 
 - Improved bilingual feedback rendering so correct and incorrect answers show clearer lessons instead of thin one-line explanations.

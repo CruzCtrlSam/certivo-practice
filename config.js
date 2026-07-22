@@ -2,8 +2,8 @@
   // Public app configuration only. Do not place service-role keys, Stripe secret
   // keys, webhook secrets, or private content in this file.
   window.CERTIVO_CONFIG = {
-    version: "5.9",
-    assetVersion: "5.9-content-quality",
+    version: "6.0",
+    assetVersion: "6.0-texas-content-audit",
     supabaseUrl: "https://ulvvofbakrlpcevunbyi.supabase.co",
     supabasePublishableKey: "sb_publishable_R1dz6grndk0MOu0I-IVWOA_KbGkq8Lb",
     freeFlashcardLimit: 10,

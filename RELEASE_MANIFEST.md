@@ -1,8 +1,8 @@
 # Release Manifest
 
-Release: Certivo Practice V5.9 Bilingual Content Quality
+Release: Certivo Practice V6.0 Texas Content Audit
 
-Date: 2026-07-21
+Date: 2026-07-22
 
 Upload target:
 
@@ -23,6 +23,7 @@ Upload target:
 - `CHANGELOG.md`
 - `QA_CHECKLIST.md`
 - `CONTENT_SCHEMA.md`
+- `CONTENT_QA_AUDIT.md`
 - `assets/`
 
 ## Keep Private
@@ -36,8 +37,8 @@ Do not upload these files or folders to GitHub:
 
 ## Supabase
 
-Live Supabase question rows were updated for bilingual content quality. No schema change is required.
+Live Supabase question rows were updated for the Texas content audit and bilingual terminology pass. No schema change is required.
 
 ## Stripe
 
-No Stripe product or webhook update is required for V5.9.
+No Stripe product or webhook update is required for V6.0.
