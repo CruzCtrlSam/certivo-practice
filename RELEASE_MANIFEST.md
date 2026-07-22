@@ -1,6 +1,6 @@
 # Release Manifest
 
-Release: Certivo Practice V5.8 Stabilization
+Release: Certivo Practice V5.9 Bilingual Content Quality
 
 Date: 2026-07-21
 
@@ -36,8 +36,8 @@ Do not upload these files or folders to GitHub:
 
 ## Supabase
 
-No SQL update is required for V5.8 if V5.7 was already working.
+Live Supabase question rows were updated for bilingual content quality. No schema change is required.
 
 ## Stripe
 
-No Stripe product or webhook update is required for V5.8.
+No Stripe product or webhook update is required for V5.9.

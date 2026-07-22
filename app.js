@@ -1615,12 +1615,8 @@
     els.feedback.appendChild(title);
 
     if (isCorrect) {
-      const explanation = document.createElement("p");
-      explanation.className = "feedback-detail";
-      const explanationLabel = document.createElement("b");
-      explanationLabel.textContent = `${t("explanation")}:`;
-      explanation.append(explanationLabel, ` ${question[prefs.language].explanation}`);
-      els.feedback.appendChild(explanation);
+      const lesson = buildFeedbackLesson(question, correctText, correctText);
+      els.feedback.appendChild(feedbackSection(t("basicExplanation"), lesson.explanation));
     } else {
       const lesson = buildFeedbackLesson(question, selectedText, correctText);
       els.feedback.append(
@@ -1748,6 +1744,74 @@
         }
       },
       {
+        match: /incidents of ownership|estate if the insured|included in the estate/,
+        en: {
+          notice: "Separate income tax from estate tax.",
+          plain: "A life insurance death benefit paid in a lump sum is usually income-tax-free to the beneficiary. But estate tax asks a different question: did the insured still control the policy at death?",
+          correct: "If the insured had incidents of ownership, the death benefit can be included in the insured's estate. Incidents of ownership means control rights like changing the beneficiary, borrowing against the policy, surrendering it, assigning it, or controlling policy benefits.",
+          wrong: "The other choices do not prove control of the policy. Being under 65, living in Texas, or paying premiums does not automatically mean the insured owned or controlled the policy at death.",
+          rule: "Income tax asks who receives money. Estate tax asks who controlled the policy."
+        },
+        es: {
+          notice: "Separa income tax de estate tax.",
+          plain: "Un beneficio por muerte pagado en suma global normalmente no paga income tax para el beneficiario. Pero estate tax hace otra pregunta: ¿el asegurado todavía controlaba la póliza al morir?",
+          correct: "Si el asegurado tenía incidents of ownership, el beneficio puede entrar al patrimonio del asegurado. Eso significa derechos de control como cambiar beneficiario, pedir préstamo, rescatar la póliza, cederla o controlar beneficios.",
+          wrong: "Las otras opciones no prueban control de la póliza. Tener menos de 65, vivir en Texas o pagar primas no significa automáticamente que el asegurado controlaba la póliza al morir.",
+          rule: "Income tax pregunta quién recibe dinero. Estate tax pregunta quién controlaba la póliza."
+        }
+      },
+      {
+        match: /unequal values|aleatory|exchange of unequal/,
+        en: {
+          notice: "The exam clue is unequal values.",
+          plain: "An aleatory insurance contract does not trade equal dollars for equal dollars. The policyowner may pay a small premium, but the insurer may have to pay a much larger benefit if the covered event happens.",
+          correct: "That unequal exchange is called aleatory. It is a contract characteristic, not a policy type.",
+          wrong: "Do not translate this idea as variable. Variable life is a separate product tied to investment performance. Aleatory means unequal values and uncertainty in the exchange.",
+          rule: "Aleatory = unequal values. Variable = investment-linked product."
+        },
+        es: {
+          notice: "La pista del examen es valores desiguales.",
+          plain: "Un contrato aleatorio de seguro no intercambia dólares iguales por dólares iguales. El dueño puede pagar una prima pequeña, pero la aseguradora podría pagar un beneficio mucho mayor si ocurre el evento cubierto.",
+          correct: "Ese intercambio desigual se llama aleatorio. Es una característica del contrato, no un tipo de póliza.",
+          wrong: "No traduzcas esta idea como variable. Vida variable es un producto distinto ligado a inversiones. Aleatorio significa valores desiguales e incertidumbre en el intercambio.",
+          rule: "Aleatorio = valores desiguales. Variable = producto ligado a inversiones."
+        }
+      },
+      {
+        match: /option b|face amount plus the cash value|face amount \\+ cash value|death benefit grows|increasing death benefit/,
+        en: {
+          notice: "For Universal Life, compare Option A and Option B.",
+          plain: "Universal Life has two common death benefit designs. Option A is level: the total death benefit stays about the same. Option B is increasing: it pays the face amount plus the cash value.",
+          correct: "If the question says face amount plus cash value, or says the death benefit grows with cash value, it is pointing to the increasing death benefit, Option B.",
+          wrong: "Indexed describes how interest is credited, and single-premium describes how the policy is paid. Those do not answer how the Universal Life death benefit is calculated.",
+          rule: "UL Option A = level. UL Option B = face amount plus cash value."
+        },
+        es: {
+          notice: "En Universal Life, compara Opción A y Opción B.",
+          plain: "Universal Life tiene dos diseños comunes de beneficio por muerte. Opción A es nivelada: el beneficio total se mantiene casi igual. Opción B es creciente: paga la suma asegurada más el valor en efectivo.",
+          correct: "Si la pregunta dice suma asegurada más valor en efectivo, o dice que el beneficio crece con el cash value, apunta al beneficio creciente: Opción B.",
+          wrong: "Indexada describe cómo se acredita interés, y prima única describe cómo se paga la póliza. Eso no contesta cómo se calcula el beneficio por muerte de Universal Life.",
+          rule: "UL Opción A = nivelada. UL Opción B = suma asegurada más cash value."
+        }
+      },
+      {
+        match: /extended term|nonforfeiture|same face amount|stops paying|cash value allows/,
+        en: {
+          notice: "Look at what happens to the face amount and the length of coverage.",
+          plain: "Nonforfeiture options protect the policyowner from losing all value when a permanent policy lapses. Extended term uses the cash value to buy term insurance.",
+          correct: "Extended term keeps the same face amount, but only for as long as the cash value can buy. That is why the clue says same face amount for a limited time.",
+          wrong: "Reduced paid-up keeps lifetime coverage but lowers the face amount. Cash surrender ends the policy for cash. Automatic premium loan pays a premium by loan; it is not the same as the automatic nonforfeiture option.",
+          rule: "Extended term = same face amount, shorter time."
+        },
+        es: {
+          notice: "Mira qué pasa con la suma asegurada y con la duración de la cobertura.",
+          plain: "Las opciones de no confiscación protegen al dueño para que no pierda todo el valor cuando una póliza permanente caduca. Término extendido usa el cash value para comprar seguro temporal.",
+          correct: "Término extendido mantiene la misma suma asegurada, pero solo por el tiempo que el valor en efectivo pueda comprar. Por eso la pista dice misma suma por tiempo limitado.",
+          wrong: "Seguro saldado reducido mantiene cobertura de por vida pero baja la suma asegurada. Rescate en efectivo termina la póliza por dinero. Préstamo automático de prima paga una prima con préstamo; no es lo mismo que la opción automática de no confiscación.",
+          rule: "Término extendido = misma suma, menos tiempo."
+        }
+      },
+      {
         match: /guaranty association|tlhiga/,
         en: {
           notice: "This is asking for a Texas guaranty association dollar limit.",
@@ -1806,10 +1870,21 @@
 
   function defaultWrongExplanation(question, selectedText, correctText) {
     const explanation = question[prefs.language].explanation;
+    const base = explanation && explanation.trim().length > 70
+      ? explanation.trim()
+      : expandedRuleExplanation(question, correctText);
     if (prefs.language === "es") {
-      return `Según la regla que se prueba para la licencia de seguros de Texas, “${selectedText}” no es la mejor respuesta porque no coincide con el punto legal exacto de la pregunta. La respuesta correcta es “${correctText}” porque esta es la regla: ${explanation}`;
+      return `Según la regla que se prueba para la licencia de seguros de Texas, “${selectedText}” no es la mejor respuesta porque no coincide con el punto legal exacto de la pregunta. La respuesta correcta es “${correctText}”. ${base}`;
     }
-    return `Under the rule tested for the Texas insurance license, “${selectedText}” is not the best answer because it does not match the exact legal point in the question. The correct answer is “${correctText}” because this is the rule: ${explanation}`;
+    return `Under the rule tested for the Texas insurance license, “${selectedText}” is not the best answer because it does not match the exact legal point in the question. The correct answer is “${correctText}.” ${base}`;
+  }
+
+  function expandedRuleExplanation(question, correctText) {
+    const raw = question[prefs.language].explanation || "";
+    if (prefs.language === "es") {
+      return `La pista correcta es “${correctText}”. En el examen, no memorices solo la palabra: conecta esa respuesta con la regla que la hace verdadera. ${raw}`;
+    }
+    return `The key clue points to “${correctText}.” On the exam, do not memorize only the word: connect that answer to the rule that makes it true. ${raw}`;
   }
 
   function defaultMemoryRule(question, correctText) {

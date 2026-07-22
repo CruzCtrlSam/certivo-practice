@@ -1,5 +1,12 @@
 # Certivo Practice Changelog
 
+## V5.9 - Bilingual Content Quality
+
+- Improved bilingual feedback rendering so correct and incorrect answers show clearer lessons instead of thin one-line explanations.
+- Added targeted bilingual coaching for estate-tax incidents of ownership, aleatory contracts, Universal Life Option A/B, and extended term nonforfeiture questions.
+- Cleaned live Supabase question rows flagged from mobile review, including S3Q37, S4Q7, S4Q48, and S5Q12.
+- Reworded bare Universal Life answer choices so Option A/B appears with real meaning, such as level or increasing death benefit.
+
 ## V5.8 - Stabilization
 
 - Added `config.js` for public app settings, version label, Supabase publishable config, free preview limits, and Stripe price ids.
