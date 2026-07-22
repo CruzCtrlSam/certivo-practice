@@ -583,6 +583,7 @@
   };
   els.intro = document.getElementById("introScreen");
   els.introSkip = document.getElementById("introSkip");
+  els.introAudio = document.getElementById("introAudio");
 
   let prefs = loadJson(PREF_KEY, { language: "en", theme: "light" });
   let progress = loadJson(`${PROGRESS_KEY}:guest`, loadJson(PROGRESS_KEY, defaultProgress()));
@@ -599,6 +600,7 @@
   let flashcardFlipped = false;
   let flashcardChapterFilter = "all";
   let progressSyncTimer = null;
+  let introAudioUnlocked = false;
 
   function defaultProgress() {
     return { answers: {}, missed: {}, flagged: {}, history: [], study: { chapters: {} } };
@@ -2895,12 +2897,42 @@
     }
 
     document.body.classList.add("intro-active");
+    playIntroAudio();
     window.setTimeout(hideIntro, 2850);
+  }
+
+  function playIntroAudio() {
+    if (!els.introAudio || introAudioUnlocked) return;
+    els.introAudio.volume = 0.72;
+    els.introAudio.currentTime = 0;
+    const playAttempt = els.introAudio.play();
+    if (!playAttempt || typeof playAttempt.catch !== "function") {
+      introAudioUnlocked = true;
+      return;
+    }
+    playAttempt
+      .then(() => {
+        introAudioUnlocked = true;
+      })
+      .catch(() => {
+        const unlock = () => {
+          if (!els.intro || els.intro.classList.contains("hidden")) return;
+          els.introAudio.currentTime = 0;
+          els.introAudio.play().catch(() => {});
+          introAudioUnlocked = true;
+        };
+        window.addEventListener("pointerdown", unlock, { once: true });
+        window.addEventListener("keydown", unlock, { once: true });
+      });
   }
 
   function hideIntro(immediate = false) {
     if (!els.intro) return;
     document.body.classList.remove("intro-active");
+    if (els.introAudio) {
+      els.introAudio.pause();
+      els.introAudio.currentTime = 0;
+    }
     els.intro.classList.add("is-hidden");
     if (immediate) {
       els.intro.classList.add("hidden");

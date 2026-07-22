@@ -1,5 +1,11 @@
 # Certivo Practice Changelog
 
+## V6.1 - Intro Audio
+
+- Added the Victory Intro audio asset to the animated Certivo intro.
+- Added browser-safe playback logic with a first-interaction fallback for autoplay restrictions.
+- Stopping or skipping the intro now stops the intro audio cleanly.
+
 ## V6.0 - Texas Content Audit
 
 - Audited the protected Supabase question bank for fake option-letter answers, missing correct answer IDs, topic mismatches, and Spanish explanations with leftover English fragments.

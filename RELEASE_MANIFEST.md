@@ -1,6 +1,6 @@
 # Release Manifest
 
-Release: Certivo Practice V6.0 Texas Content Audit
+Release: Certivo Practice V6.1 Intro Audio
 
 Date: 2026-07-22
 
@@ -37,8 +37,12 @@ Do not upload these files or folders to GitHub:
 
 ## Supabase
 
-Live Supabase question rows were updated for the Texas content audit and bilingual terminology pass. No schema change is required.
+No Supabase update is required for V6.1. The V6.0 Texas content audit remains live in Supabase.
 
 ## Stripe
 
-No Stripe product or webhook update is required for V6.0.
+No Stripe product or webhook update is required for V6.1.
+
+## New Asset
+
+- `assets/certivo-victory-intro.mov`
