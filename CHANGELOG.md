@@ -1,5 +1,11 @@
 # Certivo Practice Changelog
 
+## V6.3 - Paid Mini Lessons Gate
+
+- Kept the free study area focused on complete chapters and bilingual key terms.
+- Hid mini lesson cheat-code coaching from free users.
+- Updated the upgrade copy so paid access clearly includes mini lessons, explanations, the full trainer, and the full flashcard deck.
+
 ## V6.2 - Intro Audio Finish
 
 - Extended the intro display timing to 3 seconds.

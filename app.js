@@ -81,7 +81,7 @@
       study: "Study",
       studyGuide: "Study Guide",
       studyPathDesc: "Free chapters and terms",
-      studyDesc: "Free study chapters, quick explanations, and bilingual key terms.",
+      studyDesc: "Free study chapters and bilingual key terms.",
       flashcards: "Flashcards",
       flashcardsPathDesc: "10 free preview cards",
       flashcardsDesc: "Review key terms quickly. The first 10 cards are free; the full deck unlocks with paid access.",
@@ -101,9 +101,9 @@
       freeIncludes: "Free includes",
       paidUnlocks: "Paid unlocks",
       freeStudyList: "Study chapters, bilingual key terms, 10 quiz questions, and 10 preview flashcards.",
-      paidStudyList: "300 questions, full explanations, full flashcard deck, saved progress, exam mode, and weakness review.",
+      paidStudyList: "300 questions, full explanations, mini lessons, full flashcard deck, saved progress, exam mode, and weakness review.",
       sectionGuide: "Section guide",
-      freeStudyPaidPractice: "Study is free. Practice, explanations, and the full card deck unlock with paid access.",
+      freeStudyPaidPractice: "Chapters are free. Full practice, explanations, mini lessons, and the full card deck unlock with paid access.",
       previewUpgradeNote: "Preview · full deck is paid",
       chapterCardCount: "cards in this set",
       flipCard: "Flip card",
@@ -164,7 +164,7 @@
       chooseNinety: "Choose 90-day",
       paidIncludes: "Paid access includes",
       includeQuestions: "Full 300-question trainer",
-      includeExplanations: "Correct answers, explanations, and memory phrases",
+      includeExplanations: "Correct answers, explanations, mini lessons, and memory phrases",
       includeFlashcards: "Full flashcard deck",
       includeProgress: "Saved progress, missed review, filters, and exam mode",
       includeLanguage: "Full English and Spanish practice",
@@ -306,7 +306,7 @@
       study: "Estudiar",
       studyGuide: "Guía de estudio",
       studyPathDesc: "Capítulos y términos gratis",
-      studyDesc: "Capítulos de estudio gratis, explicaciones rápidas y términos clave bilingües.",
+      studyDesc: "Capítulos de estudio gratis y términos clave bilingües.",
       flashcards: "Tarjetas",
       flashcardsPathDesc: "10 tarjetas gratis",
       flashcardsDesc: "Repasa términos clave rápidamente. Las primeras 10 tarjetas son gratis; el mazo completo se desbloquea con acceso pagado.",
@@ -326,9 +326,9 @@
       freeIncludes: "Gratis incluye",
       paidUnlocks: "Pagado desbloquea",
       freeStudyList: "Capítulos de estudio, términos clave bilingües, 10 preguntas y 10 tarjetas de vista previa.",
-      paidStudyList: "300 preguntas, explicaciones completas, mazo completo de tarjetas, progreso guardado, modo examen y repaso de puntos débiles.",
+      paidStudyList: "300 preguntas, explicaciones completas, mini lecciones, mazo completo de tarjetas, progreso guardado, modo examen y repaso de puntos débiles.",
       sectionGuide: "Guía de secciones",
-      freeStudyPaidPractice: "El estudio es gratis. La práctica, explicaciones y el mazo completo se desbloquean con acceso pagado.",
+      freeStudyPaidPractice: "Los capítulos son gratis. La práctica completa, explicaciones, mini lecciones y el mazo completo se desbloquean con acceso pagado.",
       previewUpgradeNote: "Vista gratis · mazo completo pagado",
       chapterCardCount: "tarjetas en este mazo",
       flipCard: "Voltear tarjeta",
@@ -389,7 +389,7 @@
       chooseNinety: "Elegir 90 días",
       paidIncludes: "El acceso pagado incluye",
       includeQuestions: "Entrenador completo de 300 preguntas",
-      includeExplanations: "Respuestas correctas, explicaciones y frases para memorizar",
+      includeExplanations: "Respuestas correctas, explicaciones, mini lecciones y frases para memorizar",
       includeFlashcards: "Mazo completo de tarjetas",
       includeProgress: "Progreso guardado, repaso de falladas, filtros y modo examen",
       includeLanguage: "Práctica completa en inglés y español",
@@ -2605,7 +2605,7 @@
       why: weaknessExplanation(topic),
       mistake: prefs.language === "es" ? "El error común es escoger una respuesta que suena familiar sin probarla contra la regla." : "The common mistake is choosing an answer that sounds familiar without testing it against the rule.",
       memory: prefs.language === "es" ? "Regla primero, respuesta después." : "Rule first, answer second.",
-      fix: prefs.language === "es" ? "Repasa la mini lección y luego haz un quiz enfocado." : "Review the mini lesson, then take a targeted quiz."
+      fix: prefs.language === "es" ? "Repasa el capítulo y luego haz un quiz enfocado." : "Review the chapter, then take a targeted quiz."
     };
     return WEAKNESS_COACHING[prefs.language]?.[topic] || WEAKNESS_COACHING.en[topic] || fallback;
   }
@@ -2675,7 +2675,12 @@
     }
     weaknesses.forEach((item, index) => {
       const coaching = weaknessCoaching(item.topic);
-      const miniLesson = miniLessonCheatCode(item.topic, coaching);
+      const miniLessonHtml = hasFullAccess()
+        ? `<section class="mini-lesson-block">
+              <span>${t("cheatCode")}</span>
+              <p>${escapeHtml(miniLessonCheatCode(item.topic, coaching))}</p>
+            </section>`
+        : "";
       const card = document.createElement("article");
       card.className = "weakness-card";
       card.innerHTML = `
@@ -2683,10 +2688,7 @@
         <div>
           <div class="topic-top"><strong>${escapeHtml(topicLabel(item.topic))}</strong><span>${item.accuracy}% · ${item.seen} ${t("answered")}</span></div>
           <div class="weakness-coaching">
-            <section class="mini-lesson-block">
-              <span>${t("cheatCode")}</span>
-              <p>${escapeHtml(miniLesson)}</p>
-            </section>
+            ${miniLessonHtml}
             <section>
               <span>${t("whyWeak")}</span>
               <p>${escapeHtml(coaching.why)}</p>
