@@ -2898,7 +2898,9 @@
 
     document.body.classList.add("intro-active");
     playIntroAudio();
-    window.setTimeout(hideIntro, 2850);
+    els.intro.addEventListener("pointerdown", playIntroAudio, { once: true });
+    els.intro.addEventListener("keydown", playIntroAudio, { once: true });
+    window.setTimeout(hideIntro, 3000);
   }
 
   function playIntroAudio() {
@@ -2916,20 +2918,20 @@
       })
       .catch(() => {
         const unlock = () => {
-          if (!els.intro || els.intro.classList.contains("hidden")) return;
+          if (!els.introAudio) return;
           els.introAudio.currentTime = 0;
           els.introAudio.play().catch(() => {});
           introAudioUnlocked = true;
         };
-        window.addEventListener("pointerdown", unlock, { once: true });
-        window.addEventListener("keydown", unlock, { once: true });
+        els.intro?.addEventListener("pointerdown", unlock, { once: true });
+        els.intro?.addEventListener("keydown", unlock, { once: true });
       });
   }
 
   function hideIntro(immediate = false) {
     if (!els.intro) return;
     document.body.classList.remove("intro-active");
-    if (els.introAudio) {
+    if (immediate && els.introAudio) {
       els.introAudio.pause();
       els.introAudio.currentTime = 0;
     }

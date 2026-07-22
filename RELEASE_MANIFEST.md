@@ -1,6 +1,6 @@
 # Release Manifest
 
-Release: Certivo Practice V6.1 Intro Audio
+Release: Certivo Practice V6.2 Intro Audio Finish
 
 Date: 2026-07-22
 
@@ -37,11 +37,11 @@ Do not upload these files or folders to GitHub:
 
 ## Supabase
 
-No Supabase update is required for V6.1. The V6.0 Texas content audit remains live in Supabase.
+No Supabase update is required for V6.2. The V6.0 Texas content audit remains live in Supabase.
 
 ## Stripe
 
-No Stripe product or webhook update is required for V6.1.
+No Stripe product or webhook update is required for V6.2.
 
 ## New Asset
 

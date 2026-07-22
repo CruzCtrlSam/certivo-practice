@@ -1,5 +1,11 @@
 # Certivo Practice Changelog
 
+## V6.2 - Intro Audio Finish
+
+- Extended the intro display timing to 3 seconds.
+- Allowed the Victory Intro audio to finish naturally after the intro fades away.
+- Limited the Safari/iPhone audio unlock fallback to taps on the intro itself.
+
 ## V6.1 - Intro Audio
 
 - Added the Victory Intro audio asset to the animated Certivo intro.
