@@ -840,6 +840,10 @@ input::placeholder {
 }
 
 .eyebrow {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
   margin: 0 0 8px;
   color: var(--muted);
   font-size: 0.78rem;
@@ -906,37 +910,138 @@ input::placeholder {
   border-left-color: var(--red);
 }
 
-.feedback strong {
+.feedback > strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+}
+
+.feedback-detail {
+  margin: 0;
+}
+
+.explanation-section,
+.related-questions,
+.repeat-miss-prompt {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel), transparent 18%);
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.explanation-section summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 12px;
+  color: var(--blue-strong);
+  font-weight: 900;
+}
+
+.explanation-section summary::-webkit-details-marker {
+  display: none;
+}
+
+.explanation-section summary::after {
+  content: "+";
+  float: right;
+  color: var(--muted);
+}
+
+.explanation-section[open] summary::after {
+  content: "-";
+}
+
+.explanation-body {
+  border-top: 1px solid var(--line);
+  padding: 12px;
+}
+
+.explanation-body p,
+.explanation-body ul {
+  margin: 0;
+}
+
+.explanation-body ul {
+  display: grid;
+  gap: 8px;
+  padding-left: 18px;
+}
+
+.repeat-miss-prompt {
+  border-color: color-mix(in srgb, var(--gold), var(--line) 35%);
+  background: color-mix(in srgb, var(--gold), transparent 86%);
+  padding: 12px;
+}
+
+.repeat-miss-prompt strong {
   display: block;
   margin-bottom: 6px;
 }
 
-.feedback-detail {
-  margin: 0;
+.repeat-miss-prompt p {
+  margin: 0 0 10px;
 }
 
-.feedback-detail {
-  margin-top: 10px;
+.related-questions {
+  padding: 12px;
 }
 
-.feedback-section {
+.related-questions h4 {
+  margin: 0 0 10px;
+  color: var(--blue-strong);
+}
+
+.related-question-list {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.related-question {
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: color-mix(in srgb, var(--panel), transparent 18%);
-  padding: 12px;
-  margin-top: 10px;
+  background: color-mix(in srgb, var(--panel), transparent 12%);
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  text-align: left;
 }
 
-.feedback-section h4 {
-  margin: 0 0 5px;
-  color: var(--blue-strong);
+.related-question span {
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
+.related-question strong {
   font-size: 0.92rem;
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
-.feedback-section p {
-  margin: 0;
-  line-height: 1.48;
+.difficulty-badge {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 900;
+  padding: 4px 8px;
+}
+
+.difficulty-badge.easy {
+  background: color-mix(in srgb, var(--green), transparent 82%);
+}
+
+.difficulty-badge.moderate {
+  background: color-mix(in srgb, var(--gold), transparent 82%);
+}
+
+.difficulty-badge.challenging {
+  background: color-mix(in srgb, var(--red), transparent 84%);
 }
 
 .question-actions {

@@ -1,5 +1,12 @@
 # Certivo Practice Changelog
 
+## V6.4 - Instructor Explanations
+
+- Replaced the old single explanation box with collapsible instructor-style sections.
+- Added "why this is correct," "why the others are wrong," exam tip, optional memory trick, optional real-world example, and related-question practice.
+- Added question difficulty badges and repeat-miss concept coaching prompts.
+- Removed robotic fallback wording from displayed explanations.
+
 ## V6.3 - Paid Mini Lessons Gate
 
 - Kept the free study area focused on complete chapters and bilingual key terms.

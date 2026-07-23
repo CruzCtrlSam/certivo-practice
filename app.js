@@ -237,6 +237,20 @@
       correctAnswer: "Correct answer",
       explanation: "Explanation",
       basicExplanation: "Explanation",
+      whyCorrect: "✅ Why this is Correct",
+      whyOthersWrong: "❌ Why the Others are Wrong",
+      examTip: "💡 Exam Tip",
+      memoryTrick: "🧠 Memory Trick",
+      realWorldExample: "📘 Real-world Example",
+      practiceSimilarQuestions: "Practice Similar Questions",
+      similarQuestions: "Related Questions",
+      repeatMissTitle: "You have missed this concept more than once.",
+      repeatMissBody: "Would you like to review this concept before continuing?",
+      reviewConcept: "Review Concept",
+      continueExam: "Continue Exam",
+      easy: "🟢 Easy",
+      moderate: "🟡 Moderate",
+      challenging: "🔴 Challenging",
       memoryPhrase: "Memory phrase",
       chooseAnswer: "Choose an answer to continue.",
       emptyMissed: "No missed questions yet.",
@@ -462,6 +476,20 @@
       correctAnswer: "Respuesta correcta",
       explanation: "Explicación",
       basicExplanation: "Explicación",
+      whyCorrect: "✅ Por qué es correcta",
+      whyOthersWrong: "❌ Por qué las otras son incorrectas",
+      examTip: "💡 Consejo de examen",
+      memoryTrick: "🧠 Truco para memorizar",
+      realWorldExample: "📘 Ejemplo real",
+      practiceSimilarQuestions: "Practicar preguntas similares",
+      similarQuestions: "Preguntas relacionadas",
+      repeatMissTitle: "Has fallado este concepto más de una vez.",
+      repeatMissBody: "¿Quieres repasar este concepto antes de continuar?",
+      reviewConcept: "Repasar concepto",
+      continueExam: "Continuar examen",
+      easy: "🟢 Fácil",
+      moderate: "🟡 Moderada",
+      challenging: "🔴 Difícil",
       memoryPhrase: "Frase para memorizar",
       chooseAnswer: "Elige una respuesta para continuar.",
       emptyMissed: "Todavía no hay preguntas falladas.",
@@ -1014,6 +1042,11 @@
     }[Number(number)] || "general";
   }
 
+  function chapterForTopic(topic) {
+    const chapter = window.CERTIVO_STUDY?.chapters?.find((item) => topicForChapter(item.number) === topic);
+    return chapter?.id || window.CERTIVO_STUDY?.chapters?.[0]?.id || "";
+  }
+
   function chapterCheatCode(chapter) {
     const number = Number(chapter?.number || 0);
     const lines = {
@@ -1560,7 +1593,11 @@
     els.timer.textContent = `${minutes}:${seconds}`;
     els.questionTopic.textContent = topicLabel(question.topic);
     els.questionProgress.style.width = `${((session.index + 1) / session.deck.length) * 100}%`;
-    els.questionSource.textContent = `${t("simulator")} ${question.simulator} · ${question.id.toUpperCase()}${session.reviewingMissed ? ` · ${t("reviewingMissed")}` : ""}`;
+    const difficulty = questionDifficulty(question);
+    els.questionSource.innerHTML = `
+      <span>${escapeHtml(t("simulator"))} ${escapeHtml(question.simulator)} · ${escapeHtml(question.id.toUpperCase())}${session.reviewingMissed ? ` · ${escapeHtml(t("reviewingMissed"))}` : ""}</span>
+      <span class="difficulty-badge ${difficulty.level}">${escapeHtml(difficulty.label)}</span>
+    `;
     els.questionText.textContent = copy.question;
 
     els.answers.innerHTML = "";
@@ -1607,53 +1644,344 @@
       return;
     }
 
-    const answers = question[prefs.language].answers;
-    const selectedText = answers.find((answer) => answer.id === selectedId)?.text || "";
-    const correctText = answers.find((answer) => answer.id === question.correctAnswerId).text;
     els.feedback.className = `feedback ${isCorrect ? "good" : "bad"}`;
 
     const title = document.createElement("strong");
     title.textContent = isCorrect ? t("correct") : t("incorrect");
     els.feedback.appendChild(title);
-
-    if (isCorrect) {
-      const lesson = buildFeedbackLesson(question, correctText, correctText);
-      els.feedback.appendChild(feedbackSection(t("basicExplanation"), lesson.explanation));
-    } else {
-      const lesson = buildFeedbackLesson(question, selectedText, correctText);
-      els.feedback.append(
-        feedbackSection(t("basicExplanation"), lesson.explanation),
-        feedbackSection(t("memoryPhrase"), lesson.memory)
-      );
+    const lesson = buildInstructorExplanation(question);
+    if (!isCorrect && repeatedConceptMisses(question) >= 2) {
+      els.feedback.appendChild(repeatMissPrompt(question));
     }
+    els.feedback.append(
+      explanationDetails(t("whyCorrect"), lesson.whyCorrect, true),
+      explanationDetails(t("whyOthersWrong"), lesson.whyOthersWrong, false, "list"),
+      explanationDetails(t("examTip"), lesson.examTip, false)
+    );
+    if (lesson.memoryTrick) els.feedback.appendChild(explanationDetails(t("memoryTrick"), lesson.memoryTrick, false));
+    if (lesson.example) els.feedback.appendChild(explanationDetails(t("realWorldExample"), lesson.example, false));
+    els.feedback.appendChild(relatedQuestionsBlock(question));
   }
 
-  function feedbackSection(label, value) {
-    const section = document.createElement("section");
-    section.className = "feedback-section";
-    const heading = document.createElement("h4");
-    const body = document.createElement("p");
-    heading.textContent = label;
-    body.textContent = value;
-    section.append(heading, body);
-    return section;
+  function explanationDetails(label, value, open = false, kind = "text") {
+    const details = document.createElement("details");
+    details.className = "explanation-section";
+    details.open = open;
+    const summary = document.createElement("summary");
+    summary.textContent = label;
+    const body = document.createElement("div");
+    body.className = "explanation-body";
+    if (kind === "list") {
+      const list = document.createElement("ul");
+      value.forEach((line) => {
+        const item = document.createElement("li");
+        item.textContent = line;
+        list.appendChild(item);
+      });
+      body.appendChild(list);
+    } else {
+      const paragraph = document.createElement("p");
+      paragraph.textContent = value;
+      body.appendChild(paragraph);
+    }
+    details.append(summary, body);
+    return details;
   }
 
-  function buildFeedbackLesson(question, selectedText, correctText) {
-    const concept = conceptLesson(question, correctText);
+  function buildInstructorExplanation(question) {
+    const answers = question[prefs.language].answers;
+    const correct = answers.find((answer) => answer.id === question.correctAnswerId);
+    const concept = conceptLesson(question, correct?.text || "");
+    const whyCorrect = instructorWhyCorrect(question, concept);
+    const whyOthersWrong = answers
+      .filter((answer) => answer.id !== question.correctAnswerId)
+      .map((answer) => distractorExplanation(question, answer, concept));
     return {
-      explanation: concept.explanation || conceptExplanation(concept) || defaultWrongExplanation(question, selectedText, correctText),
-      memory: concept.rule || defaultMemoryRule(question, correctText)
+      whyCorrect,
+      whyOthersWrong,
+      examTip: instructorExamTip(question, concept, correct?.text || ""),
+      memoryTrick: instructorMemoryTrick(question, concept, correct?.text || ""),
+      example: instructorExample(question, concept)
     };
   }
 
-  function conceptExplanation(concept) {
-    const parts = [concept.plain, concept.correct, concept.wrong].filter(Boolean);
-    if (!parts.length) return "";
-    const prefix = prefs.language === "es"
-      ? "Según la regla que se prueba para la licencia de seguros de Texas, "
-      : "Under the rule tested for the Texas insurance license, ";
-    return `${prefix}${parts.join(" ")}`;
+  function cleanInstructorText(value) {
+    return String(value || "")
+      .replace(/\bThe correct answer is\b/gi, "This concept is")
+      .replace(/\bThe correct answer says\b/gi, "This choice describes")
+      .replace(/\bThe key clue points to\b/gi, "The question is testing")
+      .replace(/\bUnder the rule tested for the Texas insurance license,?\s*/gi, "")
+      .replace(/\bOn the exam,?\s*/gi, "")
+      .replace(/\bSegún la regla que se prueba para la licencia de seguros de Texas,?\s*/gi, "")
+      .replace(/\bLa respuesta correcta es\b/gi, "La idea correcta es")
+      .replace(/\bLa respuesta correcta dice\b/gi, "Esta opción describe")
+      .replace(/\bLa pista correcta es\b/gi, "La pregunta evalúa")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function instructorWhyCorrect(question, concept) {
+    const raw = [concept.plain, concept.correct].filter(Boolean).map(cleanInstructorText).join(" ");
+    if (raw.length > 80) return raw;
+    const stored = cleanInstructorText(question[prefs.language].explanation || "");
+    if (stored.length > 70) return stored;
+    const topic = topicLabel(question.topic);
+    if (prefs.language === "es") {
+      return `Este concepto pertenece a ${topic}. La pregunta evalúa si puedes conectar la situación con la función real de la póliza, contrato o regla. En seguro de vida, no basta memorizar una palabra: hay que identificar qué derecho, riesgo, beneficio o plazo está funcionando en el escenario.`;
+    }
+    return `This concept belongs to ${topic}. The question is asking you to connect the situation to the real function of the policy, contract, or rule. In life insurance, the right choice usually comes from identifying which right, risk, benefit, or time limit is operating in the scenario.`;
+  }
+
+  function distractorExplanation(question, answer, concept) {
+    const textValue = answer.text;
+    const lower = textValue.toLowerCase();
+    const spanish = prefs.language === "es";
+    const bank = spanish ? DISTRACTOR_EXPLANATIONS.es : DISTRACTOR_EXPLANATIONS.en;
+    const found = bank.find((item) => item.match.test(lower));
+    if (found) return `${textValue}: ${found.text}`;
+    if (concept.wrong) return `${textValue}: ${cleanInstructorText(concept.wrong)}`;
+    if (spanish) {
+      return `${textValue}: describe otra idea de seguro y no resuelve la situación específica planteada.`;
+    }
+    return `${textValue}: describes a different insurance idea and does not solve the specific situation being asked.`;
+  }
+
+  const DISTRACTOR_EXPLANATIONS = {
+    en: [
+      { match: /mutual/, text: "mutual insurers are owned by policyholders and commonly issue participating policies." },
+      { match: /stock/, text: "stock insurers are owned by shareholders, so policyholders are not the owners." },
+      { match: /fraternal/, text: "fraternal insurers provide coverage through a lodge or membership system." },
+      { match: /reciprocal/, text: "reciprocal insurers exchange insurance among subscribers through an attorney-in-fact." },
+      { match: /adhesion/, text: "adhesion means the insurer writes the contract and ambiguities favor the insured." },
+      { match: /aleatory/, text: "aleatory means the exchange of value can be unequal because a small premium may create a large benefit." },
+      { match: /unilateral/, text: "unilateral means only the insurer makes an enforceable promise after premiums are paid." },
+      { match: /conditional/, text: "conditional means policy benefits depend on policy conditions being met." },
+      { match: /extended term/, text: "extended term keeps the same face amount only for the time the cash value can buy." },
+      { match: /reduced paid-up/, text: "reduced paid-up keeps permanent coverage but lowers the face amount." },
+      { match: /cash surrender/, text: "cash surrender ends the policy and pays the available cash value." },
+      { match: /\bapl\b|automatic premium loan/, text: "automatic premium loan uses policy value to pay a premium; it is not a nonforfeiture payout choice." },
+      { match: /option a|level/, text: "Universal Life Option A is a level death benefit." },
+      { match: /option b|increasing/, text: "Universal Life Option B is an increasing death benefit equal to face amount plus cash value." },
+      { match: /indexed/, text: "indexed describes how interest may be credited, not the death-benefit option." },
+      { match: /single-premium/, text: "single-premium describes how the policy is funded, not the tested benefit design." }
+    ],
+    es: [
+      { match: /mutua|mutual/, text: "las aseguradoras mutuas pertenecen a los asegurados y suelen emitir pólizas participantes." },
+      { match: /stock|acciones|accionistas/, text: "las aseguradoras stock pertenecen a accionistas, no a los asegurados." },
+      { match: /fraternal/, text: "las aseguradoras fraternales funcionan mediante un sistema de logia o membresía." },
+      { match: /recíproca|reciprocal/, text: "las recíprocas intercambian seguro entre suscriptores mediante un attorney-in-fact." },
+      { match: /adhesión|adhesion/, text: "adhesión significa que la aseguradora redacta el contrato y las ambigüedades favorecen al asegurado." },
+      { match: /aleatorio|aleatory/, text: "aleatorio significa que el intercambio de valores puede ser desigual." },
+      { match: /unilateral/, text: "unilateral significa que solo la aseguradora tiene una promesa exigible después de pagar primas." },
+      { match: /condicional|conditional/, text: "condicional significa que los beneficios dependen de cumplir las condiciones de la póliza." },
+      { match: /término extendido|extended term/, text: "término extendido mantiene la misma suma asegurada solo por el tiempo que compra el valor en efectivo." },
+      { match: /saldado reducido|reduced paid-up/, text: "saldado reducido mantiene cobertura permanente, pero reduce la suma asegurada." },
+      { match: /rescate|cash surrender/, text: "rescate en efectivo termina la póliza y entrega el valor en efectivo disponible." },
+      { match: /\bapl\b|préstamo automático/, text: "el préstamo automático de prima usa valor de póliza para pagar una prima; no es una opción de pago de no confiscación." },
+      { match: /opción a|option a|nivelada/, text: "Universal Life Opción A es un beneficio por muerte nivelado." },
+      { match: /opción b|option b|creciente/, text: "Universal Life Opción B es un beneficio creciente igual a suma asegurada más valor en efectivo." },
+      { match: /indexada|indexed/, text: "indexada describe cómo se puede acreditar interés, no la opción de beneficio por muerte." },
+      { match: /prima única|single-premium/, text: "prima única describe cómo se financia la póliza, no el diseño del beneficio." }
+    ]
+  };
+
+  function instructorExamTip(question, concept, correctText) {
+    if (concept.rule) return cleanInstructorText(concept.rule);
+    const source = `${question.en.question} ${question.en.explanation} ${correctText}`.toLowerCase();
+    if (/stock/.test(source)) return prefs.language === "es" ? "Accionistas = compañía stock." : "Shareholders = Stock Company.";
+    if (/mutual/.test(source)) return prefs.language === "es" ? "Asegurados = compañía mutua." : "Policyholders = Mutual Company.";
+    if (/substandard/.test(source)) return prefs.language === "es" ? "Substandard = aceptado con prima más alta." : "Substandard = accepted with a higher premium.";
+    if (/free-look|free look/.test(source)) return prefs.language === "es" ? "Free-look = periodo de reembolso." : "Free-look = refund period.";
+    return prefs.language === "es" ? "Define el término antes de escoger la opción." : "Define the term before choosing the option.";
+  }
+
+  function instructorMemoryTrick(question, concept, correctText) {
+    const source = `${question.en.question} ${question.en.explanation} ${correctText}`.toLowerCase();
+    if (/stock/.test(source)) return prefs.language === "es" ? "Stockholders own Stock companies." : "Stockholders own Stock companies.";
+    if (/mutual/.test(source)) return prefs.language === "es" ? "Mutual empieza como miembros: los asegurados son dueños." : "Mutual starts with members: policyholders own it.";
+    if (/spia|single-premium immediate/.test(source)) return prefs.language === "es" ? "SPIA: Single Payment, Income ASAP." : "SPIA: Single Payment, Income ASAP.";
+    if (/extended term/.test(source)) return prefs.language === "es" ? "Extendido = extiende tiempo, no reduce la suma." : "Extended term extends time, not the face amount.";
+    if (/option b|face amount plus/.test(source)) return prefs.language === "es" ? "B = Bigger benefit: suma asegurada + valor en efectivo." : "B = Bigger benefit: face amount + cash value.";
+    return "";
+  }
+
+  function instructorExample(question, concept) {
+    const source = `${question.en.question} ${question.en.explanation}`.toLowerCase();
+    if (/substandard/.test(source)) {
+      return prefs.language === "es"
+        ? "Si la salud del solicitante es mala pero la aseguradora aún lo acepta con una prima más alta, es un riesgo substandard."
+        : "If an applicant has poor health but the insurer still accepts them with a higher premium, they are a substandard risk.";
+    }
+    if (/annuity|anualidad|spia/.test(source)) {
+      return prefs.language === "es"
+        ? "Si alguien entrega una suma grande y empieza a recibir pagos mensuales pronto, está usando la anualidad para crear ingreso."
+        : "If someone pays one large amount and soon starts receiving monthly payments, the annuity is being used to create income.";
+    }
+    if (/incidents of ownership/.test(source)) {
+      return prefs.language === "es"
+        ? "Si el asegurado todavía podía cambiar beneficiarios o pedir préstamos al morir, conservaba control sobre la póliza."
+        : "If the insured could still change beneficiaries or borrow from the policy at death, they kept control over the policy.";
+    }
+    return cleanInstructorText(concept.example || "");
+  }
+
+  function relatedQuestionsBlock(question) {
+    const related = questionBank
+      .filter((item) => item.id !== question.id && item.topic === question.topic)
+      .slice(0, 5);
+    const section = document.createElement("section");
+    section.className = "related-questions";
+    const title = document.createElement("h4");
+    title.textContent = t("similarQuestions");
+    section.appendChild(title);
+    if (!related.length) {
+      const empty = document.createElement("p");
+      empty.className = "muted";
+      empty.textContent = t("noQuestions");
+      section.appendChild(empty);
+      return section;
+    }
+    const list = document.createElement("div");
+    list.className = "related-question-list";
+    related.forEach((item) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "related-question";
+      button.dataset.relatedId = item.id;
+      button.innerHTML = `<span>${escapeHtml(item.id.toUpperCase())}</span><strong>${escapeHtml(item[prefs.language].question)}</strong>`;
+      list.appendChild(button);
+    });
+    const action = document.createElement("button");
+    action.type = "button";
+    action.className = "button primary compact";
+    action.textContent = t("practiceSimilarQuestions");
+    action.addEventListener("click", () => startRelatedQuestionSession(question, related.map((item) => item.id)));
+    list.querySelectorAll("[data-related-id]").forEach((button) => {
+      button.addEventListener("click", () => startRelatedQuestionSession(question, [button.dataset.relatedId, ...related.map((item) => item.id)]));
+    });
+    section.append(list, action);
+    return section;
+  }
+
+  function startRelatedQuestionSession(question, preferredIds = []) {
+    const ids = [...new Set(preferredIds)]
+      .filter((id) => id && id !== question.id && qById(id))
+      .slice(0, 5);
+    const fallback = questionBank
+      .filter((item) => item.id !== question.id && item.topic === question.topic && !ids.includes(item.id))
+      .slice(0, 5 - ids.length)
+      .map((item) => item.id);
+    const deck = [...ids, ...fallback].map((id) => {
+      const item = qById(id);
+      return { id, answerOrder: shuffle(item.en.answers.map((answer) => answer.id)) };
+    });
+    if (!deck.length) return;
+    session = {
+      mode: "practice",
+      deck,
+      index: 0,
+      answers: {},
+      startedAt: Date.now(),
+      lastMissed: [],
+      reviewingMissed: false
+    };
+    saveJson(SESSION_KEY, session);
+    showScreen("quiz");
+    renderQuestion();
+  }
+
+  function repeatMissPrompt(question) {
+    const box = document.createElement("section");
+    box.className = "repeat-miss-prompt";
+    box.innerHTML = `
+      <strong>⚠️ ${escapeHtml(t("repeatMissTitle"))}</strong>
+      <p>${escapeHtml(repeatMissMessage(question))}</p>
+      <div class="actions">
+        <button class="button primary compact" type="button" data-action="review">${escapeHtml(t("reviewConcept"))}</button>
+        <button class="button quiet compact" type="button" data-action="continue">${escapeHtml(t("continueExam"))}</button>
+      </div>
+    `;
+    box.querySelector("[data-action='review']")?.addEventListener("click", () => {
+      const mappedChapter = chapterForTopic(question.topic);
+      if (mappedChapter && els.studyChapterSelect) els.studyChapterSelect.value = String(mappedChapter);
+      showScreen("study");
+      renderStudy();
+    });
+    box.querySelector("[data-action='continue']")?.addEventListener("click", () => box.remove());
+    return box;
+  }
+
+  function repeatMissMessage(question) {
+    const label = conceptLabel(question);
+    if (prefs.language === "es") {
+      return `Has fallado preguntas sobre ${label} varias veces. ${t("repeatMissBody")}`;
+    }
+    return `You have missed questions about ${label} multiple times. ${t("repeatMissBody")}`;
+  }
+
+  function questionConceptKey(question) {
+    const source = `${question.en.question} ${question.en.explanation} ${question.en.answers.map((answer) => answer.text).join(" ")}`.toLowerCase();
+    const patterns = [
+      ["stock-mutual", /stock|mutual|participating|non-participating/],
+      ["ul-option-ab", /option a|option b|face amount plus|universal life/],
+      ["aleatory", /aleatory|unequal values/],
+      ["extended-term", /extended term|nonforfeiture|same face amount/],
+      ["insurable-interest", /insurable interest/],
+      ["estate-incidents", /incidents of ownership|estate/],
+      ["annuity-tax", /lifo|nonqualified annuity|withdrawal/],
+      ["spia", /single-premium immediate|spia/],
+      ["texas-rules", /texas|tlhiga|commissioner|license|free-look|free look/]
+    ];
+    return patterns.find(([, match]) => match.test(source))?.[0] || `topic-${question.topic}`;
+  }
+
+  function conceptLabel(question) {
+    const labels = {
+      en: {
+        "stock-mutual": "Stock vs Mutual insurers",
+        "ul-option-ab": "Universal Life Option A vs Option B",
+        aleatory: "Aleatory contracts",
+        "extended-term": "Extended term nonforfeiture",
+        "insurable-interest": "Insurable interest",
+        "estate-incidents": "Incidents of ownership",
+        "annuity-tax": "annuity taxation",
+        spia: "single-premium immediate annuities",
+        "texas-rules": "Texas insurance rules"
+      },
+      es: {
+        "stock-mutual": "aseguradoras stock vs mutuas",
+        "ul-option-ab": "Universal Life Opción A vs Opción B",
+        aleatory: "contratos aleatorios",
+        "extended-term": "término extendido de no confiscación",
+        "insurable-interest": "interés asegurable",
+        "estate-incidents": "incidents of ownership",
+        "annuity-tax": "impuestos de anualidades",
+        spia: "anualidades inmediatas de prima única",
+        "texas-rules": "reglas de seguros de Texas"
+      }
+    };
+    const key = questionConceptKey(question);
+    return labels[prefs.language]?.[key] || topicLabel(question.topic);
+  }
+
+  function repeatedConceptMisses(question) {
+    const key = questionConceptKey(question);
+    return questionBank.reduce((count, item) => {
+      if (questionConceptKey(item) !== key) return count;
+      return count + (Number(progress.answers?.[item.id]?.wrong) || 0);
+    }, 0);
+  }
+
+  function questionDifficulty(question) {
+    const explicit = String(question.difficulty || "").toLowerCase();
+    const source = `${question.en.question} ${question.en.explanation}`.toLowerCase();
+    let level = explicit.includes("easy") ? "easy" : explicit.includes("chall") || explicit.includes("hard") ? "challenging" : explicit.includes("moder") ? "moderate" : "";
+    if (!level) {
+      if (/estate|incidents of ownership|tax|lifo|mec|replacement|tlhiga|commissioner|universal life|nonforfeiture|aleatory/.test(source)) level = "challenging";
+      else if (Number(question.simulator || 0) >= 4) level = "moderate";
+      else level = "easy";
+    }
+    return { level, label: t(level) };
   }
 
   function conceptLesson(question, correctText) {
@@ -1665,14 +1993,14 @@
         en: {
           notice: "The key words are single-premium and immediate.",
           plain: "Single-premium means the owner pays one lump sum. Immediate means income payments start soon, usually within about one year.",
-          correct: "The correct answer says payments begin within about one year and there is no accumulation phase. That matches an immediate annuity exactly.",
+          correct: "Payments begin within about one year and there is no accumulation phase. That matches an immediate annuity exactly.",
           wrong: "The wrong choices describe other ideas: flexible payments, variable-only products, or long accumulation. A SPIA is not built that way. It is funded once, then it starts paying.",
           rule: "SPIA = one payment in, income starts soon."
         },
         es: {
           notice: "Las palabras clave son prima única e inmediata.",
           plain: "Prima única significa que el dueño paga una sola suma grande. Inmediata significa que los pagos de ingreso empiezan pronto, normalmente dentro de aproximadamente un año.",
-          correct: "La respuesta correcta dice que empieza a pagar dentro de aproximadamente un año y que no hay fase de acumulación. Eso describe exactamente una anualidad inmediata.",
+          correct: "Empieza a pagar dentro de aproximadamente un año y no tiene fase de acumulación. Eso describe exactamente una anualidad inmediata.",
           wrong: "Las respuestas incorrectas describen otras ideas: pagos flexibles, productos solo variables o una acumulación larga. Una SPIA no funciona así. Se paga una vez y luego empieza a pagar ingresos.",
           rule: "SPIA = un pago entra, el ingreso empieza pronto."
         }
@@ -1682,14 +2010,14 @@
         en: {
           notice: "Look for the client's need first: age, liquidity, risk tolerance, and time horizon.",
           plain: "Best interest means the recommendation must fit the client, not just the product features or the commission.",
-          correct: "The correct answer protects the client's stated need. If the client needs money soon, a product with long surrender charges is usually a bad fit.",
+          correct: "The recommendation protects the client's stated need. If the client needs money soon, a product with long surrender charges is usually a bad fit.",
           wrong: "Your answer focuses on one feature, but suitability is about the whole client situation. A good feature does not fix a product that blocks money the client needs.",
           rule: "Client need first, product second."
         },
         es: {
           notice: "Primero mira la necesidad del cliente: edad, liquidez, tolerancia al riesgo y plazo.",
           plain: "Mejor interés significa que la recomendación debe encajar con el cliente, no solo con las características del producto o la comisión.",
-          correct: "La respuesta correcta protege la necesidad declarada del cliente. Si el cliente necesita dinero pronto, un producto con cargos de rescate largos normalmente no encaja.",
+          correct: "La recomendación protege la necesidad declarada del cliente. Si el cliente necesita dinero pronto, un producto con cargos de rescate largos normalmente no encaja.",
           wrong: "Tu respuesta se enfoca en una característica, pero la idoneidad mira la situación completa del cliente. Una característica buena no arregla un producto que bloquea el dinero que el cliente necesita.",
           rule: "Primero la necesidad del cliente, después el producto."
         }
@@ -1699,14 +2027,14 @@
         en: {
           notice: "Watch whether the annuity is nonqualified and whether the question says withdrawal instead of annuitized payment.",
           plain: "For a nonqualified annuity withdrawal, the IRS treats earnings as coming out first.",
-          correct: "The correct answer matches LIFO: last in, first out. The gain comes out first, so it is taxable first.",
+          correct: "LIFO means last in, first out. The gain comes out first, so it is taxable first.",
           wrong: "Your answer treats the owner's basis as coming out first or treats the money as tax-free. That is not how nonqualified annuity withdrawals are tested.",
           rule: "Nonqualified annuity withdrawal = gain first = taxable first."
         },
         es: {
           notice: "Fíjate si la anualidad es no calificada y si la pregunta dice retiro en vez de pago anualizado.",
           plain: "En un retiro de anualidad no calificada, el IRS trata la ganancia como si saliera primero.",
-          correct: "La respuesta correcta coincide con LIFO: lo último que entró sale primero. La ganancia sale primero, así que se grava primero.",
+          correct: "LIFO significa que lo último que entró sale primero. La ganancia sale primero, así que se grava primero.",
           wrong: "Tu respuesta trata la base del dueño como si saliera primero o como si el dinero fuera libre de impuesto. Así no se prueban los retiros de anualidades no calificadas.",
           rule: "Retiro de anualidad no calificada = ganancia primero = impuesto primero."
         }
@@ -1716,14 +2044,14 @@
         en: {
           notice: "The key is the account type and the required beginning age.",
           plain: "Traditional IRA money was usually tax-deferred, so the IRS eventually forces minimum withdrawals.",
-          correct: "The correct answer gives the current general RMD start age for a traditional IRA.",
+          correct: "The age given is the current general RMD start age for a traditional IRA.",
           wrong: "Your answer is either an old rule, a penalty-free withdrawal age, or a retirement age. Those are different rules.",
           rule: "Traditional IRA RMDs currently start at 73 for this exam rule."
         },
         es: {
           notice: "La clave es el tipo de cuenta y la edad en que deben empezar las distribuciones.",
           plain: "El dinero de una IRA tradicional normalmente fue diferido de impuestos, por eso el IRS eventualmente exige retiros mínimos.",
-          correct: "La respuesta correcta da la edad general vigente para empezar RMD en una IRA tradicional.",
+          correct: "La edad indicada es la edad general vigente para empezar RMD en una IRA tradicional.",
           wrong: "Tu respuesta puede ser una regla vieja, una edad para retirar sin penalidad o una edad de retiro. Son reglas distintas.",
           rule: "RMD de IRA tradicional empieza generalmente a los 73 bajo esta regla de examen."
         }
@@ -1733,14 +2061,14 @@
         en: {
           notice: "Ask when insurable interest must exist.",
           plain: "For life insurance, insurable interest is checked when the policy starts. It does not have to be proven again at death.",
-          correct: "The correct answer says application or policy issue. That is the required timing for life insurance.",
+          correct: "Application or policy issue is the required timing for life insurance.",
           wrong: "Your answer adds another timing requirement that belongs more to property insurance thinking, not life insurance.",
           rule: "Life insurance insurable interest = required at the beginning."
         },
         es: {
           notice: "Pregunta cuándo debe existir el interés asegurable.",
           plain: "En seguro de vida, el interés asegurable se revisa cuando empieza la póliza. No tiene que probarse otra vez al morir.",
-          correct: "La respuesta correcta dice solicitud o emisión de la póliza. Ese es el momento requerido en vida.",
+          correct: "Solicitud o emisión de la póliza es el momento requerido en seguro de vida.",
           wrong: "Tu respuesta agrega otro momento que se parece más a la lógica de seguros de propiedad, no de vida.",
           rule: "Interés asegurable en vida = se exige al inicio."
         }
@@ -1818,14 +2146,14 @@
         en: {
           notice: "This is asking for a Texas guaranty association dollar limit.",
           plain: "The guaranty association is a safety net if an insurer fails, but it only protects up to set limits.",
-          correct: "The correct answer is the death benefit limit for life insurance.",
+          correct: "The amount tested here is the death benefit limit for life insurance.",
           wrong: "Your answer is likely a different benefit limit. The exam expects you to match the limit to the type of benefit.",
           rule: "TLHIGA life death benefit limit = $300,000."
         },
         es: {
           notice: "La pregunta pide un límite en dólares de la asociación de garantía de Texas.",
           plain: "La asociación de garantía funciona como protección si una aseguradora falla, pero solo protege hasta ciertos límites.",
-          correct: "La respuesta correcta es el límite para beneficio por muerte en seguro de vida.",
+          correct: "La cantidad evaluada aquí es el límite para beneficio por muerte en seguro de vida.",
           wrong: "Tu respuesta probablemente corresponde a otro tipo de límite. El examen espera que conectes el límite con el tipo de beneficio.",
           rule: "Límite TLHIGA para beneficio por muerte de vida = $300,000."
         }
@@ -1835,14 +2163,14 @@
         en: {
           notice: "This is an ethics vocabulary question. Small wording differences matter.",
           plain: "The question describes a prohibited sales behavior. Match the behavior to the exact term.",
-          correct: "The correct answer names the specific unfair practice described in the question.",
+          correct: "The term names the specific unfair practice described in the question.",
           wrong: "Your answer is a different unfair practice. These terms are close, but each one describes a different bad action.",
           rule: "Define the behavior first, then pick the term."
         },
         es: {
           notice: "Esta es una pregunta de vocabulario ético. Las diferencias pequeñas importan.",
           plain: "La pregunta describe una práctica de venta prohibida. Debes conectar la conducta con el término exacto.",
-          correct: "La respuesta correcta nombra la práctica injusta específica descrita en la pregunta.",
+          correct: "El término nombra la práctica injusta específica descrita en la pregunta.",
           wrong: "Tu respuesta es otra práctica injusta distinta. Estos términos se parecen, pero cada uno describe una mala conducta diferente.",
           rule: "Primero define la conducta, luego escoge el término."
         }
@@ -1852,14 +2180,14 @@
         en: {
           notice: "Look for total disability and premium payments.",
           plain: "Waiver of premium means the policy can stay in force without the insured paying premiums after a qualifying disability.",
-          correct: "The correct answer connects the rider to disability, not death, loans, or beneficiary changes.",
+          correct: "This rider connects to disability, not death, loans, or beneficiary changes.",
           wrong: "Your answer points to a different policy feature. The disability clue should lead you to waiver of premium.",
           rule: "Disability clue = waiver of premium."
         },
         es: {
           notice: "Busca discapacidad total y pagos de prima.",
           plain: "Exención de prima significa que la póliza puede seguir activa sin que el asegurado pague primas después de una discapacidad que califica.",
-          correct: "La respuesta correcta conecta la cláusula adicional con discapacidad, no con muerte, préstamos o cambios de beneficiario.",
+          correct: "Esta cláusula adicional se conecta con discapacidad, no con muerte, préstamos o cambios de beneficiario.",
           wrong: "Tu respuesta apunta a otra característica de la póliza. La pista de discapacidad debe llevarte a exención de prima.",
           rule: "Pista de discapacidad = exención de prima."
         }
@@ -1868,32 +2196,6 @@
 
     const match = lessons.find((lesson) => lesson.match.test(source));
     return match ? match[spanish ? "es" : "en"] : {};
-  }
-
-  function defaultWrongExplanation(question, selectedText, correctText) {
-    const explanation = question[prefs.language].explanation;
-    const base = explanation && explanation.trim().length > 70
-      ? explanation.trim()
-      : expandedRuleExplanation(question, correctText);
-    if (prefs.language === "es") {
-      return `Según la regla que se prueba para la licencia de seguros de Texas, “${selectedText}” no es la mejor respuesta porque no coincide con el punto legal exacto de la pregunta. La respuesta correcta es “${correctText}”. ${base}`;
-    }
-    return `Under the rule tested for the Texas insurance license, “${selectedText}” is not the best answer because it does not match the exact legal point in the question. The correct answer is “${correctText}.” ${base}`;
-  }
-
-  function expandedRuleExplanation(question, correctText) {
-    const raw = question[prefs.language].explanation || "";
-    if (prefs.language === "es") {
-      return `La pista correcta es “${correctText}”. En el examen, no memorices solo la palabra: conecta esa respuesta con la regla que la hace verdadera. ${raw}`;
-    }
-    return `The key clue points to “${correctText}.” On the exam, do not memorize only the word: connect that answer to the rule that makes it true. ${raw}`;
-  }
-
-  function defaultMemoryRule(question, correctText) {
-    if (prefs.language === "es") {
-      return `Para memorizarlo: conecta la pista de la pregunta con esta frase corta: ${correctText}.`;
-    }
-    return `Memory shortcut: connect the question clue to this short phrase: ${correctText}.`;
   }
 
   function selectAnswer(questionId, answerId) {
@@ -2624,7 +2926,7 @@
         contracts: "Adhesion favors insured on ambiguity. Aleatory means unequal values. Unilateral means only insurer has an enforceable promise.",
         riders: "A rider is an add-on. Match the rider to the problem: disability, accidental death, future insurability, long-term care.",
         retirement: "Qualified plans get tax advantages because they obey tax rules. Contributions, growth, and distributions are separate events.",
-        ethics: "The correct answer protects the consumer, tells the truth, documents facts, and avoids pressure.",
+        ethics: "The strongest ethics choice protects the consumer, tells the truth, documents facts, and avoids pressure.",
         beneficiaries: "Owner controls. Insured is covered. Beneficiary receives. Revocable can change; irrevocable usually must consent.",
         "best interest": "Gather facts first, disclose before sale, document why the recommendation fits."
       },
@@ -2639,7 +2941,7 @@
         contracts: "Adhesión favorece al asegurado si hay ambigüedad. Aleatorio significa valores desiguales. Unilateral significa una promesa exigible.",
         riders: "Una cláusula adicional es un agregado. Une la cláusula con el problema: discapacidad, muerte accidental, asegurabilidad futura o cuidado a largo plazo.",
         retirement: "Planes calificados reciben ventaja fiscal porque obedecen reglas fiscales. Contribución, crecimiento y distribución son eventos distintos.",
-        ethics: "La respuesta correcta protege al consumidor, dice la verdad, documenta hechos y evita presión.",
+        ethics: "La opción ética más fuerte protege al consumidor, dice la verdad, documenta hechos y evita presión.",
         beneficiaries: "Dueño controla. Asegurado está cubierto. Beneficiario recibe. Revocable cambia; irrevocable normalmente consiente.",
         "best interest": "Recopila datos primero, divulga antes de vender y documenta por qué la recomendación encaja."
       }

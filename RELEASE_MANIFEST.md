@@ -1,6 +1,6 @@
 # Release Manifest
 
-Release: Certivo Practice V6.3 Paid Mini Lessons Gate
+Release: Certivo Practice V6.4 Instructor Explanations
 
 Date: 2026-07-22
 
@@ -37,11 +37,11 @@ Do not upload these files or folders to GitHub:
 
 ## Supabase
 
-No Supabase update is required for V6.3. The V6.0 Texas content audit remains live in Supabase.
+No Supabase update is required for V6.4. The app now renders existing Supabase explanations through the instructor-style explanation system.
 
 ## Stripe
 
-No Stripe product or webhook update is required for V6.3.
+No Stripe product or webhook update is required for V6.4.
 
 ## New Asset
 
